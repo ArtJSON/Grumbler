@@ -54,6 +54,7 @@ model User {
     displayName   String?
     name          String?   @unique
     email         String?   @unique
+    role          String    @default("USER")
     emailVerified DateTime?
     image         String?
     accounts      Account[]
