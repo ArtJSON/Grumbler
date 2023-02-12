@@ -52,7 +52,7 @@ model VerificationToken {
 model User {
     id            String    @id @default(cuid())
     displayName   String?
-    username      String?   @unique
+    name          String?   @unique
     email         String?   @unique
     emailVerified DateTime?
     image         String?
@@ -95,6 +95,12 @@ model Post {
     comments        Comment[]
     postLikes       PostLike[]
     forwards        Forward[]
+    hashtags        Hashtag[]
+}
+
+model Hashtag {
+    id    String @id
+    posts Post[]
 }
 
 model PostLike {
