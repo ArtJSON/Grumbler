@@ -14,12 +14,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -47,20 +41,72 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-}
-
 model VerificationToken {
     identifier String
     token      String   @unique
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model User {
+    id            String    @id @default(cuid())
+    displayName   String?
+    username      String?   @unique
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+
+    posts        Post[]
+    comments     Comment[]
+    commentLikes CommentLike[]
+    postLikes    PostLike[]
+    forwards     Forward[]
+
+    followedBy User[] @relation("UserFollows")
+    following  User[] @relation("UserFollows")
+}
+
+model Comment {
+    id          String        @id @default(cuid())
+    createdAt   DateTime      @default(now())
+    user        User          @relation(fields: [id], references: [id], onDelete: Cascade)
+    post        Post          @relation(fields: [id], references: [id], onDelete: Cascade)
+    commentLike CommentLike[]
+}
+
+model CommentLike {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
+    comment   Comment  @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+model Post {
+    id              String     @id @default(cuid())
+    createdAt       DateTime   @default(now())
+    user            User       @relation(fields: [id], references: [id], onDelete: Cascade)
+    views           Int
+    content         String
+    // media String // TODO: add a field that is used to store photos/videos data (cloudinary)
+    extendedContent String?
+    comments        Comment[]
+    postLikes       PostLike[]
+    forwards        Forward[]
+}
+
+model PostLike {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
+    post      Post     @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+model Forward {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
+    post      Post     @relation(fields: [id], references: [id], onDelete: Cascade)
 }
