@@ -1,6 +1,8 @@
 # Grumbler
 
-A twitter-inspired social networking site, that enables user to discuss different topics.
+> **Grumble** (verb)  UK /ˈɡrʌm.bəl/  US /ˈɡrʌm.bəl/ - *to complain about someone or something in an annoyed way*
+
+***A twitter-inspired social networking site. Share your thoughts, interests, and experiences with your followers, and discover new and interesting content through hashtags. With a user-friendly interface and powerful features, Grumbler makes it easy to express yourself and stay connected with the people and topics that matter to you.***
 
 ## Technological stack
 
