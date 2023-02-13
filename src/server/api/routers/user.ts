@@ -2,9 +2,9 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { errorMessages } from "../../../utils/errorMessages";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
-export const followRouter = createTRPCRouter({
+export const userRouter = createTRPCRouter({
   follow: protectedProcedure
     .input(
       z.object({
@@ -63,6 +63,34 @@ export const followRouter = createTRPCRouter({
           followerId_followingId: {
             followerId: ctx.session.user.id,
             followingId: userId,
+          },
+        },
+      });
+    }),
+  getUserRecentPosts: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        page: z.number().min(0),
+      })
+    )
+    .query(async ({ ctx, input: { userId, page } }) => {
+      return await ctx.prisma.post.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+        skip: page * 25,
+        take: 25,
+        where: {
+          userId: userId,
+        },
+        include: {
+          _count: {
+            select: {
+              comments: true,
+              forwards: true,
+              postLikes: true,
+            },
           },
         },
       });

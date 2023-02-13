@@ -29,7 +29,7 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
-  getRecentByFollowed: publicProcedure
+  getRecentByFollowed: protectedProcedure
     .input(
       z.object({
         page: z.number().min(0),
