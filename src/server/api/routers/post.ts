@@ -29,6 +29,46 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
+  getRecentByFollowed: publicProcedure
+    .input(
+      z.object({
+        page: z.number().min(0),
+      })
+    )
+    .query(async ({ ctx, input: { page } }) => {
+      const followsInDb = await ctx.prisma.follows.findMany({
+        where: {
+          followerId: ctx.session?.user.id,
+        },
+        select: {
+          followingId: true,
+        },
+      });
+
+      const followingIds = followsInDb.map(({ followingId }) => followingId);
+
+      return await ctx.prisma.post.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+        where: {
+          userId: {
+            in: followingIds,
+          },
+        },
+        skip: page * 25,
+        take: 25,
+        include: {
+          _count: {
+            select: {
+              comments: true,
+              forwards: true,
+              postLikes: true,
+            },
+          },
+        },
+      });
+    }),
   create: protectedProcedure
     .input(
       z.object({ content: z.string(), extendedConent: z.string().optional() })
