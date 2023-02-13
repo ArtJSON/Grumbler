@@ -140,4 +140,62 @@ export const postRouter = createTRPCRouter({
         });
       }
     }),
+  forward: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input: { postId } }) => {
+      const forwardInDb = await ctx.prisma.forward.findFirst({
+        where: {
+          AND: [
+            {
+              userId: ctx.session.user.id,
+            },
+            {
+              postId: postId,
+            },
+          ],
+        },
+      });
+
+      if (forwardInDb === null) {
+        return await ctx.prisma.forward.create({
+          data: {
+            postId: postId,
+            userId: ctx.session.user.id,
+          },
+        });
+      }
+    }),
+  unforward: protectedProcedure
+    .input(
+      z.object({
+        forwardId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input: { forwardId } }) => {
+      const forwardInDb = await ctx.prisma.forward.findFirst({
+        where: {
+          AND: [
+            {
+              userId: ctx.session.user.id,
+            },
+            {
+              id: forwardId,
+            },
+          ],
+        },
+      });
+
+      if (forwardInDb !== null) {
+        return await ctx.prisma.forward.deleteMany({
+          where: {
+            id: forwardId,
+            userId: ctx.session.user.id,
+          },
+        });
+      }
+    }),
 });
