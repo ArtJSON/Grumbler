@@ -100,11 +100,11 @@ model CommentLike {
 }
 
 model Post {
-    id              String     @id @default(cuid())
-    createdAt       DateTime   @default(now())
-    user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id              String        @id @default(cuid())
+    createdAt       DateTime      @default(now())
+    user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId          String
-    views           Int        @default(0)
+    views           Int           @default(0)
     content         String
     // TODO: add a field that is used to store photos/videos data (cloudinary)
     // TODO: Add possibility to respond to a Post (creates a separate post linking to the other one, different to a comment)
@@ -112,12 +112,21 @@ model Post {
     comments        Comment[]
     postLikes       PostLike[]
     forwards        Forward[]
-    hashtags        Hashtag[]
+    postHashtag     PostHashtag[]
+}
+
+model PostHashtag {
+    post        Post    @relation(fields: [postId], references: [id])
+    postId      String
+    hashtag     Hashtag @relation(fields: [hashtagName], references: [name])
+    hashtagName String
+
+    @@id([postId, hashtagName])
 }
 
 model Hashtag {
-    id    String @id
-    posts Post[]
+    name        String        @id
+    postHashtag PostHashtag[]
 }
 
 // TODO: Change id to composite key of userId and postId and change trpc procedures to match new key
