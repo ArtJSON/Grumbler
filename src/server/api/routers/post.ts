@@ -82,4 +82,62 @@ export const postRouter = createTRPCRouter({
           },
         });
     }),
+  like: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input: { postId } }) => {
+      const postLikeInDb = await ctx.prisma.postLike.findFirst({
+        where: {
+          AND: [
+            {
+              userId: ctx.session.user.id,
+            },
+            {
+              postId: postId,
+            },
+          ],
+        },
+      });
+
+      if (postLikeInDb === null) {
+        return await ctx.prisma.postLike.create({
+          data: {
+            postId: postId,
+            userId: ctx.session.user.id,
+          },
+        });
+      }
+    }),
+  unlike: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input: { postId } }) => {
+      const postLikeInDb = await ctx.prisma.postLike.findFirst({
+        where: {
+          AND: [
+            {
+              userId: ctx.session.user.id,
+            },
+            {
+              postId: postId,
+            },
+          ],
+        },
+      });
+
+      if (postLikeInDb !== null) {
+        return await ctx.prisma.postLike.deleteMany({
+          where: {
+            postId: postId,
+            userId: ctx.session.user.id,
+          },
+        });
+      }
+    }),
 });
