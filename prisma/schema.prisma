@@ -73,23 +73,28 @@ model User {
 model Comment {
     id          String        @id @default(cuid())
     createdAt   DateTime      @default(now())
-    user        User          @relation(fields: [id], references: [id], onDelete: Cascade)
-    post        Post          @relation(fields: [id], references: [id], onDelete: Cascade)
+    user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      String
+    post        Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId      String
     commentLike CommentLike[]
 }
 
 model CommentLike {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
-    user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
-    comment   Comment  @relation(fields: [id], references: [id], onDelete: Cascade)
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+    commentId String
 }
 
 model Post {
     id              String     @id @default(cuid())
     createdAt       DateTime   @default(now())
-    user            User       @relation(fields: [id], references: [id], onDelete: Cascade)
-    views           Int
+    user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId          String
+    views           Int        @default(0)
     content         String
     // media String // TODO: add a field that is used to store photos/videos data (cloudinary)
     extendedContent String?
@@ -107,13 +112,17 @@ model Hashtag {
 model PostLike {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
-    user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
-    post      Post     @relation(fields: [id], references: [id], onDelete: Cascade)
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId    String
 }
 
 model Forward {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
-    user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
-    post      Post     @relation(fields: [id], references: [id], onDelete: Cascade)
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId    String
 }

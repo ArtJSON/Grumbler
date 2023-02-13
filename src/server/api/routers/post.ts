@@ -27,7 +27,30 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
-  create: protectedProcedure.query(({ ctx }) => {
-    return "you can now see this secret message!";
-  }),
+  create: protectedProcedure
+    .input(
+      z.object({ content: z.string(), extendedConent: z.string().optional() })
+    )
+    .mutation(({ ctx, input: { content, extendedConent } }) => {
+      return ctx.prisma.post.create({
+        data: {
+          content: content,
+          extendedContent: extendedConent,
+          userId: ctx.session.user.id,
+        },
+      });
+    }),
+  delete: protectedProcedure
+    .input(
+      z.object({ content: z.string(), extendedConent: z.string().optional() })
+    )
+    .mutation(({ ctx, input: { content, extendedConent } }) => {
+      return ctx.prisma.post.create({
+        data: {
+          content: content,
+          extendedContent: extendedConent,
+          userId: ctx.session.user.id,
+        },
+      });
+    }),
 });

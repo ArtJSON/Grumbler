@@ -2,7 +2,17 @@ import styles from "./index.module.css";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { api } from "../utils/api";
+import { useEffect } from "react";
 const Home: NextPage = () => {
+  const userQuery = api.post.getRecent.useQuery(
+    { page: 0 },
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    }
+  );
+
   return (
     <>
       <Head>
