@@ -50,9 +50,35 @@ export const postRouter = createTRPCRouter({
       });
 
       if (postInDb?.userId === ctx.session.user.id)
-        return ctx.prisma.post.delete({
+        return await ctx.prisma.post.delete({
           where: {
             id: postId,
+          },
+        });
+    }),
+  update: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+        content: z.string(),
+        extendedConent: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input: { content, extendedConent, postId } }) => {
+      const postInDb = await ctx.prisma.post.findUnique({
+        where: {
+          id: postId,
+        },
+      });
+
+      if (postInDb?.userId === ctx.session.user.id)
+        return await ctx.prisma.post.update({
+          where: {
+            id: postId,
+          },
+          data: {
+            content: content,
+            extendedContent: extendedConent,
           },
         });
     }),
