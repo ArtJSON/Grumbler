@@ -74,6 +74,8 @@ export const postRouter = createTRPCRouter({
       z.object({ content: z.string(), extendedConent: z.string().optional() })
     )
     .mutation(async ({ ctx, input: { content, extendedConent } }) => {
+      // TODO: Add hashtag extraction
+
       return await ctx.prisma.post.create({
         data: {
           content: content,
@@ -113,6 +115,7 @@ export const postRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input: { content, extendedConent, postId } }) => {
+      // TODO: Add hashtag extraction
       const postInDb = await ctx.prisma.post.findUnique({
         where: {
           id: postId,

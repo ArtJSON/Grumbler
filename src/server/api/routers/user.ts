@@ -4,6 +4,7 @@ import { errorMessages } from "../../../utils/errorMessages";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
+// TODO: Add notifications
 export const userRouter = createTRPCRouter({
   follow: protectedProcedure
     .input(
