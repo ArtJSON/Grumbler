@@ -1,4 +1,6 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { errorMessages } from "../../../utils/errorMessages";
 
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 
@@ -51,12 +53,18 @@ export const postRouter = createTRPCRouter({
         },
       });
 
-      if (postInDb?.userId === ctx.session.user.id)
-        return await ctx.prisma.post.delete({
-          where: {
-            id: postId,
-          },
+      if (postInDb?.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: errorMessages.UNAUTHORIZED,
         });
+      }
+
+      return await ctx.prisma.post.delete({
+        where: {
+          id: postId,
+        },
+      });
     }),
   update: protectedProcedure
     .input(
@@ -73,16 +81,22 @@ export const postRouter = createTRPCRouter({
         },
       });
 
-      if (postInDb?.userId === ctx.session.user.id)
-        return await ctx.prisma.post.update({
-          where: {
-            id: postId,
-          },
-          data: {
-            content: content,
-            extendedContent: extendedConent,
-          },
+      if (postInDb?.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: errorMessages.UNAUTHORIZED,
         });
+      }
+
+      return await ctx.prisma.post.update({
+        where: {
+          id: postId,
+        },
+        data: {
+          content: content,
+          extendedContent: extendedConent,
+        },
+      });
     }),
   like: protectedProcedure
     .input(
@@ -104,14 +118,19 @@ export const postRouter = createTRPCRouter({
         },
       });
 
-      if (postLikeInDb === null) {
-        return await ctx.prisma.postLike.create({
-          data: {
-            postId: postId,
-            userId: ctx.session.user.id,
-          },
+      if (postLikeInDb !== null) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: errorMessages.BAD_REQUEST,
         });
       }
+
+      return await ctx.prisma.postLike.create({
+        data: {
+          postId: postId,
+          userId: ctx.session.user.id,
+        },
+      });
     }),
   unlike: protectedProcedure
     .input(
@@ -133,14 +152,19 @@ export const postRouter = createTRPCRouter({
         },
       });
 
-      if (postLikeInDb !== null) {
-        return await ctx.prisma.postLike.deleteMany({
-          where: {
-            postId: postId,
-            userId: ctx.session.user.id,
-          },
+      if (postLikeInDb === null) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: errorMessages.UNAUTHORIZED,
         });
       }
+
+      return await ctx.prisma.postLike.deleteMany({
+        where: {
+          postId: postId,
+          userId: ctx.session.user.id,
+        },
+      });
     }),
   forward: protectedProcedure
     .input(
@@ -162,14 +186,19 @@ export const postRouter = createTRPCRouter({
         },
       });
 
-      if (forwardInDb === null) {
-        return await ctx.prisma.forward.create({
-          data: {
-            postId: postId,
-            userId: ctx.session.user.id,
-          },
+      if (forwardInDb !== null) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: errorMessages.BAD_REQUEST,
         });
       }
+
+      return await ctx.prisma.forward.create({
+        data: {
+          postId: postId,
+          userId: ctx.session.user.id,
+        },
+      });
     }),
   unforward: protectedProcedure
     .input(
@@ -191,14 +220,19 @@ export const postRouter = createTRPCRouter({
         },
       });
 
-      if (forwardInDb !== null) {
-        return await ctx.prisma.forward.deleteMany({
-          where: {
-            id: forwardId,
-            userId: ctx.session.user.id,
-          },
+      if (forwardInDb === null) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: errorMessages.UNAUTHORIZED,
         });
       }
+
+      return await ctx.prisma.forward.deleteMany({
+        where: {
+          id: forwardId,
+          userId: ctx.session.user.id,
+        },
+      });
     }),
   comment: protectedProcedure
     .input(
@@ -214,14 +248,19 @@ export const postRouter = createTRPCRouter({
         },
       });
 
-      if (postInDb !== null) {
-        return await ctx.prisma.comment.create({
-          data: {
-            userId: ctx.session.user.id,
-            postId: postId,
-          },
+      if (postInDb === null) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: errorMessages.BAD_REQUEST,
         });
       }
+
+      return await ctx.prisma.comment.create({
+        data: {
+          userId: ctx.session.user.id,
+          postId: postId,
+        },
+      });
     }),
   deleteComment: protectedProcedure
     .input(
@@ -236,13 +275,18 @@ export const postRouter = createTRPCRouter({
         },
       });
 
-      if (commentInDb !== null && commentInDb.userId === ctx.session.user.id) {
-        return await ctx.prisma.comment.delete({
-          where: {
-            id: commentId,
-          },
+      if (commentInDb === null || commentInDb.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: errorMessages.UNAUTHORIZED,
         });
       }
+
+      return await ctx.prisma.comment.delete({
+        where: {
+          id: commentId,
+        },
+      });
     }),
   likeComment: protectedProcedure
     .input(
