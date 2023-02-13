@@ -66,8 +66,17 @@ model User {
     postLikes    PostLike[]
     forwards     Forward[]
 
-    followedBy User[] @relation("UserFollows")
-    following  User[] @relation("UserFollows")
+    followedBy Follows[] @relation("following")
+    following  Follows[] @relation("follower")
+}
+
+model Follows {
+    follower    User   @relation("follower", fields: [followerId], references: [id])
+    followerId  String
+    following   User   @relation("following", fields: [followingId], references: [id])
+    followingId String
+
+    @@id([followerId, followingId])
 }
 
 model Comment {
@@ -80,6 +89,7 @@ model Comment {
     commentLike CommentLike[]
 }
 
+// TODO: Change id to composite key of userId and commentId and change trpc procedures to match new key
 model CommentLike {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
@@ -110,6 +120,7 @@ model Hashtag {
     posts Post[]
 }
 
+// TODO: Change id to composite key of userId and postId and change trpc procedures to match new key
 model PostLike {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
