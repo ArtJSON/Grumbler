@@ -96,7 +96,8 @@ model Post {
     userId          String
     views           Int        @default(0)
     content         String
-    // media String // TODO: add a field that is used to store photos/videos data (cloudinary)
+    // TODO: add a field that is used to store photos/videos data (cloudinary)
+    // TODO: Add possibility to respond to a Post (creates a separate post linking to the other one, different to a comment)
     extendedContent String?
     comments        Comment[]
     postLikes       PostLike[]

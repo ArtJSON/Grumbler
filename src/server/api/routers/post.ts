@@ -2,6 +2,8 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 
+// TODO: Add correct error handling
+// TODO: Split into separate routers (comments, likes etc.)
 export const postRouter = createTRPCRouter({
   getRecent: publicProcedure
     .input(
@@ -194,6 +196,96 @@ export const postRouter = createTRPCRouter({
           where: {
             id: forwardId,
             userId: ctx.session.user.id,
+          },
+        });
+      }
+    }),
+  comment: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+        comment: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input: { postId, comment } }) => {
+      const postInDb = await ctx.prisma.post.findUnique({
+        where: {
+          id: postId,
+        },
+      });
+
+      if (postInDb !== null) {
+        return await ctx.prisma.comment.create({
+          data: {
+            userId: ctx.session.user.id,
+            postId: postId,
+          },
+        });
+      }
+    }),
+  deleteComment: protectedProcedure
+    .input(
+      z.object({
+        commentId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input: { commentId } }) => {
+      const commentInDb = await ctx.prisma.comment.findUnique({
+        where: {
+          id: commentId,
+        },
+      });
+
+      if (commentInDb !== null && commentInDb.userId === ctx.session.user.id) {
+        return await ctx.prisma.comment.delete({
+          where: {
+            id: commentId,
+          },
+        });
+      }
+    }),
+  likeComment: protectedProcedure
+    .input(
+      z.object({
+        commentId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input: { commentId } }) => {
+      const commentLikeInDb = await ctx.prisma.commentLike.findFirst({
+        where: {
+          AND: [{ commentId: commentId }, { userId: ctx.session.user.id }],
+        },
+      });
+
+      if (commentLikeInDb === null) {
+        return await ctx.prisma.commentLike.create({
+          data: {
+            userId: ctx.session.user.id,
+            commentId: commentId,
+          },
+        });
+      }
+    }),
+  unlikeComment: protectedProcedure
+    .input(
+      z.object({
+        commentLikeId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input: { commentLikeId } }) => {
+      const commentLikeInDb = await ctx.prisma.commentLike.findFirst({
+        where: {
+          AND: [{ id: commentLikeId }, { userId: ctx.session.user.id }],
+        },
+      });
+
+      if (
+        commentLikeInDb !== null &&
+        commentLikeInDb.userId === ctx.session.user.id
+      ) {
+        return await ctx.prisma.commentLike.delete({
+          where: {
+            id: commentLikeId,
           },
         });
       }
