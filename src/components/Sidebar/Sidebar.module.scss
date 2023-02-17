@@ -9,9 +9,7 @@
   padding: 0.5rem;
 
   @media screen and (min-width: $breakpoint-desktop) {
-    bottom: 0;
-    top: 0;
-    left: 0;
+    position: relative;
     width: 320px;
     padding: 1.5rem;
   }

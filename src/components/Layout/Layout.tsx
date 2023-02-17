@@ -5,7 +5,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className={styles.layout}>
       <Sidebar />
-      {children}
+      <div className={styles.pageContainer}>{children}</div>
     </div>
   );
 }

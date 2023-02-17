@@ -9,6 +9,7 @@ import "../styles/globals.scss";
 import { useState } from "react";
 import { ColorTheme } from "../types/types";
 import React from "react";
+import { Layout } from "../components/Layout/Layout";
 
 const ThemeContext = React.createContext({
   theme: "light",
@@ -35,7 +36,9 @@ const MyApp: AppType<{
   return (
     <SessionProvider session={session}>
       <ThemeContext.Provider value={{ theme: theme, toggleTheme: toggleTheme }}>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </ThemeContext.Provider>
     </SessionProvider>
   );
