@@ -8,6 +8,7 @@ import Auth0Provider from "next-auth/providers/auth0";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "../env.mjs";
 import { prisma } from "./db";
+import { UserRole } from "../types/types.js";
 
 /**
  * Module augmentation for `next-auth` types.
@@ -20,8 +21,8 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      role: UserRole;
       // ...other properties
-      // role: UserRole;
     } & DefaultSession["user"];
   }
 
@@ -39,9 +40,15 @@ declare module "next-auth" {
  **/
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session({ session, user }) {
+    async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
+        const userInDb = await prisma.user.findUnique({
+          where: { id: user.id },
+        });
+
+        session.user.role = userInDb?.role as UserRole;
+        session.user.image = userInDb?.avatar;
         // session.user.role = user.role; <-- put other properties on the session here
       }
       return session;

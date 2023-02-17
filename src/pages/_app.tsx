@@ -5,9 +5,9 @@ import { getCookie, setCookie } from "cookies-next";
 
 import { api } from "../utils/api";
 
-import "../styles/globals.css";
+import "../styles/globals.scss";
 import { useState } from "react";
-import { ColorTheme } from "../types/ColorTheme";
+import { ColorTheme } from "../types/types";
 import React from "react";
 
 const ThemeContext = React.createContext({
