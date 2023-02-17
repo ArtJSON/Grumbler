@@ -5,12 +5,14 @@
   bottom: 0;
   right: 0;
   left: 0;
-  background-color: red;
+  background-color: $blue-700;
+  color: $gray-100;
   padding: 0.5rem;
 
   @media screen and (min-width: $breakpoint-desktop) {
     position: relative;
-    width: 320px;
+    box-sizing: border-box;
+    flex: 0 0 280px;
     padding: 1.5rem;
   }
 
@@ -32,6 +34,11 @@
 
       @media screen and (min-width: $breakpoint-desktop) {
         gap: 0.5rem;
+      }
+
+      svg {
+        stroke: $gray-100;
+        stroke-width: 1.5px;
       }
 
       .optionText {
