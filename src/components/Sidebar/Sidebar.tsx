@@ -10,36 +10,33 @@ import {
   TrendingUp,
   User,
 } from "tabler-icons-react";
-import classes from "./Sidebar.module.scss";
+import styles from "./Sidebar.module.scss";
 
 export function Sidebar() {
   const { data: sessionData } = useSession();
 
   return (
-    <nav className={classes.sidebar}>
-      <ul className={classes.optionList}>
-        <Link className={classes.option} href="#">
+    <nav className={styles.sidebar}>
+      <ul className={styles.optionList}>
+        <Link className={styles.option} href="#">
           <Home2 size={32} strokeWidth={2} color={"black"} />
-          <span className={classes.optionText}>Home</span>
+          <span className={styles.optionText}>Home</span>
         </Link>
-        <Link className={classes.option} href="#">
+        <Link className={styles.option} href="#">
           <TrendingUp size={32} strokeWidth={2} color={"black"} />
-          <span className={classes.optionText}>Trending</span>
+          <span className={styles.optionText}>Trending</span>
         </Link>
-        <Link className={classes.option} href="#">
+        <Link className={styles.option} href="#">
           <BellRinging size={32} strokeWidth={2} color={"black"} />
-          <span className={classes.optionText}>Notifications</span>
+          <span className={styles.optionText}>Notifications</span>
         </Link>
         {sessionData ? (
           <>
-            <Link
-              className={`${classes.option} ${classes.desktopOnly}`}
-              href="#"
-            >
+            <Link className={`${styles.option} ${styles.desktopOnly}`} href="#">
               <Settings size={32} strokeWidth={2} color={"black"} />
-              <span className={classes.optionText}>Settings</span>
+              <span className={styles.optionText}>Settings</span>
             </Link>
-            <Link className={classes.option} href="#">
+            <Link className={styles.option} href="#">
               {sessionData.user.image ? (
                 <Image
                   src={sessionData.user.image}
@@ -50,20 +47,20 @@ export function Sidebar() {
               ) : (
                 <User size={32} strokeWidth={2} color={"black"} />
               )}
-              <span className={classes.optionText}>Profile</span>
+              <span className={styles.optionText}>Profile</span>
             </Link>
           </>
         ) : (
-          <div className={classes.option} onClick={() => signIn()}>
+          <div className={styles.option} onClick={() => signIn()}>
             <Login size={32} strokeWidth={2} color={"black"} />
-            <span className={classes.optionText}>Sign in</span>
+            <span className={styles.optionText}>Sign in</span>
           </div>
         )}
 
         {sessionData?.user.role !== "USER" && (
-          <Link className={`${classes.option} ${classes.desktopOnly}`} href="#">
+          <Link className={`${styles.option} ${styles.desktopOnly}`} href="#">
             <ServerBolt size={32} strokeWidth={2} color={"black"} />
-            <span className={classes.optionText}>Admin panel</span>
+            <span className={styles.optionText}>Admin panel</span>
           </Link>
         )}
       </ul>
