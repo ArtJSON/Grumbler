@@ -9,7 +9,15 @@
     padding-bottom: 0;
   }
 
-  .pageContainer {
+  .pageWrapper {
     overflow-y: scroll;
+    width: 100%;
+
+    @media screen and (min-width: $breakpoint-desktop) {
+      .childrenContainer {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+    }
   }
 }
