@@ -21,6 +21,7 @@ CREATE TABLE "Session" (
     "sessionToken" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "expires" DATETIME NOT NULL,
+    "role" TEXT NOT NULL DEFAULT 'USER',
     CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -38,8 +39,19 @@ CREATE TABLE "User" (
     "name" TEXT,
     "email" TEXT,
     "role" TEXT NOT NULL DEFAULT 'USER',
+    "avatar" TEXT,
     "emailVerified" DATETIME,
     "image" TEXT
+);
+
+-- CreateTable
+CREATE TABLE "Follows" (
+    "followerId" TEXT NOT NULL,
+    "followingId" TEXT NOT NULL,
+
+    PRIMARY KEY ("followerId", "followingId"),
+    CONSTRAINT "Follows_followerId_fkey" FOREIGN KEY ("followerId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Follows_followingId_fkey" FOREIGN KEY ("followingId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -74,8 +86,18 @@ CREATE TABLE "Post" (
 );
 
 -- CreateTable
+CREATE TABLE "PostHashtag" (
+    "postId" TEXT NOT NULL,
+    "hashtagName" TEXT NOT NULL,
+
+    PRIMARY KEY ("postId", "hashtagName"),
+    CONSTRAINT "PostHashtag_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "PostHashtag_hashtagName_fkey" FOREIGN KEY ("hashtagName") REFERENCES "Hashtag" ("name") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
 CREATE TABLE "Hashtag" (
-    "id" TEXT NOT NULL PRIMARY KEY
+    "name" TEXT NOT NULL PRIMARY KEY
 );
 
 -- CreateTable
@@ -98,22 +120,6 @@ CREATE TABLE "Forward" (
     CONSTRAINT "Forward_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- CreateTable
-CREATE TABLE "_UserFollows" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL,
-    CONSTRAINT "_UserFollows_A_fkey" FOREIGN KEY ("A") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "_UserFollows_B_fkey" FOREIGN KEY ("B") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
-);
-
--- CreateTable
-CREATE TABLE "_HashtagToPost" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL,
-    CONSTRAINT "_HashtagToPost_A_fkey" FOREIGN KEY ("A") REFERENCES "Hashtag" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "_HashtagToPost_B_fkey" FOREIGN KEY ("B") REFERENCES "Post" ("id") ON DELETE CASCADE ON UPDATE CASCADE
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");
 
@@ -131,15 +137,3 @@ CREATE UNIQUE INDEX "User_name_key" ON "User"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_UserFollows_AB_unique" ON "_UserFollows"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_UserFollows_B_index" ON "_UserFollows"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_HashtagToPost_AB_unique" ON "_HashtagToPost"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_HashtagToPost_B_index" ON "_HashtagToPost"("B");

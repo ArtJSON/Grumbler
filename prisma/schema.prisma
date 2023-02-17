@@ -35,6 +35,7 @@ model Session {
     sessionToken String   @unique
     userId       String
     expires      DateTime
+    role         String   @default("USER")
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -52,6 +53,7 @@ model User {
     name          String?   @unique
     email         String?   @unique
     role          String    @default("USER")
+    avatar        String?
     emailVerified DateTime?
     image         String?
     accounts      Account[]
