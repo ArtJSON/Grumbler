@@ -1,7 +1,8 @@
 import styles from "./PostInput.module.scss";
-import { Textarea, Button, Box, Code } from "@mantine/core";
+import { Textarea } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
+import { TiptapEditor } from "../TiptapEditor/TiptapEditor";
 
 export function PostInput() {
   const form = useForm({
@@ -28,14 +29,7 @@ export function PostInput() {
         {...form.getInputProps("content")}
       />
       <span>{form.values.content.length} / 320 characters</span>
-      <Textarea
-        withAsterisk
-        placeholder="Tell us more..."
-        maxLength={320}
-        minRows={3}
-        autosize
-        {...form.getInputProps("extendedContent")}
-      />
+      <TiptapEditor />
     </div>
   );
 }
