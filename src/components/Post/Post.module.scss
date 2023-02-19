@@ -1,0 +1,33 @@
+@import "../../styles/variables";
+
+.post {
+  text-decoration: none !important;
+  color: inherit;
+  display: block;
+  padding: 1rem;
+
+  border-bottom: $post-border-light;
+  border-top: $post-border-light;
+
+  .infoHeader {
+    font-size: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+
+    .userInfo {
+      display: flex;
+
+      .namesContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+      }
+    }
+
+    .date {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
