@@ -23,7 +23,7 @@ export function PostInput() {
       z.object({
         content: z
           .string()
-          .min(10, "Post must be at least 10 characters long!")
+          .min(3, "Post must be at least 3 characters long!")
           .max(320),
       })
     ),
