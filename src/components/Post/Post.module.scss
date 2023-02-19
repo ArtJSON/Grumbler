@@ -6,28 +6,72 @@
   display: block;
   padding: 1rem;
 
-  border-bottom: $post-border-light;
   border-top: $post-border-light;
+
+  @media screen and (min-width: $breakpoint-desktop) {
+    border: $post-border-light;
+    border-radius: 0.25rem;
+  }
 
   .infoHeader {
     font-size: 0.75rem;
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.5rem;
+    color: $gray-400;
 
     .userInfo {
       display: flex;
 
       .namesContainer {
+        margin-left: 1rem;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
+
+        .displayName {
+          font-weight: 500;
+          color: $gray-600;
+        }
+
+        .username {
+          font-weight: 200;
+        }
       }
     }
 
     .date {
       display: flex;
       align-items: center;
+    }
+  }
+
+  .content {
+    margin-bottom: 0.5rem;
+  }
+
+  .readMore {
+    font-size: 0.75rem;
+    color: $gray-600;
+    margin-bottom: 0.5rem;
+  }
+
+  .infoFooter {
+    display: flex;
+    justify-content: space-between;
+
+    color: $gray-600;
+
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      font-weight: 300;
+
+      svg {
+        stroke-width: 1.25px;
+      }
     }
   }
 }
