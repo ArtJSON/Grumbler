@@ -3,10 +3,14 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "../utils/api";
-import { useEffect } from "react";
-import { Sidebar } from "../components/Sidebar/Sidebar";
 import { PostInput } from "../components/PostInput/PostInput";
+import { Post } from "../components/Post/Post";
+
 const Home: NextPage = () => {
+  const { data: postsData } = api.post.getRecent.useQuery({ page: 0 });
+
+  console.log(postsData);
+
   return (
     <>
       <Head>
@@ -15,6 +19,33 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PostInput />
+      {postsData?.map(
+        ({
+          id,
+          createdAt,
+          userId,
+          user: { avatar: userImage, displayName, name: username },
+          content,
+          _count,
+          views,
+          extendedContent,
+        }) => (
+          <Post
+            id={id}
+            createdAt={createdAt.toDateString()}
+            userId={userId}
+            userImage={userImage ?? undefined}
+            displayName={displayName ?? ""}
+            username={username ?? ""}
+            content={content}
+            commentCount={_count.comments}
+            likesCount={_count.postLikes}
+            forwardCount={_count.forwards}
+            viewCount={views}
+            hasExtendedContent={extendedContent !== null}
+          />
+        )
+      )}
       <div>
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. In amet minus
         nesciunt suscipit reprehenderit incidunt ducimus delectus obcaecati est
