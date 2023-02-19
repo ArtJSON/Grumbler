@@ -1,6 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { User } from "tabler-icons-react";
+import {
+  ArrowUpRightCircle,
+  Eye,
+  Heart,
+  MessageCircle,
+  User,
+} from "tabler-icons-react";
 import styles from "./Post.module.scss";
 
 interface PostProps {
@@ -41,21 +47,33 @@ export function Post({
             <User size={32} strokeWidth={2} color={"black"} />
           )}
           <div className={styles.namesContainer}>
-            <span>{displayName}</span>
-            <span>{username}</span>
+            <span className={styles.displayName}>{displayName}</span>
+            <span className={styles.username}>@{username}</span>
           </div>
         </div>
         <div className={styles.date}>{createdAt}</div>
       </div>
       <div className={styles.content}>{content}</div>
       {hasExtendedContent && (
-        <div className={styles.readMore}>Read more...</div>
+        <div className={styles.readMore}>Click to read more...</div>
       )}
       <div className={styles.infoFooter}>
-        <span>{commentCount}</span>
-        <span>{likesCount}</span>
-        <span>{forwardCount}</span>
-        <span>{viewCount}</span>
+        <span>
+          {likesCount}
+          <Heart />
+        </span>
+        <span>
+          {commentCount}
+          <MessageCircle />
+        </span>
+        <span>
+          {forwardCount}
+          <ArrowUpRightCircle />
+        </span>
+        <span>
+          {viewCount}
+          <Eye />
+        </span>
       </div>
     </Link>
   );
