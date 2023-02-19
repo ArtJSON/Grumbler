@@ -1,31 +1,15 @@
 import { RichTextEditor } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import TextAlign from "@tiptap/extension-text-align";
-import CharacterCount from "@tiptap/extension-character-count";
-import Placeholder from "@tiptap/extension-placeholder";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import { lowlight } from "lowlight";
+import { Editor } from "@tiptap/react";
+
 import { useRef } from "react";
 
-export function TiptapEditor({ extended }: { extended: boolean }) {
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      TextAlign,
-      Placeholder.configure({ placeholder: "Say something more..." }),
-      CharacterCount.configure({
-        limit: 5000,
-      }),
-      CodeBlockLowlight.configure({
-        lowlight,
-      }),
-    ],
-    content: "<p>Hello World! 🌎️</p>",
-  });
-
+export function TiptapEditor({
+  extended,
+  editor,
+}: {
+  extended: boolean;
+  editor: Editor | null;
+}) {
   const contentRef = useRef<HTMLDivElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
 
@@ -46,6 +30,7 @@ export function TiptapEditor({ extended }: { extended: boolean }) {
         },
         content: {
           overflowY: "scroll",
+          maxHeight: 500,
         },
       }}
     >
