@@ -1,0 +1,10 @@
+@import "../styles/variables";
+
+.postsContainer {
+  @media screen and (min-width: $breakpoint-desktop) {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
