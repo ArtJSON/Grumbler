@@ -19,6 +19,13 @@ export const postRouter = createTRPCRouter({
         skip: page * 25,
         take: 25,
         include: {
+          user: {
+            select: {
+              avatar: true,
+              displayName: true,
+              name: true,
+            },
+          },
           _count: {
             select: {
               comments: true,
