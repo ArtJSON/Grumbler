@@ -14,7 +14,9 @@ import { MantineProvider } from "@mantine/core";
 
 const ThemeContext = React.createContext({
   theme: "light",
-  toggleTheme: () => {},
+  toggleTheme: () => {
+    return;
+  },
 });
 
 const MyApp: AppType<{

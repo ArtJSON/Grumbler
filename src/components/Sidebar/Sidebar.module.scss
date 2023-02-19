@@ -10,10 +10,13 @@
   padding: 0.5rem;
 
   @media screen and (min-width: $breakpoint-desktop) {
-    position: relative;
-    box-sizing: border-box;
-    flex: 0 0 280px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: unset;
+    width: 280px;
     padding: 1.5rem;
+    box-sizing: border-box;
   }
 
   .optionList {

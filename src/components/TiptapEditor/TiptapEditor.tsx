@@ -20,8 +20,8 @@ export function TiptapEditor({
       styles={{
         root: {
           height: extended
-            ? contentRef.current?.scrollHeight! +
-              toolbarRef.current?.scrollHeight!
+            ? (contentRef.current?.scrollHeight ?? 0) +
+              (toolbarRef.current?.scrollHeight ?? 0)
             : 0,
           marginTop: extended ? 16 : 0,
           opacity: extended ? 1 : 0,
@@ -31,6 +31,7 @@ export function TiptapEditor({
         content: {
           overflowY: "scroll",
           maxHeight: 500,
+          fontSize: 16,
         },
       }}
     >

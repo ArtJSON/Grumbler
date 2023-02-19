@@ -51,7 +51,14 @@ export function Sidebar() {
             </Link>
           </>
         ) : (
-          <div className={styles.option} onClick={() => signIn()}>
+          <div
+            className={styles.option}
+            onClick={() => {
+              void (async () => {
+                await signIn();
+              })();
+            }}
+          >
             <Login size={32} strokeWidth={2} color={"black"} />
             <span className={styles.optionText}>Sign in</span>
           </div>

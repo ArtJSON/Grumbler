@@ -21,7 +21,10 @@ export function PostInput() {
   const form = useForm({
     validate: zodResolver(
       z.object({
-        content: z.string().min(3).max(320),
+        content: z
+          .string()
+          .min(10, "Post must be at least 10 characters long!")
+          .max(320),
       })
     ),
     initialValues: {
@@ -60,6 +63,11 @@ export function PostInput() {
         maxLength={320}
         minRows={3}
         autosize
+        styles={{
+          input: {
+            fontSize: 16,
+          },
+        }}
         {...form.getInputProps("content")}
       />
       <div className={styles.options}>
@@ -75,7 +83,9 @@ export function PostInput() {
         </span>
       </div>
       <TiptapEditor extended={extended} editor={editor} />
-      <button type="submit">Submit</button>
+      <button className={styles.submitButton} type="submit">
+        Submit
+      </button>
     </form>
   );
 }

@@ -3,20 +3,21 @@
 .layout {
   padding-bottom: 3rem;
   display: flex;
-  height: 100vh;
+  overflow-y: scroll;
 
   @media screen and (min-width: $breakpoint-desktop) {
     padding-bottom: 0;
+    height: 100vh;
   }
 
   .pageWrapper {
-    overflow-y: scroll;
     width: 100%;
 
     @media screen and (min-width: $breakpoint-desktop) {
       .childrenContainer {
         max-width: 720px;
         margin: 0 auto;
+        padding-left: 280px;
       }
     }
   }
