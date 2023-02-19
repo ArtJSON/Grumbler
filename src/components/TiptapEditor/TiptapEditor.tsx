@@ -1,13 +1,15 @@
-import { RichTextEditor, Link } from "@mantine/tiptap";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { RichTextEditor } from "@mantine/tiptap";
+import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import CharacterCount from "@tiptap/extension-character-count";
-import styles from "./TiptapEditor.module.scss";
 import Placeholder from "@tiptap/extension-placeholder";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { lowlight } from "lowlight";
+import { useRef } from "react";
 
-export function TiptapEditor() {
+export function TiptapEditor({ extended }: { extended: boolean }) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -17,21 +19,37 @@ export function TiptapEditor() {
       CharacterCount.configure({
         limit: 5000,
       }),
+      CodeBlockLowlight.configure({
+        lowlight,
+      }),
     ],
     content: "<p>Hello World! 🌎️</p>",
   });
 
+  const contentRef = useRef<HTMLDivElement>(null);
+  const toolbarRef = useRef<HTMLDivElement>(null);
+
   return (
     <RichTextEditor
       editor={editor}
+      withCodeHighlightStyles
       styles={{
+        root: {
+          height: extended
+            ? contentRef.current?.scrollHeight! +
+              toolbarRef.current?.scrollHeight!
+            : 0,
+          marginTop: extended ? 16 : 0,
+          opacity: extended ? 1 : 0,
+          overflow: "clip",
+          transition: "height 0.3s ease, opacity 0.2s, margin-top 0.2s",
+        },
         content: {
-          maxHeight: 500,
           overflowY: "scroll",
         },
       }}
     >
-      <RichTextEditor.Toolbar sticky stickyOffset={0}>
+      <RichTextEditor.Toolbar sticky stickyOffset={0} ref={toolbarRef}>
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />
           <RichTextEditor.Italic />
@@ -39,6 +57,7 @@ export function TiptapEditor() {
           <RichTextEditor.Strikethrough />
           <RichTextEditor.ClearFormatting />
           <RichTextEditor.Code />
+          <RichTextEditor.CodeBlock />
         </RichTextEditor.ControlsGroup>
 
         <RichTextEditor.ControlsGroup>
@@ -68,7 +87,7 @@ export function TiptapEditor() {
         </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
 
-      <RichTextEditor.Content />
+      <RichTextEditor.Content ref={contentRef} />
     </RichTextEditor>
   );
 }
