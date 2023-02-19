@@ -1,2 +1,15 @@
 .postInput {
+  padding: 1rem;
+
+  .options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+
+    .contentLength {
+      display: inline-block;
+      font-size: 0.75rem;
+    }
+  }
 }
