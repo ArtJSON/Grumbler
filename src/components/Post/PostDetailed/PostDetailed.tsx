@@ -1,8 +1,10 @@
 import { RichTextEditor } from "@mantine/tiptap";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { lowlight } from "lowlight";
 import { useEffect, useState } from "react";
 import { PostInfoHeader } from "../PostFragments/PostInfoHeader/PostInfoHeader";
 import styles from "./PostDetailed.module.scss";
@@ -27,7 +29,14 @@ export function PostDetailed({
   const editor = useEditor({
     editable: false,
     content: extendedContent,
-    extensions: [StarterKit, Underline, TextAlign],
+    extensions: [
+      StarterKit,
+      Underline,
+      TextAlign,
+      CodeBlockLowlight.configure({
+        lowlight,
+      }),
+    ],
   });
 
   useEffect(() => {
