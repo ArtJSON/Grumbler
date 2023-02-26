@@ -7,7 +7,10 @@ import { PostInput } from "../components/PostInput/PostInput";
 import { PostListingItem } from "../components/Post/PostListingItem/PostListingItem";
 
 const Home: NextPage = () => {
-  const { data: postsData, refetch } = api.post.getRecent.useQuery({ page: 0 });
+  const { data: postsData, refetch } = api.post.getRecent.useQuery(
+    { page: 0 },
+    { refetchOnReconnect: false, refetchOnWindowFocus: false }
+  );
 
   return (
     <>
@@ -34,6 +37,7 @@ const Home: NextPage = () => {
             extendedContent,
           }) => (
             <PostListingItem
+              key={id}
               id={id}
               createdAt={createdAt.toDateString()}
               userId={userId}
