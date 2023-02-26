@@ -55,6 +55,17 @@ export const postRouter = createTRPCRouter({
               name: true,
             },
           },
+          comments: {
+            include: {
+              user: {
+                select: {
+                  displayName: true,
+                  avatar: true,
+                  name: true,
+                },
+              },
+            },
+          },
           _count: {
             select: {
               comments: true,
