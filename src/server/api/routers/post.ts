@@ -36,6 +36,35 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
+  getById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input: { id } }) => {
+      return await ctx.prisma.post.findUnique({
+        where: {
+          id: id,
+        },
+        include: {
+          user: {
+            select: {
+              avatar: true,
+              displayName: true,
+              name: true,
+            },
+          },
+          _count: {
+            select: {
+              comments: true,
+              forwards: true,
+              postLikes: true,
+            },
+          },
+        },
+      });
+    }),
   getRecentByFollowed: protectedProcedure
     .input(
       z.object({
