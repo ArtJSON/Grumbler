@@ -14,9 +14,19 @@ import { lowlight } from "lowlight";
 import { useEditor } from "@tiptap/react";
 import { api } from "../../utils/api";
 
-export function PostInput() {
+interface PostInputProps {
+  onSubmit?: () => void;
+}
+
+export function PostInput({ onSubmit }: PostInputProps) {
   const [extended, setExtended] = useState(false);
-  const postCreateMutation = api.post.create.useMutation();
+  const postCreateMutation = api.post.create.useMutation({
+    onSuccess: () => {
+      if (onSubmit) {
+        onSubmit();
+      }
+    },
+  });
 
   const form = useForm({
     validate: zodResolver(
@@ -55,6 +65,9 @@ export function PostInput() {
           content: values.content,
           extendedConent: extended ? editor!.getHTML() : undefined,
         });
+        editor?.commands.clearContent();
+        form.reset();
+        setExtended(false);
       })}
     >
       <Textarea
@@ -74,6 +87,7 @@ export function PostInput() {
         <Checkbox
           label="Extended content"
           styles={{ label: { fontSize: 12, paddingLeft: 4 } }}
+          checked={extended}
           onChange={(event) => {
             setExtended(event.target.checked);
           }}
