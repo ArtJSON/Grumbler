@@ -59,8 +59,12 @@
   .infoFooter {
     display: flex;
     justify-content: space-between;
-
     color: $gray-600;
+
+    @media screen and (min-width: $breakpoint-desktop) {
+      justify-content: flex-start;
+      gap: 2rem;
+    }
 
     span {
       display: flex;
