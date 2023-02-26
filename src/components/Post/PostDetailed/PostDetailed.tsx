@@ -1,3 +1,9 @@
+import { RichTextEditor } from "@mantine/tiptap";
+import TextAlign from "@tiptap/extension-text-align";
+import Underline from "@tiptap/extension-underline";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { useEffect, useState } from "react";
 import { PostInfoHeader } from "../PostFragments/PostInfoHeader/PostInfoHeader";
 import styles from "./PostDetailed.module.scss";
 
@@ -18,6 +24,18 @@ export function PostDetailed({
   content,
   extendedContent,
 }: PostDetailedProps) {
+  const editor = useEditor({
+    editable: false,
+    content: extendedContent,
+    extensions: [StarterKit, Underline, TextAlign],
+  });
+
+  useEffect(() => {
+    if (editor && !editor.isDestroyed) {
+      editor.commands.setContent(extendedContent ?? "");
+    }
+  }, [extendedContent, editor]);
+
   return (
     <div className={styles.postDetailed}>
       <PostInfoHeader
@@ -27,12 +45,21 @@ export function PostDetailed({
         createdAt={createdAt}
       />
       <div className={styles.content}>{content}</div>
-      {extendedContent && (
-        <div
-          className={styles.extendedContent}
-          dangerouslySetInnerHTML={{ __html: extendedContent }}
-        />
-      )}
+      {extendedContent && <div className={styles.extendedContent}></div>}
+      <RichTextEditor
+        editor={editor}
+        styles={{
+          root: {
+            border: "none",
+            ".ProseMirror": {
+              padding: "0",
+            },
+          },
+        }}
+        withCodeHighlightStyles
+      >
+        <RichTextEditor.Content />
+      </RichTextEditor>
     </div>
   );
 }
