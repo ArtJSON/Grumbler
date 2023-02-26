@@ -18,7 +18,7 @@ export function Sidebar() {
   return (
     <nav className={styles.sidebar}>
       <ul className={styles.optionList}>
-        <Link className={styles.option} href="#">
+        <Link className={styles.option} href="/">
           <Home2 size={32} strokeWidth={2} color={"black"} />
           <span className={styles.optionText}>Home</span>
         </Link>
