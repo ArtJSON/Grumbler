@@ -30,6 +30,7 @@ export const commentRouter = createTRPCRouter({
         data: {
           userId: ctx.session.user.id,
           postId: postId,
+          text: comment,
         },
       });
     }),
