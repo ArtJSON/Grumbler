@@ -21,7 +21,7 @@ export function CommentInput({ postId, onSubmit }: CommentInputProps) {
   const form = useForm({
     validate: zodResolver(
       z.object({
-        content: z
+        comment: z
           .string()
           .min(3, "Comment must be at least 3 characters long!")
           .max(320),
@@ -40,6 +40,7 @@ export function CommentInput({ postId, onSubmit }: CommentInputProps) {
           postId: postId,
           comment: values.comment,
         });
+        form.reset();
       })}
     >
       <Textarea
