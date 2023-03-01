@@ -32,7 +32,9 @@ export function PostDetailed({
     extensions: [
       StarterKit,
       Underline,
-      TextAlign,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
       CodeBlockLowlight.configure({
         lowlight,
       }),

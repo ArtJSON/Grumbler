@@ -46,7 +46,9 @@ export function PostInput({ onSubmit }: PostInputProps) {
     extensions: [
       StarterKit,
       Underline,
-      TextAlign,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
       Placeholder.configure({ placeholder: "Say something more..." }),
       CharacterCount.configure({
         limit: 5000,
