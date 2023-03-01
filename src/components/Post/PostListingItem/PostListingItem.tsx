@@ -2,6 +2,8 @@ import Link from "next/link";
 import styles from "./PostListingItem.module.scss";
 import { PostInfoHeader } from "../PostFragments/PostInfoHeader/PostInfoHeader";
 import { PostReactionsFooter } from "../PostFragments/PostReactionsFooter/PostReactionsFooter";
+import { api } from "../../../utils/api";
+import { useState } from "react";
 
 interface PostListingItemProps {
   id: string;
@@ -15,6 +17,7 @@ interface PostListingItemProps {
   likesCount: number;
   forwardsCount: number;
   viewsCount: number;
+  liked: boolean;
   hasExtendedContent: boolean;
 }
 
@@ -30,7 +33,12 @@ export function PostListingItem({
   forwardsCount,
   viewsCount,
   hasExtendedContent,
+  liked,
 }: PostListingItemProps) {
+  const likePostMutation = api.post.like.useMutation();
+  const unlikePostMutation = api.post.unlike.useMutation();
+  const [isLiked, setIsLiked] = useState<boolean>(liked);
+
   return (
     <Link href={`/post/${id}`} className={styles.post}>
       <PostInfoHeader
@@ -44,15 +52,18 @@ export function PostListingItem({
         <div className={styles.readMore}>Click to read more...</div>
       )}
       <PostReactionsFooter
-        likesCount={likesCount}
+        likesCount={likesCount - Number(liked) + Number(isLiked)}
         commentsCount={commentsCount}
         forwardsCount={forwardsCount}
         viewsCount={viewsCount}
-        onLikeClick={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-        onCommentClick={function (): void {
-          throw new Error("Function not implemented.");
+        liked={isLiked}
+        onLikeClick={() => {
+          if (isLiked) {
+            unlikePostMutation.mutate({ postId: id });
+          } else {
+            likePostMutation.mutate({ postId: id });
+          }
+          setIsLiked((prev) => !prev);
         }}
         onForwardClick={function (): void {
           throw new Error("Function not implemented.");

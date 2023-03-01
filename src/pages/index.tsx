@@ -35,6 +35,7 @@ const Home: NextPage = () => {
             _count,
             views,
             extendedContent,
+            postLikes,
           }) => (
             <PostListingItem
               key={id}
@@ -50,6 +51,7 @@ const Home: NextPage = () => {
               forwardsCount={_count.forwards}
               viewsCount={views}
               hasExtendedContent={extendedContent !== null}
+              liked={postLikes.length !== 0}
             />
           )
         )}

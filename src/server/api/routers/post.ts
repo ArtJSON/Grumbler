@@ -26,6 +26,11 @@ export const postRouter = createTRPCRouter({
               name: true,
             },
           },
+          postLikes: {
+            where: {
+              userId: ctx.session?.user.id,
+            },
+          },
           _count: {
             select: {
               comments: true,
@@ -55,6 +60,11 @@ export const postRouter = createTRPCRouter({
               name: true,
             },
           },
+          postLikes: {
+            where: {
+              userId: ctx.session?.user.id,
+            },
+          },
           comments: {
             include: {
               user: {
@@ -62,6 +72,11 @@ export const postRouter = createTRPCRouter({
                   displayName: true,
                   avatar: true,
                   name: true,
+                },
+              },
+              commentLike: {
+                where: {
+                  userId: ctx.session?.user.id,
                 },
               },
             },

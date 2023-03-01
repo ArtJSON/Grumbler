@@ -10,15 +10,25 @@
     gap: 2rem;
   }
 
-  span {
+  .item {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.25rem;
     font-weight: 300;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 
     svg {
       stroke-width: 1.25px;
+    }
+  }
+
+  .liked {
+    svg {
+      fill: $red-heart;
+      color: $red-heart;
     }
   }
 }

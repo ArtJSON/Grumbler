@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   ArrowUpRightCircle,
   Eye,
@@ -11,8 +12,8 @@ interface PostReactionsFooterProps {
   commentsCount: number;
   forwardsCount: number;
   viewsCount: number;
+  liked: boolean;
   onLikeClick: () => void;
-  onCommentClick: () => void;
   onForwardClick: () => void;
 }
 
@@ -21,22 +22,30 @@ export function PostReactionsFooter({
   commentsCount,
   forwardsCount,
   viewsCount,
+  liked,
+  onLikeClick,
 }: PostReactionsFooterProps) {
   return (
     <div className={styles.postReactionsFooter}>
-      <span>
+      <span
+        className={`${styles.item} ${liked ? styles.liked : ""}`}
+        onClick={(e) => {
+          e.preventDefault();
+          onLikeClick();
+        }}
+      >
         {likesCount}
         <Heart />
       </span>
-      <span>
+      <span className={styles.item}>
         {commentsCount}
         <MessageCircle />
       </span>
-      <span>
+      <span className={styles.item}>
         {forwardsCount}
         <ArrowUpRightCircle />
       </span>
-      <span>
+      <span className={styles.item}>
         {viewsCount}
         <Eye />
       </span>
