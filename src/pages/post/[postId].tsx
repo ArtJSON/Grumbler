@@ -70,14 +70,15 @@ export default function PostPage({ postId }: PostPagePropsType) {
         <CommentList
           comments={postData.comments.map((c) => {
             return {
-              commentId: c.id ?? "",
-              text: c.text ?? "",
-              createdAt: c.createdAt.toDateString() ?? "",
+              commentId: c.id,
+              text: c.text,
+              createdAt: c.createdAt.toDateString(),
               displayName: c.user.displayName ?? "",
               username: c.user.name ?? "",
               userImgUrl: c.user.avatar ?? "/defaultUserImage.webp",
               userId: c.userId ?? "",
               liked: c.commentLike.length != 0,
+              likeAmount: c.commentLike.length,
             };
           })}
         />

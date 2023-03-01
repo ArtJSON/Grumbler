@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { Heart } from "tabler-icons-react";
+import { api } from "../../utils/api";
 import { PostInfoHeader } from "../Post/PostFragments/PostInfoHeader/PostInfoHeader";
+import { Comment } from "./Comment/Comment";
 import styles from "./CommentList.module.scss";
 
 interface CommentListProps {
@@ -12,38 +14,38 @@ interface CommentListProps {
     displayName: string;
     username: string;
     userImgUrl: string;
+    liked: boolean;
+    likeAmount: number;
   }[];
 }
 
 export function CommentList({ comments }: CommentListProps) {
   return (
     <div className={styles.commentList}>
-      {comments.map((c) => (
-        <div className={styles.comment} key={c.commentId}>
-          <div className={styles.header}>
-            <div className={styles.userInfo}>
-              <Image
-                src={c.userImgUrl}
-                alt="User image"
-                width={32}
-                height={32}
-              />
-              <div className={styles.namesContainer}>
-                <span className={styles.displayName}>{c.displayName}</span>
-                <span className={styles.username}>@{c.username}</span>
-              </div>
-            </div>
-            <div className={styles.dateLikeContainer}>
-              <div className={styles.date}>{c.createdAt}</div>
-              <div className={styles.like}>
-                {0}
-                <Heart />
-              </div>
-            </div>
-          </div>
-          {c.text}
-        </div>
-      ))}
+      {comments.map(
+        ({
+          username,
+          displayName,
+          liked,
+          userImgUrl,
+          createdAt,
+          text,
+          commentId,
+          likeAmount,
+        }) => (
+          <Comment
+            userImgUrl={userImgUrl}
+            text={text}
+            username={username}
+            displayName={displayName}
+            createdAt={createdAt}
+            liked={liked}
+            commentId={commentId}
+            likeAmount={likeAmount}
+            key={commentId}
+          />
+        )
+      )}
     </div>
   );
 }

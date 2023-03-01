@@ -1,0 +1,71 @@
+@import "../../../styles/variables";
+
+.comment {
+  border-bottom: $post-border-light;
+  padding: 1rem;
+
+  @media screen and (min-width: $breakpoint-desktop) {
+    border: $post-border-light;
+    border-radius: 0.25rem;
+  }
+
+  .header {
+    font-size: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: $gray-400;
+    padding-bottom: 0.5rem;
+
+    .userInfo {
+      display: flex;
+
+      .namesContainer {
+        margin-left: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        .displayName {
+          font-weight: 500;
+          color: $gray-600;
+        }
+
+        .username {
+          font-weight: 200;
+        }
+      }
+    }
+
+    .dateLikeContainer {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .date {
+        display: flex;
+        align-items: center;
+      }
+
+      .like {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-weight: 300;
+        font-size: 1rem;
+        color: $gray-600;
+
+        svg {
+          stroke-width: 1.25px;
+        }
+      }
+
+      .liked {
+        svg {
+          color: $red-heart;
+          fill: $red-heart;
+        }
+      }
+    }
+  }
+}

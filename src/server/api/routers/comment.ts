@@ -85,13 +85,13 @@ export const commentRouter = createTRPCRouter({
   unlikeComment: protectedProcedure
     .input(
       z.object({
-        commentLikeId: z.string(),
+        commentId: z.string(),
       })
     )
-    .mutation(async ({ ctx, input: { commentLikeId } }) => {
+    .mutation(async ({ ctx, input: { commentId } }) => {
       const commentLikeInDb = await ctx.prisma.commentLike.findFirst({
         where: {
-          AND: [{ id: commentLikeId }, { userId: ctx.session.user.id }],
+          AND: [{ commentId: commentId }, { userId: ctx.session.user.id }],
         },
       });
 
@@ -101,7 +101,7 @@ export const commentRouter = createTRPCRouter({
       ) {
         return await ctx.prisma.commentLike.delete({
           where: {
-            id: commentLikeId,
+            id: commentLikeInDb.id,
           },
         });
       }
