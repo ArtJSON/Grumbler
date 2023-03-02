@@ -1,0 +1,10 @@
+@import "../../styles/variables";
+
+.postList {
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (min-width: $breakpoint-desktop) {
+    gap: 1rem;
+  }
+}

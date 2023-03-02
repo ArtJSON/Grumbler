@@ -10,10 +10,10 @@ interface PostListProps {
 
 export function PostList({ posts }: PostListProps) {
   return (
-    <>
+    <div className={styles.postList}>
       {posts.map((p) => (
         <PostListingItem key={p.id} {...p} />
       ))}
-    </>
+    </div>
   );
 }
