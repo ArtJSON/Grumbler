@@ -54,6 +54,7 @@ model User {
     email         String?   @unique
     role          String    @default("USER")
     avatar        String    @default("/defaultUserImage.webp")
+    bio           String?
     emailVerified DateTime?
     image         String?
     accounts      Account[]
