@@ -1,11 +1,11 @@
 import Link from "next/link";
 import styles from "./PostListingItem.module.scss";
-import { PostInfoHeader } from "../PostFragments/PostInfoHeader/PostInfoHeader";
-import { PostReactionsFooter } from "../PostFragments/PostReactionsFooter/PostReactionsFooter";
+import { PostInfoHeader } from "../../Post/PostFragments/PostInfoHeader/PostInfoHeader";
+import { PostReactionsFooter } from "../../Post/PostFragments/PostReactionsFooter/PostReactionsFooter";
 import { api } from "../../../utils/api";
 import { useState } from "react";
 
-interface PostListingItemProps {
+export interface PostListingItemProps {
   id: string;
   createdAt: string;
   userId: string;

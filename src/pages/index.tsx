@@ -4,13 +4,18 @@ import Head from "next/head";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "../utils/api";
 import { PostInput } from "../components/PostInput/PostInput";
-import { PostListingItem } from "../components/Post/PostListingItem/PostListingItem";
+import { PostListingItem } from "../components/PostList/PostListingItem/PostListingItem";
+import { PostList } from "../components/PostList/PostList";
 
 const Home: NextPage = () => {
   const { data: postsData, refetch } = api.post.getRecent.useQuery(
     { page: 0 },
     { refetchOnReconnect: false, refetchOnWindowFocus: false }
   );
+
+  if (!postsData) {
+    return <></>;
+  }
 
   return (
     <>
@@ -25,57 +30,38 @@ const Home: NextPage = () => {
         }}
       />
       <div className={styles.postsContainer}>
-        {postsData?.map(
-          ({
-            id,
-            createdAt,
-            userId,
-            user: { avatar: userImage, displayName, name: username },
-            content,
-            _count,
-            views,
-            extendedContent,
-            postLikes,
-          }) => (
-            <PostListingItem
-              key={id}
-              id={id}
-              createdAt={createdAt.toDateString()}
-              userId={userId}
-              userImage={userImage ?? undefined}
-              displayName={displayName ?? ""}
-              username={username ?? ""}
-              content={content}
-              commentsCount={_count.comments}
-              likesCount={_count.postLikes}
-              forwardsCount={_count.forwards}
-              viewsCount={views}
-              hasExtendedContent={extendedContent !== null}
-              liked={postLikes.length !== 0}
-            />
-          )
-        )}
+        <PostList
+          posts={postsData.map(
+            ({
+              id,
+              createdAt,
+              userId,
+              user: { avatar: userImage, displayName, name: username },
+              content,
+              _count,
+              views,
+              extendedContent,
+              postLikes,
+            }) => ({
+              id,
+              createdAt: createdAt.toDateString(),
+              userId: userId,
+              userImage: userImage,
+              displayName: displayName ?? "",
+              username: username ?? "",
+              content: content,
+              commentsCount: _count.comments,
+              likesCount: _count.postLikes,
+              forwardsCount: _count.forwards,
+              viewsCount: views,
+              liked: postLikes.length !== 0,
+              hasExtendedContent: extendedContent !== null,
+            })
+          )}
+        />
       </div>
     </>
   );
 };
 
 export default Home;
-
-const AuthShowcase: React.FC = () => {
-  const { data: sessionData } = useSession();
-
-  return (
-    <div className={styles.authContainer}>
-      <p className={styles.showcaseText}>
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-      </p>
-      <button
-        className={styles.loginButton}
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
-  );
-};
