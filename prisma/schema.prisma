@@ -49,6 +49,7 @@ model VerificationToken {
 
 model User {
     id            String    @id @default(cuid())
+    joinedAt      DateTime  @default(now())
     displayName   String?
     name          String?   @unique
     email         String?   @unique
