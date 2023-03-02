@@ -71,11 +71,11 @@ export const userRouter = createTRPCRouter({
   getUserRecentPosts: publicProcedure
     .input(
       z.object({
-        userId: z.string(),
+        username: z.string(),
         page: z.number().min(0),
       })
     )
-    .query(async ({ ctx, input: { userId, page } }) => {
+    .query(async ({ ctx, input: { username, page } }) => {
       return await ctx.prisma.post.findMany({
         orderBy: {
           createdAt: "desc",
@@ -83,9 +83,13 @@ export const userRouter = createTRPCRouter({
         skip: page * 25,
         take: 25,
         where: {
-          userId: userId,
+          user: {
+            name: username,
+          },
         },
         include: {
+          postLikes: true,
+          user: true,
           _count: {
             select: {
               comments: true,

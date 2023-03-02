@@ -36,7 +36,10 @@ export function Sidebar() {
               <Settings size={32} strokeWidth={2} color={"black"} />
               <span className={styles.optionText}>Settings</span>
             </Link>
-            <Link className={styles.option} href="#">
+            <Link
+              className={styles.option}
+              href={`/user/${sessionData.user.name}`}
+            >
               {sessionData.user.image ? (
                 <Image
                   src={sessionData.user.image}
@@ -63,7 +66,6 @@ export function Sidebar() {
             <span className={styles.optionText}>Sign in</span>
           </div>
         )}
-
         {sessionData?.user.role !== "USER" && (
           <Link className={`${styles.option} ${styles.desktopOnly}`} href="#">
             <ServerBolt size={32} strokeWidth={2} color={"black"} />
