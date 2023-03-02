@@ -1,7 +1,3 @@
-import Image from "next/image";
-import { Heart } from "tabler-icons-react";
-import { api } from "../../utils/api";
-import { PostInfoHeader } from "../Post/PostFragments/PostInfoHeader/PostInfoHeader";
 import { Comment } from "./Comment/Comment";
 import styles from "./CommentList.module.scss";
 

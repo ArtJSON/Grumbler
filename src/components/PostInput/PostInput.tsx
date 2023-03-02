@@ -44,7 +44,9 @@ export function PostInput({ onSubmit }: PostInputProps) {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        codeBlock: false,
+      }),
       Underline,
       TextAlign.configure({
         types: ["heading", "paragraph"],

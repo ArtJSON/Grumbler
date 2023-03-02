@@ -30,7 +30,9 @@ export function PostDetailed({
     editable: false,
     content: extendedContent,
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        codeBlock: false,
+      }),
       Underline,
       TextAlign.configure({
         types: ["heading", "paragraph"],
