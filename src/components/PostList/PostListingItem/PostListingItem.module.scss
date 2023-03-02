@@ -47,12 +47,15 @@
   }
 
   .content {
-    margin-bottom: 0.5rem;
-  }
+    text-decoration: none;
+    color: unset;
+    display: block;
+    padding-bottom: 0.5rem;
 
-  .readMore {
-    font-size: 0.75rem;
-    color: $gray-600;
-    margin-bottom: 0.5rem;
+    .readMore {
+      font-size: 0.75rem;
+      color: $gray-600;
+      margin-top: 0.5rem;
+    }
   }
 }

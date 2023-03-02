@@ -40,17 +40,19 @@ export function PostListingItem({
   const [isLiked, setIsLiked] = useState<boolean>(liked);
 
   return (
-    <Link href={`/post/${id}`} className={styles.post}>
+    <div className={styles.post}>
       <PostInfoHeader
         imageUrl={userImage ?? "/defaultUserImage.webp"}
         displayName={displayName}
         username={username}
         createdAt={createdAt}
       />
-      <div className={styles.content}>{content}</div>
-      {hasExtendedContent && (
-        <div className={styles.readMore}>Click to read more...</div>
-      )}
+      <Link href={`/post/${id}`} className={styles.content}>
+        <div>{content}</div>
+        {hasExtendedContent && (
+          <div className={styles.readMore}>Click to read more...</div>
+        )}
+      </Link>
       <PostReactionsFooter
         likesCount={likesCount - Number(liked) + Number(isLiked)}
         commentsCount={commentsCount}
@@ -69,6 +71,6 @@ export function PostListingItem({
           throw new Error("Function not implemented.");
         }}
       />
-    </Link>
+    </div>
   );
 }
