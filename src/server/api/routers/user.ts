@@ -15,7 +15,7 @@ export const userRouter = createTRPCRouter({
     .mutation(async ({ ctx, input: { username } }) => {
       const userInDb = await ctx.prisma.user.findUniqueOrThrow({
         where: {
-          name: username,
+          username: username,
         },
       });
 
@@ -51,7 +51,7 @@ export const userRouter = createTRPCRouter({
     .mutation(async ({ ctx, input: { username } }) => {
       const userInDb = await ctx.prisma.user.findUniqueOrThrow({
         where: {
-          name: username,
+          username: username,
         },
       });
 
@@ -120,7 +120,7 @@ export const userRouter = createTRPCRouter({
 
       const userInDb = await ctx.prisma.user.findUniqueOrThrow({
         where: {
-          name: username,
+          username: username,
         },
         include: {
           _count: {
@@ -171,5 +171,33 @@ export const userRouter = createTRPCRouter({
           likeButtonActive: ctx.session !== null,
         })),
       };
+    }),
+  updateSettings: protectedProcedure
+    .input(
+      z.object({
+        displayName: z
+          .string()
+          .min(3)
+          .max(32)
+          .regex(/^\S+(?: \S+)*$/),
+        username: z
+          .string()
+          .min(3)
+          .max(32)
+          .regex(/^[a-z0-9]+$/),
+        bio: z.string().max(320),
+      })
+    )
+    .mutation(async ({ ctx, input: { bio, displayName, username } }) => {
+      return ctx.prisma.user.update({
+        data: {
+          bio,
+          displayName,
+          username,
+        },
+        where: {
+          id: ctx.session.user.id,
+        },
+      });
     }),
 });
