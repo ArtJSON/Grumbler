@@ -1,4 +1,4 @@
-import { useSession, signIn } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -66,11 +66,24 @@ export function Sidebar() {
             <span className={styles.optionText}>Sign in</span>
           </div>
         )}
-        {sessionData?.user.role !== "USER" && (
+        {sessionData && sessionData.user.role === "USER" && (
           <Link className={`${styles.option} ${styles.desktopOnly}`} href="#">
             <ServerBolt size={32} strokeWidth={2} color={"black"} />
             <span className={styles.optionText}>Admin panel</span>
           </Link>
+        )}
+        {sessionData && (
+          <div
+            className={styles.option}
+            onClick={() => {
+              void (async () => {
+                await signOut();
+              })();
+            }}
+          >
+            <Login size={32} strokeWidth={2} color={"black"} />
+            <span className={styles.optionText}>Sign out</span>
+          </div>
         )}
       </ul>
     </nav>
