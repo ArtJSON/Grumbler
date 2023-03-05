@@ -19,6 +19,7 @@ export interface PostListingItemProps {
   viewsCount: number;
   liked: boolean;
   hasExtendedContent: boolean;
+  likeButtonActive: boolean;
 }
 
 export function PostListingItem({
@@ -34,6 +35,7 @@ export function PostListingItem({
   viewsCount,
   hasExtendedContent,
   liked,
+  likeButtonActive,
 }: PostListingItemProps) {
   const likePostMutation = api.post.like.useMutation();
   const unlikePostMutation = api.post.unlike.useMutation();
@@ -60,11 +62,16 @@ export function PostListingItem({
         viewsCount={viewsCount}
         liked={isLiked}
         onLikeClick={() => {
+          if (!likeButtonActive) {
+            return;
+          }
+
           if (isLiked) {
             unlikePostMutation.mutate({ postId: id });
           } else {
             likePostMutation.mutate({ postId: id });
           }
+
           setIsLiked((prev) => !prev);
         }}
         onForwardClick={function (): void {
