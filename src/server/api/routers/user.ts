@@ -9,20 +9,26 @@ export const userRouter = createTRPCRouter({
   follow: protectedProcedure
     .input(
       z.object({
-        userId: z.string(),
+        username: z.string(),
       })
     )
-    .mutation(async ({ ctx, input: { userId } }) => {
+    .mutation(async ({ ctx, input: { username } }) => {
+      const userInDb = await ctx.prisma.user.findUniqueOrThrow({
+        where: {
+          name: username,
+        },
+      });
+
       const followsInDb = await ctx.prisma.follows.findUnique({
         where: {
           followerId_followingId: {
             followerId: ctx.session.user.id,
-            followingId: userId,
+            followingId: userInDb.id,
           },
         },
       });
 
-      if (followsInDb !== null || userId === ctx.session.user.id) {
+      if (followsInDb !== null || userInDb.id === ctx.session.user.id) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: errorMessages.BAD_REQUEST,
@@ -32,22 +38,28 @@ export const userRouter = createTRPCRouter({
       return await ctx.prisma.follows.create({
         data: {
           followerId: ctx.session.user.id,
-          followingId: userId,
+          followingId: userInDb.id,
         },
       });
     }),
   unfollow: protectedProcedure
     .input(
       z.object({
-        userId: z.string(),
+        username: z.string(),
       })
     )
-    .mutation(async ({ ctx, input: { userId } }) => {
+    .mutation(async ({ ctx, input: { username } }) => {
+      const userInDb = await ctx.prisma.user.findUniqueOrThrow({
+        where: {
+          name: username,
+        },
+      });
+
       const followsInDb = await ctx.prisma.follows.findUnique({
         where: {
           followerId_followingId: {
             followerId: ctx.session.user.id,
-            followingId: userId,
+            followingId: userInDb.id,
           },
         },
       });
@@ -63,12 +75,12 @@ export const userRouter = createTRPCRouter({
         where: {
           followerId_followingId: {
             followerId: ctx.session.user.id,
-            followingId: userId,
+            followingId: userInDb.id,
           },
         },
       });
     }),
-  getUserRecentPosts: publicProcedure
+  getUser: publicProcedure
     .input(
       z.object({
         username: z.string(),
@@ -76,7 +88,7 @@ export const userRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input: { username, page } }) => {
-      return await ctx.prisma.post.findMany({
+      const postInDb = await ctx.prisma.post.findMany({
         orderBy: {
           createdAt: "desc",
         },
@@ -88,7 +100,13 @@ export const userRouter = createTRPCRouter({
           },
         },
         include: {
-          postLikes: true,
+          postLikes: {
+            where: {
+              user: {
+                id: ctx.session?.user.id,
+              },
+            },
+          },
           user: true,
           _count: {
             select: {
@@ -99,5 +117,59 @@ export const userRouter = createTRPCRouter({
           },
         },
       });
+
+      const userInDb = await ctx.prisma.user.findUniqueOrThrow({
+        where: {
+          name: username,
+        },
+        include: {
+          _count: {
+            select: {
+              posts: true,
+              followedBy: true,
+              following: true,
+            },
+          },
+        },
+      });
+
+      const followInDb = await ctx.prisma.follows.findFirst({
+        where: {
+          followerId: ctx.session?.user.id,
+          following: {
+            name: username,
+          },
+        },
+      });
+
+      return {
+        user: {
+          username: userInDb.name ?? "",
+          bio: userInDb.bio ?? undefined,
+          imageUrl: userInDb.avatar,
+          displayName: userInDb.displayName ?? "",
+          joinedAt: userInDb.joinedAt.toDateString(),
+          followers: userInDb._count.followedBy,
+          following: userInDb._count.following,
+          posts: userInDb._count.posts,
+          isUserFollowing: followInDb !== null ? true : false,
+        },
+        posts: postInDb.map((p) => ({
+          id: p.id,
+          createdAt: p.createdAt.toDateString(),
+          userId: p.user.id,
+          userImage: p.user.avatar,
+          displayName: p.user.displayName ?? "",
+          username: p.user.name ?? "",
+          content: p.content,
+          commentsCount: p._count.comments,
+          likesCount: p._count.postLikes,
+          forwardsCount: p._count.forwards,
+          viewsCount: p.views,
+          liked: ctx.session !== null && p.postLikes.length !== 0,
+          hasExtendedContent: p.extendedContent !== null,
+          likeButtonActive: ctx.session !== null,
+        })),
+      };
     }),
 });
