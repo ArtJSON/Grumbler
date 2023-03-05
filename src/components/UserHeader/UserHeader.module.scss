@@ -1,0 +1,76 @@
+@import "../../styles/variables";
+
+.userHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  @media screen and (min-width: $breakpoint-desktop) {
+    border: $post-border-light;
+    border-radius: 0.25rem;
+  }
+
+  .infoImageContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1rem 0;
+
+    .image {
+      border-radius: 100%;
+    }
+
+    .userInfo {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .displayName {
+        color: $gray-600;
+        font-weight: 500;
+        display: flex;
+      }
+
+      .username {
+        color: $gray-400;
+        font-weight: 200;
+
+        &::before {
+          content: "@";
+        }
+      }
+
+      .joinedAt {
+        color: $gray-400;
+      }
+
+      .followButton {
+        background-color: $blue-500;
+        color: $blue-100;
+        width: fit-content;
+        border: none;
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $blue-700;
+        }
+      }
+    }
+  }
+
+  .bio {
+    padding: 0 1rem;
+  }
+
+  .followerInfo {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    border-top: $post-border-light;
+    font-size: 0.75rem;
+    color: $gray-600;
+  }
+}
