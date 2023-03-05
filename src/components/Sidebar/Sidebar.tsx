@@ -32,13 +32,16 @@ export function Sidebar() {
         </Link>
         {sessionData ? (
           <>
-            <Link className={`${styles.option} ${styles.desktopOnly}`} href="#">
+            <Link
+              className={`${styles.option} ${styles.desktopOnly}`}
+              href="/settings"
+            >
               <Settings size={32} strokeWidth={2} color={"black"} />
               <span className={styles.optionText}>Settings</span>
             </Link>
             <Link
               className={styles.option}
-              href={`/user/${sessionData.user.name}`}
+              href={`/user/${sessionData.user.username}`}
             >
               {sessionData.user.image ? (
                 <Image
