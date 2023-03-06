@@ -38,6 +38,7 @@ export default function UserPage({ username }: UserPagePropsType) {
             } else {
               followMutation.mutate({ username });
             }
+
             refetch();
           }}
         />

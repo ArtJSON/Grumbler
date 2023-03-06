@@ -12,6 +12,7 @@ interface UserHeaderProps {
   isUserFollowing: boolean;
   onFollowClick: () => void;
   posts: number;
+  isUserOwner: boolean;
 }
 
 export function UserHeader({
@@ -25,6 +26,7 @@ export function UserHeader({
   posts,
   onFollowClick,
   isUserFollowing,
+  isUserOwner,
 }: UserHeaderProps) {
   return (
     <div className={styles.userHeader}>
@@ -33,9 +35,11 @@ export function UserHeader({
           <span className={styles.displayName}>{displayName}</span>
           <span className={styles.username}>{username}</span>
           <span className={styles.joinedAt}>Since {joinedAt}</span>
-          <button className={styles.followButton} onClick={onFollowClick}>
-            {isUserFollowing ? "Following" : "Follow"}
-          </button>
+          {!isUserOwner && (
+            <button className={styles.followButton} onClick={onFollowClick}>
+              {isUserFollowing ? "Following" : "Follow"}
+            </button>
+          )}
         </div>
         <Image
           width={96}

@@ -96,7 +96,7 @@ export const userRouter = createTRPCRouter({
         take: 25,
         where: {
           user: {
-            name: username,
+            username: username,
           },
         },
         include: {
@@ -144,7 +144,7 @@ export const userRouter = createTRPCRouter({
 
       return {
         user: {
-          username: userInDb.name ?? "",
+          username: userInDb.username ?? "",
           bio: userInDb.bio ?? undefined,
           imageUrl: userInDb.avatar,
           displayName: userInDb.displayName ?? "",
@@ -153,6 +153,7 @@ export const userRouter = createTRPCRouter({
           following: userInDb._count.following,
           posts: userInDb._count.posts,
           isUserFollowing: followInDb !== null ? true : false,
+          isUserOwner: ctx.session?.user.username === username,
         },
         posts: postInDb.map((p) => ({
           id: p.id,
@@ -160,7 +161,7 @@ export const userRouter = createTRPCRouter({
           userId: p.user.id,
           userImage: p.user.avatar,
           displayName: p.user.displayName ?? "",
-          username: p.user.name ?? "",
+          username: p.user.username ?? "",
           content: p.content,
           commentsCount: p._count.comments,
           likesCount: p._count.postLikes,
