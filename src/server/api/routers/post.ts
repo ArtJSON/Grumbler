@@ -143,6 +143,31 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
+  getTrending: publicProcedure
+    .input(
+      z.object({
+        page: z.number().min(0),
+      })
+    )
+    .query(async ({ ctx, input: { page } }) => {
+      const trendingMinDate = new Date();
+      trendingMinDate.setDate(trendingMinDate.getDate() + 7);
+
+      return await ctx.prisma.post.findMany({
+        where: {
+          createdAt: {
+            gt: trendingMinDate,
+          },
+        },
+        orderBy: {
+          postLikes: {
+            _count: "asc",
+          },
+        },
+        skip: page * 25,
+        take: 25,
+      });
+    }),
   create: protectedProcedure
     .input(
       z.object({ content: z.string(), extendedConent: z.string().optional() })
