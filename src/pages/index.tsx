@@ -30,35 +30,7 @@ const Home: NextPage = () => {
         }}
       />
       <div className={styles.postsContainer}>
-        <PostList
-          posts={postsData.map(
-            ({
-              id,
-              createdAt,
-              userId,
-              user: { avatar: userImage, displayName, name: username },
-              content,
-              _count,
-              views,
-              extendedContent,
-              postLikes,
-            }) => ({
-              id,
-              createdAt: createdAt.toDateString(),
-              userId: userId,
-              userImage: userImage,
-              displayName: displayName ?? "",
-              username: username ?? "",
-              content: content,
-              commentsCount: _count.comments,
-              likesCount: _count.postLikes,
-              forwardsCount: _count.forwards,
-              viewsCount: views,
-              liked: postLikes.length !== 0,
-              hasExtendedContent: extendedContent !== null,
-            })
-          )}
-        />
+        <PostList posts={postsData.posts} />
       </div>
     </>
   );

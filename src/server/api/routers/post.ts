@@ -12,20 +12,14 @@ export const postRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input: { page } }) => {
-      return await ctx.prisma.post.findMany({
+      const postsInDb = await ctx.prisma.post.findMany({
         orderBy: {
           createdAt: "desc",
         },
         skip: page * 25,
         take: 25,
         include: {
-          user: {
-            select: {
-              avatar: true,
-              displayName: true,
-              name: true,
-            },
-          },
+          user: true,
           postLikes: {
             where: {
               userId: ctx.session?.user.id,
@@ -40,6 +34,24 @@ export const postRouter = createTRPCRouter({
           },
         },
       });
+      return {
+        posts: postsInDb.map((p) => ({
+          id: p.id,
+          createdAt: p.createdAt.toDateString(),
+          userId: p.user.id,
+          userImage: p.user.avatar,
+          displayName: p.user.displayName ?? "",
+          username: p.user.username ?? "",
+          content: p.content,
+          commentsCount: p._count.comments,
+          likesCount: p._count.postLikes,
+          forwardsCount: p._count.forwards,
+          viewsCount: p.views,
+          liked: ctx.session !== null && p.postLikes.length !== 0,
+          hasExtendedContent: p.extendedContent !== null,
+          likeButtonActive: ctx.session !== null,
+        })),
+      };
     }),
   getById: publicProcedure
     .input(
