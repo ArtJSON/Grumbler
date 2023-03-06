@@ -69,7 +69,7 @@ export function Sidebar() {
             <span className={styles.optionText}>Sign in</span>
           </div>
         )}
-        {sessionData && sessionData.user.role === "USER" && (
+        {sessionData && sessionData.user.role === "ADMIN" && (
           <Link className={`${styles.option} ${styles.desktopOnly}`} href="#">
             <ServerBolt size={32} strokeWidth={2} color={"black"} />
             <span className={styles.optionText}>Admin panel</span>
