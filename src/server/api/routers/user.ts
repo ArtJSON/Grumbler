@@ -201,4 +201,17 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
+  getSettings: protectedProcedure.query(async ({ ctx }) => {
+    const userInDb = await ctx.prisma.user.findFirstOrThrow({
+      where: {
+        username: ctx.session.user.username,
+      },
+    });
+
+    return {
+      username: userInDb.username,
+      displayName: userInDb.displayName,
+      bio: userInDb.bio,
+    };
+  }),
 });
