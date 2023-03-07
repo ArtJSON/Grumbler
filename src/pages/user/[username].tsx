@@ -10,10 +10,10 @@ interface UserPagePropsType {
 }
 
 export default function UserPage({ username }: UserPagePropsType) {
-  const { data: userData, refetch } = api.user.getUser.useQuery(
-    { page: 0, username },
-    { refetchOnReconnect: false, refetchOnWindowFocus: false }
-  );
+  const { data: userData, refetch } = api.user.getUser.useQuery({
+    page: 0,
+    username,
+  });
 
   const followMutation = api.user.follow.useMutation();
   const unfollowMutation = api.user.unfollow.useMutation();

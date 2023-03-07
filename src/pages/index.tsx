@@ -8,10 +8,7 @@ import { PostListingItem } from "../components/PostList/PostListingItem/PostList
 import { PostList } from "../components/PostList/PostList";
 
 const Home: NextPage = () => {
-  const { data: postsData, refetch } = api.post.getRecent.useQuery(
-    { page: 0 },
-    { refetchOnReconnect: false, refetchOnWindowFocus: false }
-  );
+  const { data: postsData, refetch } = api.post.getRecent.useQuery({ page: 0 });
 
   if (!postsData) {
     return <></>;

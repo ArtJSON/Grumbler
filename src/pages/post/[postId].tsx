@@ -15,8 +15,6 @@ export default function PostPage({ postId }: PostPagePropsType) {
   const { data: postData, refetch } = api.post.getById.useQuery(
     { id: postId },
     {
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
       onSuccess(data) {
         setIsLiked(data?.postLikes.length !== 0);
       },
