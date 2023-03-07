@@ -209,9 +209,9 @@ export const userRouter = createTRPCRouter({
     });
 
     return {
-      username: userInDb.username,
-      displayName: userInDb.displayName,
-      bio: userInDb.bio,
+      username: userInDb.username ?? "",
+      displayName: userInDb.displayName ?? "",
+      bio: userInDb.bio ?? "",
     };
   }),
 });

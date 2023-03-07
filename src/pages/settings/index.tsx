@@ -5,8 +5,7 @@ import { Textarea, TextInput } from "@mantine/core";
 import { z } from "zod";
 import { api } from "../../utils/api";
 import { useRouter } from "next/router";
-
-// interface SettingsPagePropsType {}
+import { useEffect } from "react";
 
 const schema = z.object({
   displayName: z
@@ -33,6 +32,21 @@ export default function SettingsPage() {
   });
   const router = useRouter();
   const updateSettingsMutation = api.user.updateSettings.useMutation();
+  const { data: settingsData } = api.user.getSettings.useQuery();
+
+  useEffect(() => {
+    if (settingsData) {
+      form.setValues({
+        bio: settingsData?.bio ?? "",
+        displayName: settingsData?.displayName ?? "",
+        username: settingsData?.username ?? "",
+      });
+    }
+  }, [settingsData]);
+
+  if (!settingsData) {
+    return <></>;
+  }
 
   return (
     <>
@@ -60,5 +74,3 @@ export default function SettingsPage() {
     </>
   );
 }
-
-//export const getServerSideProps: GetServerSideProps = async () => ();
