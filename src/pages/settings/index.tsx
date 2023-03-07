@@ -4,6 +4,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { Textarea, TextInput } from "@mantine/core";
 import { z } from "zod";
 import { api } from "../../utils/api";
+import { useRouter } from "next/router";
 
 // interface SettingsPagePropsType {}
 
@@ -17,7 +18,7 @@ const schema = z.object({
     .string()
     .min(3)
     .max(32)
-    .regex(/^[a-z0-9]+$/),
+    .regex(/^[a-z0-9._]+$/),
   bio: z.string().max(320),
 });
 
@@ -30,7 +31,7 @@ export default function SettingsPage() {
       bio: "",
     },
   });
-
+  const router = useRouter();
   const updateSettingsMutation = api.user.updateSettings.useMutation();
 
   return (
@@ -42,8 +43,9 @@ export default function SettingsPage() {
       </Head>
       <div className={styles.settingsPage}>
         <form
-          onSubmit={form.onSubmit((values) => {
-            updateSettingsMutation.mutate(values);
+          onSubmit={form.onSubmit(async (values) => {
+            await updateSettingsMutation.mutate(values);
+            router.reload();
           })}
         >
           <TextInput
