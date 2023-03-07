@@ -151,22 +151,46 @@ export const postRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input: { page } }) => {
       const trendingMinDate = new Date();
-      trendingMinDate.setDate(trendingMinDate.getDate() + 7);
+      trendingMinDate.setDate(trendingMinDate.getDate() - 7);
 
-      return await ctx.prisma.post.findMany({
+      const postsInDb = await ctx.prisma.post.findMany({
         where: {
           createdAt: {
             gt: trendingMinDate,
           },
         },
+        include: {
+          user: true,
+          _count: true,
+          postLikes: true,
+        },
         orderBy: {
           postLikes: {
-            _count: "asc",
+            _count: "desc",
           },
         },
         skip: page * 25,
         take: 25,
       });
+
+      return {
+        posts: postsInDb.map((p) => ({
+          id: p.id,
+          createdAt: p.createdAt.toDateString(),
+          userId: p.user.id,
+          userImage: p.user.avatar,
+          displayName: p.user.displayName ?? "",
+          username: p.user.username ?? "",
+          content: p.content,
+          commentsCount: p._count.comments,
+          likesCount: p._count.postLikes,
+          forwardsCount: p._count.forwards,
+          viewsCount: p.views,
+          liked: ctx.session !== null && p.postLikes.length !== 0,
+          hasExtendedContent: p.extendedContent !== null,
+          likeButtonActive: ctx.session !== null,
+        })),
+      };
     }),
   create: protectedProcedure
     .input(

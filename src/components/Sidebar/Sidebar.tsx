@@ -22,7 +22,7 @@ export function Sidebar() {
           <Home2 size={32} strokeWidth={2} color={"black"} />
           <span className={styles.optionText}>Home</span>
         </Link>
-        <Link className={styles.option} href="#">
+        <Link className={styles.option} href="/trending">
           <TrendingUp size={32} strokeWidth={2} color={"black"} />
           <span className={styles.optionText}>Trending</span>
         </Link>
