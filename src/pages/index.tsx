@@ -8,7 +8,12 @@ import { PostListingItem } from "../components/PostList/PostListingItem/PostList
 import { PostList } from "../components/PostList/PostList";
 
 const Home: NextPage = () => {
-  const { data: postsData, refetch } = api.post.getRecent.useQuery({ page: 0 });
+  const { data: postsData, refetch } = api.post.getRecent.useInfiniteQuery(
+    {},
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
 
   if (!postsData) {
     return <></>;
@@ -27,7 +32,7 @@ const Home: NextPage = () => {
         }}
       />
       <div className={styles.postsContainer}>
-        <PostList posts={postsData.posts} />
+        <PostList posts={postsData.pages.map((p) => p.posts).flat(1)} />
       </div>
     </>
   );

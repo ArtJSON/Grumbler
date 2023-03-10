@@ -8,16 +8,20 @@ export const postRouter = createTRPCRouter({
   getRecent: publicProcedure
     .input(
       z.object({
-        page: z.number().min(0),
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
       })
     )
-    .query(async ({ ctx, input: { page } }) => {
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 50;
+      const { cursor } = input;
+
       const postsInDb = await ctx.prisma.post.findMany({
+        cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
           createdAt: "desc",
         },
-        skip: page * 25,
-        take: 25,
+        take: limit + 1,
         include: {
           user: true,
           postLikes: {
@@ -34,7 +38,11 @@ export const postRouter = createTRPCRouter({
           },
         },
       });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
       return {
+        nextCursor: nextCursor,
         posts: postsInDb.map((p) => ({
           id: p.id,
           createdAt: p.createdAt.toDateString(),
