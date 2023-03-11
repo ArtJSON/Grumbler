@@ -6,14 +6,22 @@ import { api } from "../utils/api";
 import { PostInput } from "../components/PostInput/PostInput";
 import { PostListingItem } from "../components/PostList/PostListingItem/PostListingItem";
 import { PostList } from "../components/PostList/PostList";
+import InfiniteScrollTrigger from "../components/InfiniteScrollTrigger/InfiniteScrollTrigger";
 
 const Home: NextPage = () => {
-  const { data: postsData, refetch } = api.post.getRecent.useInfiniteQuery(
-    {},
+  const {
+    data: postsData,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+  } = api.post.getRecent.useInfiniteQuery(
+    { limit: 3 },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
+
+  console.log(hasNextPage);
 
   if (!postsData) {
     return <></>;
@@ -31,8 +39,16 @@ const Home: NextPage = () => {
           refetch();
         }}
       />
+      <button
+        onClick={() => {
+          fetchNextPage();
+        }}
+      >
+        fetch
+      </button>
       <div className={styles.postsContainer}>
         <PostList posts={postsData.pages.map((p) => p.posts).flat(1)} />
+        <InfiniteScrollTrigger onScreenEnter={fetchNextPage} />
       </div>
     </>
   );
