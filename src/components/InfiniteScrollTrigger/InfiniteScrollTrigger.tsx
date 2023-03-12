@@ -37,5 +37,5 @@ export default function InfiniteScrollTrigger({
     }
   }, [isInViewport]);
 
-  return <div ref={ref}></div>;
+  return <div ref={ref} />;
 }

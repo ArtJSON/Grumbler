@@ -57,6 +57,7 @@ export default function SettingsPage() {
       </Head>
       <div className={styles.settingsPage}>
         <form
+          className={styles.form}
           onSubmit={form.onSubmit(async (values) => {
             await updateSettingsMutation.mutate(values);
             router.reload();
@@ -68,7 +69,9 @@ export default function SettingsPage() {
           />
           <TextInput {...form.getInputProps("username")} label="Username" />
           <Textarea {...form.getInputProps("bio")} label="Bio" />
-          <button type="submit">Save changes</button>
+          <button className={styles.submitButton} type="submit">
+            Save changes
+          </button>
         </form>
       </div>
     </>

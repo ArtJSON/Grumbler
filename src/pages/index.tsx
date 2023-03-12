@@ -38,8 +38,8 @@ const Home: NextPage = () => {
       />
       <div className={styles.postsContainer}>
         <PostList posts={postsData.pages.map((p) => p.posts).flat(1)} />
-        <InfiniteScrollTrigger onScreenEnter={fetchNextPage} />
       </div>
+      <InfiniteScrollTrigger onScreenEnter={fetchNextPage} />
     </>
   );
 };
