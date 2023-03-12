@@ -13,16 +13,12 @@ const Home: NextPage = () => {
     data: postsData,
     refetch,
     fetchNextPage,
-    hasNextPage,
-    isFetching,
   } = api.post.getRecent.useInfiniteQuery(
     {},
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
-
-  console.log(hasNextPage);
 
   if (!postsData) {
     return <></>;
