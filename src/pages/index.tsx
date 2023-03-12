@@ -49,10 +49,7 @@ const Home: NextPage = () => {
       </button>
       <div className={styles.postsContainer}>
         <PostList posts={postsData.pages.map((p) => p.posts).flat(1)} />
-        <InfiniteScrollTrigger
-          active={isFetching && Boolean(isFetching)}
-          onScreenEnter={fetchNextPage}
-        />
+        <InfiniteScrollTrigger onScreenEnter={fetchNextPage} />
       </div>
     </>
   );

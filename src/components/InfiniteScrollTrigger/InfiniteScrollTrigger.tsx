@@ -22,13 +22,11 @@ function useOnScreen(ref: RefObject<any>, rootMargin = "0px") {
 }
 
 interface InfiniteScrollTriggerProps {
-  active: boolean;
   onScreenEnter: () => void;
 }
 
 export default function InfiniteScrollTrigger({
   onScreenEnter,
-  active,
 }: InfiniteScrollTriggerProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const isInViewport = useOnScreen(ref);
