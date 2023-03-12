@@ -1,12 +1,10 @@
 import { useState, useEffect, RefObject, useRef } from "react";
 
 function useOnScreen(ref: RefObject<any>, rootMargin = "0px") {
-  // State and setter for storing whether element is visible
   const [isIntersecting, setIntersecting] = useState(false);
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Update our state when observer callback fires
         setIntersecting(entry!.isIntersecting);
       },
       {
@@ -17,20 +15,22 @@ function useOnScreen(ref: RefObject<any>, rootMargin = "0px") {
       observer.observe(ref.current);
     }
     return () => {
-      observer.unobserve(ref.current);
+      observer.disconnect();
     };
-  }, []); // Empty array ensures that effect is only run on mount and unmount
+  }, []);
   return isIntersecting;
 }
 
 interface InfiniteScrollTriggerProps {
+  active: boolean;
   onScreenEnter: () => void;
 }
 
 export default function InfiniteScrollTrigger({
   onScreenEnter,
+  active,
 }: InfiniteScrollTriggerProps) {
-  const ref = useRef<HTMLInputElement | null>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   const isInViewport = useOnScreen(ref);
 
   useEffect(() => {
@@ -39,5 +39,5 @@ export default function InfiniteScrollTrigger({
     }
   }, [isInViewport]);
 
-  return <div ref={ref} />;
+  return <div ref={ref}></div>;
 }

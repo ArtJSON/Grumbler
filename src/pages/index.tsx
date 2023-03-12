@@ -14,8 +14,9 @@ const Home: NextPage = () => {
     refetch,
     fetchNextPage,
     hasNextPage,
+    isFetching,
   } = api.post.getRecent.useInfiniteQuery(
-    { limit: 3 },
+    {},
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
@@ -48,7 +49,10 @@ const Home: NextPage = () => {
       </button>
       <div className={styles.postsContainer}>
         <PostList posts={postsData.pages.map((p) => p.posts).flat(1)} />
-        <InfiniteScrollTrigger onScreenEnter={fetchNextPage} />
+        <InfiniteScrollTrigger
+          active={isFetching && Boolean(isFetching)}
+          onScreenEnter={fetchNextPage}
+        />
       </div>
     </>
   );
