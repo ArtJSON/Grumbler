@@ -11,6 +11,7 @@ import { ColorTheme } from "../types/types";
 import React from "react";
 import { Layout } from "../components/Layout/Layout";
 import { MantineProvider } from "@mantine/core";
+import RouteGuard from "../components/RouteGuard/RouteGuard";
 
 const ThemeContext = React.createContext({
   theme: "light",
@@ -38,17 +39,21 @@ const MyApp: AppType<{
 
   return (
     <SessionProvider session={session}>
-      <ThemeContext.Provider value={{ theme: theme, toggleTheme: toggleTheme }}>
-        <MantineProvider
-          theme={{
-            fontFamily: "Roboto Flex, sans-serif",
-          }}
+      <RouteGuard>
+        <ThemeContext.Provider
+          value={{ theme: theme, toggleTheme: toggleTheme }}
         >
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </MantineProvider>
-      </ThemeContext.Provider>
+          <MantineProvider
+            theme={{
+              fontFamily: "Roboto Flex, sans-serif",
+            }}
+          >
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </MantineProvider>
+        </ThemeContext.Provider>
+      </RouteGuard>
     </SessionProvider>
   );
 };
