@@ -1,6 +1,12 @@
 @import "../../styles/variables";
 
 .settingsPage {
+  padding: 1rem;
+  @media screen and (min-width: $breakpoint-desktop) {
+    padding: 1rem 0;
+    border-bottom: 0;
+  }
+
   .form {
     display: flex;
     flex-direction: column;
