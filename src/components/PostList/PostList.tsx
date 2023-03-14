@@ -9,11 +9,15 @@ interface PostListProps {
 }
 
 export function PostList({ posts }: PostListProps) {
-  return (
-    <div className={styles.postList}>
-      {posts.map((p) => (
-        <PostListingItem key={p.id} {...p} />
-      ))}
-    </div>
-  );
+  if (posts.length) {
+    return (
+      <div className={styles.postList}>
+        {posts.map((p) => (
+          <PostListingItem key={p.id} {...p} />
+        ))}
+      </div>
+    );
+  } else {
+    return <div className={styles.emptyText}>No posts</div>;
+  }
 }
