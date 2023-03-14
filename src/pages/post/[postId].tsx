@@ -16,7 +16,7 @@ export default function PostPage({ postId }: PostPagePropsType) {
     { id: postId },
     {
       onSuccess(data) {
-        setIsLiked(data?.postLikes.length !== 0);
+        setIsLiked(data.post.liked);
       },
     }
   );
@@ -32,55 +32,30 @@ export default function PostPage({ postId }: PostPagePropsType) {
     <div className={styles.postPage}>
       <div className={styles.postInfo}>
         <PostDetailed
-          imageUrl={postData.user.avatar ?? "/defaultUserImage.webp"}
-          displayName={postData.user.displayName ?? ""}
-          username={postData.user.name ?? ""}
-          createdAt={postData.createdAt?.toDateString() ?? ""}
-          content={postData.content ?? ""}
-          extendedContent={postData.extendedContent ?? undefined}
-        />
-        <PostReactionsFooter
-          likesCount={
-            (postData._count?.postLikes ?? 0) +
-            Number(isLiked) -
-            postData.postLikes.length
-          }
-          commentsCount={postData._count?.comments ?? 0}
-          forwardsCount={postData._count?.forwards ?? 0}
-          viewsCount={postData.views ?? 0}
-          liked={isLiked}
-          onLikeClick={() => {
+          {...postData.post}
+          onLikeClick={function (): void {
+            if (!postData.post.likeButtonActive) {
+              return;
+            }
+
             if (isLiked) {
-              unlikePostMutation.mutate({ postId });
+              unlikePostMutation.mutate({ postId: postId });
             } else {
-              likePostMutation.mutate({ postId });
+              likePostMutation.mutate({ postId: postId });
             }
 
             setIsLiked((prev) => !prev);
           }}
-          onForwardClick={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          likesCount={
+            postData.post.likesCount -
+            Number(postData.post.liked) +
+            Number(isLiked)
+          }
+          liked={isLiked}
         />
         <CommentInput postId={postId} onSubmit={refetch} />
       </div>
-      {postData.comments && (
-        <CommentList
-          comments={postData.comments.map((c) => {
-            return {
-              commentId: c.id,
-              text: c.text,
-              createdAt: c.createdAt.toDateString(),
-              displayName: c.user.displayName ?? "",
-              username: c.user.name ?? "",
-              userImgUrl: c.user.avatar ?? "/defaultUserImage.webp",
-              userId: c.userId ?? "",
-              liked: c.commentLike.length != 0,
-              likeAmount: c.commentLike.length,
-            };
-          })}
-        />
-      )}
+      {postData.comments && <CommentList comments={postData.comments} />}
     </div>
   );
 }

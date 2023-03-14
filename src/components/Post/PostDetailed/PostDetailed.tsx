@@ -7,6 +7,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { lowlight } from "lowlight";
 import { useEffect, useState } from "react";
 import { PostInfoHeader } from "../PostFragments/PostInfoHeader/PostInfoHeader";
+import { PostReactionsFooter } from "../PostFragments/PostReactionsFooter/PostReactionsFooter";
 import styles from "./PostDetailed.module.scss";
 
 interface PostDetailedProps {
@@ -16,6 +17,12 @@ interface PostDetailedProps {
   createdAt: string;
   content: string;
   extendedContent?: string;
+  likesCount: number;
+  commentsCount: number;
+  viewsCount: number;
+  forwardsCount: number;
+  liked: boolean;
+  onLikeClick: () => void;
 }
 
 export function PostDetailed({
@@ -25,6 +32,12 @@ export function PostDetailed({
   createdAt,
   content,
   extendedContent,
+  likesCount,
+  commentsCount,
+  forwardsCount,
+  viewsCount,
+  liked,
+  onLikeClick,
 }: PostDetailedProps) {
   const editor = useEditor({
     editable: false,
@@ -73,6 +86,17 @@ export function PostDetailed({
       >
         <RichTextEditor.Content />
       </RichTextEditor>
+      <PostReactionsFooter
+        likesCount={likesCount}
+        commentsCount={commentsCount}
+        forwardsCount={forwardsCount}
+        viewsCount={viewsCount}
+        liked={liked}
+        onLikeClick={onLikeClick}
+        onForwardClick={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
     </div>
   );
 }

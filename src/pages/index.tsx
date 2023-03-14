@@ -1,10 +1,8 @@
 import styles from "./index.module.scss";
 import { type NextPage } from "next";
 import Head from "next/head";
-import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "../utils/api";
 import { PostInput } from "../components/PostInput/PostInput";
-import { PostListingItem } from "../components/PostList/PostListingItem/PostListingItem";
 import { PostList } from "../components/PostList/PostList";
 import InfiniteScrollTrigger from "../components/InfiniteScrollTrigger/InfiniteScrollTrigger";
 

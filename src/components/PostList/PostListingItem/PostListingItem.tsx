@@ -74,9 +74,7 @@ export function PostListingItem({
 
           setIsLiked((prev) => !prev);
         }}
-        onForwardClick={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+        onForwardClick={() => {}}
       />
     </div>
   );

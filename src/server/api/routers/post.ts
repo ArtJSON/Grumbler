@@ -72,18 +72,12 @@ export const postRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input: { id } }) => {
-      return await ctx.prisma.post.findUnique({
+      const postInDb = await ctx.prisma.post.findUniqueOrThrow({
         where: {
           id: id,
         },
         include: {
-          user: {
-            select: {
-              avatar: true,
-              displayName: true,
-              name: true,
-            },
-          },
+          user: true,
           postLikes: {
             where: {
               userId: ctx.session?.user.id,
@@ -114,6 +108,36 @@ export const postRouter = createTRPCRouter({
           },
         },
       });
+
+      return {
+        post: {
+          id: postInDb.id,
+          createdAt: postInDb.createdAt.toDateString(),
+          userId: postInDb.user.id,
+          imageUrl: postInDb.user.avatar ?? "/defaultUserImage.webp",
+          displayName: postInDb.user.displayName ?? "",
+          username: postInDb.user.username ?? "",
+          content: postInDb.content,
+          commentsCount: postInDb._count.comments,
+          likesCount: postInDb._count.postLikes,
+          forwardsCount: postInDb._count.forwards,
+          viewsCount: postInDb.views,
+          liked: ctx.session !== null && postInDb.postLikes.length !== 0,
+          hasExtendedContent: postInDb.extendedContent !== null,
+          likeButtonActive: ctx.session !== null,
+        },
+        comments: postInDb.comments.map((c) => ({
+          commentId: c.id,
+          text: c.text,
+          createdAt: c.createdAt.toDateString(),
+          displayName: c.user.displayName ?? "",
+          username: c.user.name ?? "",
+          userImgUrl: c.user.avatar ?? "/defaultUserImage.webp",
+          userId: c.userId ?? "",
+          liked: c.commentLike.length != 0,
+          likeAmount: c.commentLike.length,
+        })),
+      };
     }),
   getRecentByFollowed: protectedProcedure
     .input(
