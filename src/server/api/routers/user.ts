@@ -137,7 +137,7 @@ export const userRouter = createTRPCRouter({
         where: {
           followerId: ctx.session?.user.id,
           following: {
-            name: username,
+            username: username,
           },
         },
       });
