@@ -1,9 +1,9 @@
 import { getCookie, setCookie } from "cookies-next";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ColorTheme } from "../../types/types";
 
 const ThemeContext = React.createContext({
-  theme: "light",
+  theme: "dark",
   toggleTheme: () => {
     return;
   },
@@ -14,9 +14,11 @@ export default function ThemeManager({
 }: {
   children: React.ReactNode;
 }) {
-  const [theme, setTheme] = useState<ColorTheme>(
-    (getCookie("color-scheme") as ColorTheme) ?? "light"
-  );
+  const [theme, setTheme] = useState<ColorTheme>("dark");
+
+  useEffect(() => {
+    setTheme(getCookie("color-theme") as ColorTheme);
+  }, []);
 
   const toggleTheme = (value?: ColorTheme) => {
     const nextColorTheme = value || (theme === "dark" ? "light" : "dark");
