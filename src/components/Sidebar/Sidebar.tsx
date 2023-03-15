@@ -1,7 +1,6 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useContext } from "react";
 import {
   BellRinging,
   Brightness,
@@ -20,7 +19,11 @@ export function Sidebar() {
   const theme = useThemeContext();
 
   return (
-    <nav className={styles.sidebar}>
+    <nav
+      className={`${styles.sidebar} ${
+        theme.theme === "dark" ? styles.dark : ""
+      }`}
+    >
       <ul className={styles.optionList}>
         <Link className={styles.option} href="/">
           <Home2 size={32} strokeWidth={2} color={"black"} />
