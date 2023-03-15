@@ -111,7 +111,6 @@ export const userRouter = createTRPCRouter({
           _count: {
             select: {
               comments: true,
-              forwards: true,
               postLikes: true,
             },
           },
@@ -165,7 +164,6 @@ export const userRouter = createTRPCRouter({
           content: p.content,
           commentsCount: p._count.comments,
           likesCount: p._count.postLikes,
-          forwardsCount: p._count.forwards,
           viewsCount: p.views,
           liked: ctx.session !== null && p.postLikes.length !== 0,
           hasExtendedContent: p.extendedContent !== null,

@@ -20,7 +20,6 @@ interface PostDetailedProps {
   likesCount: number;
   commentsCount: number;
   viewsCount: number;
-  forwardsCount: number;
   liked: boolean;
   onLikeClick: () => void;
 }
@@ -34,7 +33,6 @@ export function PostDetailed({
   extendedContent,
   likesCount,
   commentsCount,
-  forwardsCount,
   viewsCount,
   liked,
   onLikeClick,
@@ -89,13 +87,9 @@ export function PostDetailed({
       <PostReactionsFooter
         likesCount={likesCount}
         commentsCount={commentsCount}
-        forwardsCount={forwardsCount}
         viewsCount={viewsCount}
         liked={liked}
         onLikeClick={onLikeClick}
-        onForwardClick={function (): void {
-          throw new Error("Function not implemented.");
-        }}
       />
     </div>
   );

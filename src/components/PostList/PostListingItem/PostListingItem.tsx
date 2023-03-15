@@ -15,7 +15,6 @@ export interface PostListingItemProps {
   content: string;
   commentsCount: number;
   likesCount: number;
-  forwardsCount: number;
   viewsCount: number;
   liked: boolean;
   hasExtendedContent: boolean;
@@ -31,7 +30,6 @@ export function PostListingItem({
   content,
   commentsCount,
   likesCount,
-  forwardsCount,
   viewsCount,
   hasExtendedContent,
   liked,
@@ -58,7 +56,6 @@ export function PostListingItem({
       <PostReactionsFooter
         likesCount={likesCount - Number(liked) + Number(isLiked)}
         commentsCount={commentsCount}
-        forwardsCount={forwardsCount}
         viewsCount={viewsCount}
         liked={isLiked}
         onLikeClick={() => {
@@ -74,7 +71,6 @@ export function PostListingItem({
 
           setIsLiked((prev) => !prev);
         }}
-        onForwardClick={() => {}}
       />
     </div>
   );

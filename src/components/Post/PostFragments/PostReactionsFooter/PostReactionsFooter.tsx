@@ -10,17 +10,14 @@ import styles from "./PostReactionsFooter.module.scss";
 interface PostReactionsFooterProps {
   likesCount: number;
   commentsCount: number;
-  forwardsCount: number;
   viewsCount: number;
   liked: boolean;
   onLikeClick: () => void;
-  onForwardClick: () => void;
 }
 
 export function PostReactionsFooter({
   likesCount,
   commentsCount,
-  forwardsCount,
   viewsCount,
   liked,
   onLikeClick,
@@ -40,10 +37,6 @@ export function PostReactionsFooter({
       <span className={styles.item}>
         {commentsCount}
         <MessageCircle />
-      </span>
-      <span className={styles.item}>
-        {forwardsCount}
-        <ArrowUpRightCircle />
       </span>
       <span className={styles.item}>
         {viewsCount}
