@@ -1,8 +1,10 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useContext } from "react";
 import {
   BellRinging,
+  Brightness,
   Home2,
   Login,
   ServerBolt,
@@ -10,10 +12,12 @@ import {
   TrendingUp,
   User,
 } from "tabler-icons-react";
+import { useThemeContext } from "../ThemeManager/ThemeManager";
 import styles from "./Sidebar.module.scss";
 
 export function Sidebar() {
   const { data: sessionData } = useSession();
+  const theme = useThemeContext();
 
   return (
     <nav className={styles.sidebar}>
@@ -88,6 +92,10 @@ export function Sidebar() {
             <span className={styles.optionText}>Sign out</span>
           </div>
         )}
+        <div className={styles.option} onClick={() => theme.toggleTheme()}>
+          <Brightness size={32} strokeWidth={2} color={"black"} />
+          <span className={styles.optionText}>{theme.theme} mode</span>
+        </div>
       </ul>
     </nav>
   );
