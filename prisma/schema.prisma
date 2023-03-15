@@ -66,7 +66,6 @@ model User {
     comments     Comment[]
     commentLikes CommentLike[]
     postLikes    PostLike[]
-    forwards     Forward[]
 
     followedBy Follows[] @relation("following")
     following  Follows[] @relation("follower")
@@ -107,14 +106,15 @@ model Post {
     createdAt       DateTime      @default(now())
     user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId          String
+    response        Post?         @relation("response", fields: [responseId], references: [id], onDelete: SetNull)
+    responseId      String?
+    responses       Post[]        @relation("response")
     views           Int           @default(0)
     content         String
     // TODO: add a field that is used to store photos/videos data (cloudinary)
-    // TODO: Add possibility to respond to a Post (creates a separate post linking to the other one, different to a comment)
     extendedContent String?
     comments        Comment[]
     postLikes       PostLike[]
-    forwards        Forward[]
     postHashtag     PostHashtag[]
 }
 
@@ -134,15 +134,6 @@ model Hashtag {
 
 // TODO: Change id to composite key of userId and postId and change trpc procedures to match new key
 model PostLike {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId    String
-    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-    postId    String
-}
-
-model Forward {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
