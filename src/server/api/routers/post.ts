@@ -32,7 +32,6 @@ export const postRouter = createTRPCRouter({
           _count: {
             select: {
               comments: true,
-              forwards: true,
               postLikes: true,
             },
           },
@@ -57,7 +56,6 @@ export const postRouter = createTRPCRouter({
           content: p.content,
           commentsCount: p._count.comments,
           likesCount: p._count.postLikes,
-          forwardsCount: p._count.forwards,
           viewsCount: p.views,
           liked: ctx.session !== null && p.postLikes.length !== 0,
           hasExtendedContent: p.extendedContent !== null,
@@ -102,7 +100,6 @@ export const postRouter = createTRPCRouter({
           _count: {
             select: {
               comments: true,
-              forwards: true,
               postLikes: true,
             },
           },
@@ -120,7 +117,6 @@ export const postRouter = createTRPCRouter({
           content: postInDb.content,
           commentsCount: postInDb._count.comments,
           likesCount: postInDb._count.postLikes,
-          forwardsCount: postInDb._count.forwards,
           viewsCount: postInDb.views,
           liked: ctx.session !== null && postInDb.postLikes.length !== 0,
           hasExtendedContent: postInDb.extendedContent !== null,
@@ -172,7 +168,6 @@ export const postRouter = createTRPCRouter({
           _count: {
             select: {
               comments: true,
-              forwards: true,
               postLikes: true,
             },
           },
@@ -220,7 +215,6 @@ export const postRouter = createTRPCRouter({
           content: p.content,
           commentsCount: p._count.comments,
           likesCount: p._count.postLikes,
-          forwardsCount: p._count.forwards,
           viewsCount: p.views,
           liked: ctx.session !== null && p.postLikes.length !== 0,
           hasExtendedContent: p.extendedContent !== null,
@@ -362,74 +356,6 @@ export const postRouter = createTRPCRouter({
       return await ctx.prisma.postLike.deleteMany({
         where: {
           postId: postId,
-          userId: ctx.session.user.id,
-        },
-      });
-    }),
-  forward: protectedProcedure
-    .input(
-      z.object({
-        postId: z.string(),
-      })
-    )
-    .mutation(async ({ ctx, input: { postId } }) => {
-      const forwardInDb = await ctx.prisma.forward.findFirst({
-        where: {
-          AND: [
-            {
-              userId: ctx.session.user.id,
-            },
-            {
-              postId: postId,
-            },
-          ],
-        },
-      });
-
-      if (forwardInDb !== null) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: errorMessages.BAD_REQUEST,
-        });
-      }
-
-      return await ctx.prisma.forward.create({
-        data: {
-          postId: postId,
-          userId: ctx.session.user.id,
-        },
-      });
-    }),
-  unforward: protectedProcedure
-    .input(
-      z.object({
-        forwardId: z.string(),
-      })
-    )
-    .mutation(async ({ ctx, input: { forwardId } }) => {
-      const forwardInDb = await ctx.prisma.forward.findFirst({
-        where: {
-          AND: [
-            {
-              userId: ctx.session.user.id,
-            },
-            {
-              id: forwardId,
-            },
-          ],
-        },
-      });
-
-      if (forwardInDb === null) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: errorMessages.UNAUTHORIZED,
-        });
-      }
-
-      return await ctx.prisma.forward.deleteMany({
-        where: {
-          id: forwardId,
           userId: ctx.session.user.id,
         },
       });
