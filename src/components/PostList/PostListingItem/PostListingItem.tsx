@@ -20,6 +20,7 @@ export interface PostListingItemProps {
   liked: boolean;
   hasExtendedContent: boolean;
   likeButtonActive: boolean;
+  onReportClick: () => void;
 }
 
 export function PostListingItem({
@@ -35,6 +36,7 @@ export function PostListingItem({
   hasExtendedContent,
   liked,
   likeButtonActive,
+  onReportClick,
 }: PostListingItemProps) {
   const likePostMutation = api.post.like.useMutation();
   const unlikePostMutation = api.post.unlike.useMutation();
@@ -75,6 +77,7 @@ export function PostListingItem({
 
           setIsLiked((prev) => !prev);
         }}
+        onReportClick={onReportClick}
       />
     </div>
   );
