@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import { Settings } from "tabler-icons-react";
 import styles from "./UserHeader.module.scss";
 
 interface UserHeaderProps {
@@ -35,7 +37,15 @@ export function UserHeader({
           <span className={styles.displayName}>{displayName}</span>
           <span className={styles.username}>{username}</span>
           <span className={styles.joinedAt}>Since {joinedAt}</span>
-          {!isUserOwner && (
+          {isUserOwner ? (
+            <Link
+              className={`${styles.option} ${styles.desktopOnly}`}
+              href="/settings"
+            >
+              <Settings size={32} strokeWidth={2} color={"black"} />
+              <span>Settings</span>
+            </Link>
+          ) : (
             <button className={styles.followButton} onClick={onFollowClick}>
               {isUserFollowing ? "Following" : "Follow"}
             </button>

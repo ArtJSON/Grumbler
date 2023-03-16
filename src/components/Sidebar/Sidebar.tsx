@@ -84,7 +84,7 @@ export function Sidebar() {
         )}
         {sessionData && (
           <div
-            className={styles.option}
+            className={`${styles.option} ${styles.desktopOnly}`}
             onClick={() => {
               void (async () => {
                 await signOut();
@@ -95,7 +95,10 @@ export function Sidebar() {
             <span className={styles.optionText}>Sign out</span>
           </div>
         )}
-        <div className={styles.option} onClick={() => theme.toggleTheme()}>
+        <div
+          className={`${styles.option} ${styles.desktopOnly}`}
+          onClick={() => theme.toggleTheme()}
+        >
           <Brightness size={32} strokeWidth={2} color={"black"} />
           <span className={styles.optionText}>{theme.theme} mode</span>
         </div>
