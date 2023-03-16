@@ -69,6 +69,7 @@ model User {
 
     followedBy Follows[] @relation("following")
     following  Follows[] @relation("follower")
+    Report     Report[]
 }
 
 model Follows {
@@ -116,6 +117,7 @@ model Post {
     comments        Comment[]
     postLikes       PostLike[]
     postHashtag     PostHashtag[]
+    Report          Report[]
 }
 
 model PostHashtag {
@@ -134,6 +136,15 @@ model Hashtag {
 
 // TODO: Change id to composite key of userId and postId and change trpc procedures to match new key
 model PostLike {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId    String
+}
+
+model Report {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
