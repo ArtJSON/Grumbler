@@ -4,6 +4,7 @@
   padding-bottom: 3rem;
   display: flex;
   overflow-y: scroll;
+  min-height: 100vh;
 
   @media screen and (min-width: $breakpoint-desktop) {
     padding-bottom: 0;
