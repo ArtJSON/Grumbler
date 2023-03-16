@@ -80,17 +80,11 @@ export function PostInput({ onSubmit }: PostInputProps) {
         maxLength={320}
         minRows={3}
         autosize
-        styles={{
-          input: {
-            fontSize: 16,
-          },
-        }}
         {...form.getInputProps("content")}
       />
       <div className={styles.options}>
         <Checkbox
           label="Extended content"
-          styles={{ label: { fontSize: 12, paddingLeft: 4 } }}
           checked={extended}
           onChange={(event) => {
             setExtended(event.target.checked);

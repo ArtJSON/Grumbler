@@ -115,6 +115,7 @@ export const postRouter = createTRPCRouter({
           displayName: postInDb.user.displayName ?? "",
           username: postInDb.user.username ?? "",
           content: postInDb.content,
+          extendedContent: postInDb.extendedContent ?? undefined,
           commentsCount: postInDb._count.comments,
           likesCount: postInDb._count.postLikes,
           viewsCount: postInDb.views,

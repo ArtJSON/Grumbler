@@ -18,15 +18,9 @@ const MyApp: AppType<{
     <SessionProvider session={session}>
       <RouteGuard>
         <ThemeManager>
-          <MantineProvider
-            theme={{
-              fontFamily: "Roboto Flex, sans-serif",
-            }}
-          >
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </MantineProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </ThemeManager>
       </RouteGuard>
     </SessionProvider>

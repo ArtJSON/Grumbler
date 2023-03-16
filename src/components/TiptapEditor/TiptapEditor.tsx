@@ -17,22 +17,15 @@ export function TiptapEditor({
     <RichTextEditor
       editor={editor}
       withCodeHighlightStyles
-      styles={{
-        root: {
-          height: extended
-            ? (contentRef.current?.scrollHeight ?? 0) +
-              (toolbarRef.current?.scrollHeight ?? 0)
-            : 0,
-          marginTop: extended ? 16 : 0,
-          opacity: extended ? 1 : 0,
-          overflow: "clip",
-          transition: "height 0.3s ease, opacity 0.2s, margin-top 0.2s",
-        },
-        content: {
-          overflowY: "scroll",
-          maxHeight: 500,
-          fontSize: 16,
-        },
+      sx={{
+        marginTop: extended ? 16 : 0,
+        opacity: extended ? 1 : 0,
+        height: extended
+          ? (contentRef.current?.scrollHeight ?? 0) +
+            (toolbarRef.current?.scrollHeight ?? 0)
+          : 0,
+        transition:
+          "height 0.3s ease, opacity 0.2s, margin-top 0.2s !important",
       }}
     >
       <RichTextEditor.Toolbar sticky stickyOffset={0} ref={toolbarRef}>

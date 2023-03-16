@@ -3,6 +3,7 @@ import styles from "./CommentInput.module.scss";
 import { z } from "zod";
 import { api } from "../../utils/api";
 import { Textarea } from "@mantine/core";
+import { useThemeContext } from "../ThemeManager/ThemeManager";
 
 interface CommentInputProps {
   postId: string;
@@ -10,6 +11,8 @@ interface CommentInputProps {
 }
 
 export function CommentInput({ postId, onSubmit }: CommentInputProps) {
+  const theme = useThemeContext();
+
   const commentCreateMutation = api.comment.comment.useMutation({
     onSuccess: () => {
       if (onSubmit) {
@@ -34,7 +37,9 @@ export function CommentInput({ postId, onSubmit }: CommentInputProps) {
 
   return (
     <form
-      className={styles.commentInput}
+      className={`${styles.commentInput} ${
+        theme.theme === "dark" ? styles.dark : ""
+      }`}
       onSubmit={form.onSubmit((values) => {
         commentCreateMutation.mutate({
           postId: postId,
@@ -49,11 +54,6 @@ export function CommentInput({ postId, onSubmit }: CommentInputProps) {
         maxLength={320}
         minRows={3}
         autosize
-        styles={{
-          input: {
-            fontSize: 16,
-          },
-        }}
         {...form.getInputProps("comment")}
       />
       <div className={styles.footer}>
