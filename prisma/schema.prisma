@@ -151,4 +151,5 @@ model Report {
     userId    String
     post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId    String
+    reason    String
 }
