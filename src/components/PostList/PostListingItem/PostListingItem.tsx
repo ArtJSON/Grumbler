@@ -4,6 +4,7 @@ import { PostInfoHeader } from "../../Post/PostFragments/PostInfoHeader/PostInfo
 import { PostReactionsFooter } from "../../Post/PostFragments/PostReactionsFooter/PostReactionsFooter";
 import { api } from "../../../utils/api";
 import { useState } from "react";
+import { useThemeContext } from "../../ThemeManager/ThemeManager";
 
 export interface PostListingItemProps {
   id: string;
@@ -38,9 +39,12 @@ export function PostListingItem({
   const likePostMutation = api.post.like.useMutation();
   const unlikePostMutation = api.post.unlike.useMutation();
   const [isLiked, setIsLiked] = useState<boolean>(liked);
+  const theme = useThemeContext();
 
   return (
-    <div className={styles.post}>
+    <div
+      className={`${styles.post} ${theme.theme === "dark" ? styles.dark : ""}`}
+    >
       <PostInfoHeader
         imageUrl={userImage ?? "/defaultUserImage.webp"}
         displayName={displayName}

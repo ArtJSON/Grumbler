@@ -31,4 +31,8 @@
       color: $red-heart;
     }
   }
+
+  &.dark {
+    color: $gray-400;
+  }
 }

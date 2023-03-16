@@ -28,4 +28,17 @@
     margin-top: 0.5rem;
     cursor: pointer;
   }
+
+  &.dark {
+    .options {
+      .contentLength {
+        color: $gray-200;
+      }
+    }
+
+    .submitButton {
+      background-color: $blue-700;
+      color: $gray-100;
+    }
+  }
 }

@@ -5,6 +5,7 @@ import {
   Heart,
   MessageCircle,
 } from "tabler-icons-react";
+import { useThemeContext } from "../../../ThemeManager/ThemeManager";
 import styles from "./PostReactionsFooter.module.scss";
 
 interface PostReactionsFooterProps {
@@ -22,8 +23,14 @@ export function PostReactionsFooter({
   liked,
   onLikeClick,
 }: PostReactionsFooterProps) {
+  const theme = useThemeContext();
+
   return (
-    <div className={styles.postReactionsFooter}>
+    <div
+      className={`${styles.postReactionsFooter} ${
+        theme.theme === "dark" ? styles.dark : ""
+      }`}
+    >
       <span
         className={`${styles.item} ${liked ? styles.liked : ""}`}
         onClick={(e) => {

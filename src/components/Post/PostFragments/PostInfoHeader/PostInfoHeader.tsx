@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useThemeContext } from "../../../ThemeManager/ThemeManager";
 import styles from "./PostInfoHeader.module.scss";
 
 interface PostInfoHeaderProps {
@@ -15,8 +16,14 @@ export function PostInfoHeader({
   username,
   createdAt,
 }: PostInfoHeaderProps) {
+  const theme = useThemeContext();
+
   return (
-    <div className={styles.postInfoHeader}>
+    <div
+      className={`${styles.postInfoHeader} ${
+        theme.theme === "dark" ? styles.dark : ""
+      }`}
+    >
       <Link href={`/user/${username}`} className={styles.userInfo}>
         <Image src={imageUrl} alt="User image" width={32} height={32} />
         <div className={styles.namesContainer}>

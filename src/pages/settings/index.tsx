@@ -6,6 +6,9 @@ import { z } from "zod";
 import { api } from "../../utils/api";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useThemeContext } from "../../components/ThemeManager/ThemeManager";
+import { Brightness, Login } from "tabler-icons-react";
+import { signOut } from "next-auth/react";
 
 const schema = z.object({
   displayName: z
@@ -33,6 +36,7 @@ export default function SettingsPage() {
   const router = useRouter();
   const updateSettingsMutation = api.user.updateSettings.useMutation();
   const { data: settingsData } = api.user.getSettings.useQuery();
+  const theme = useThemeContext();
 
   useEffect(() => {
     if (settingsData) {
@@ -63,6 +67,21 @@ export default function SettingsPage() {
             router.reload();
           })}
         >
+          <div
+            className={`${styles.option} ${styles.desktopOnly}`}
+            onClick={() => {
+              void (async () => {
+                await signOut();
+              })();
+            }}
+          >
+            <Login size={32} strokeWidth={2} color={"black"} />
+            <span className={styles.optionText}>Sign out</span>
+          </div>
+          <div onClick={() => theme.toggleTheme()}>
+            <Brightness size={32} strokeWidth={2} color={"black"} />
+            <span className={styles.optionText}>{theme.theme} mode</span>
+          </div>
           <TextInput
             {...form.getInputProps("displayName")}
             label="Display name"

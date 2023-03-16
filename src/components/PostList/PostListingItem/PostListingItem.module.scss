@@ -19,31 +19,6 @@
     justify-content: space-between;
     margin-bottom: 0.5rem;
     color: $gray-400;
-
-    .userInfo {
-      display: flex;
-
-      .namesContainer {
-        margin-left: 1rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-
-        .displayName {
-          font-weight: 500;
-          color: $gray-600;
-        }
-
-        .username {
-          font-weight: 200;
-        }
-      }
-    }
-
-    .date {
-      display: flex;
-      align-items: center;
-    }
   }
 
   .content {
@@ -56,6 +31,19 @@
       font-size: 0.75rem;
       color: $gray-600;
       margin-top: 0.5rem;
+    }
+  }
+}
+
+.post.dark {
+  border-color: $gray-800;
+  background-color: $gray-800;
+
+  .content {
+    color: $gray-200;
+
+    .readMore {
+      color: $gray-400;
     }
   }
 }
