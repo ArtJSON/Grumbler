@@ -13,4 +13,10 @@
       border-bottom: 0;
     }
   }
+
+  &.dark {
+    .postInfo {
+      border-color: $gray-800;
+    }
+  }
 }

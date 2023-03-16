@@ -68,4 +68,32 @@
       }
     }
   }
+
+  &.dark {
+    border-color: $gray-800;
+
+    .header {
+      .userInfo {
+        .namesContainer {
+          .displayName {
+            color: $gray-300;
+          }
+
+          .username {
+            color: $gray-400;
+          }
+        }
+      }
+
+      .dateLikeContainer {
+        .like {
+          color: $gray-400;
+        }
+      }
+    }
+
+    .content {
+      color: $gray-200;
+    }
+  }
 }

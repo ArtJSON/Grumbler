@@ -1,3 +1,5 @@
+@import "../../../styles/variables";
+
 .postDetailed {
   display: flex;
   flex-direction: column;
@@ -5,5 +7,9 @@
 
   .extendedContent {
     white-space: pre;
+  }
+
+  &.dark {
+    color: $gray-200;
   }
 }

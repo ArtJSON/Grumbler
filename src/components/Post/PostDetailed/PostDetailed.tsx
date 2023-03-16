@@ -6,6 +6,7 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { lowlight } from "lowlight";
 import { useEffect, useState } from "react";
+import { useThemeContext } from "../../ThemeManager/ThemeManager";
 import { PostInfoHeader } from "../PostFragments/PostInfoHeader/PostInfoHeader";
 import { PostReactionsFooter } from "../PostFragments/PostReactionsFooter/PostReactionsFooter";
 import styles from "./PostDetailed.module.scss";
@@ -37,6 +38,7 @@ export function PostDetailed({
   liked,
   onLikeClick,
 }: PostDetailedProps) {
+  const theme = useThemeContext();
   const editor = useEditor({
     editable: false,
     content: extendedContent,
@@ -61,7 +63,11 @@ export function PostDetailed({
   }, [extendedContent, editor]);
 
   return (
-    <div className={styles.postDetailed}>
+    <div
+      className={`${styles.postDetailed} ${
+        theme.theme === "dark" ? styles.dark : ""
+      }`}
+    >
       <PostInfoHeader
         imageUrl={imageUrl}
         displayName={displayName}
@@ -72,12 +78,13 @@ export function PostDetailed({
       {extendedContent && <div className={styles.extendedContent}></div>}
       <RichTextEditor
         editor={editor}
-        styles={{
-          root: {
-            border: "none",
-            ".ProseMirror": {
-              padding: "0 !important",
-            },
+        sx={{
+          border: "none",
+          ".ProseMirror": {
+            padding: "0 !important",
+            backgroundColor: `${
+              theme.theme === "dark" ? "#111113" : "#fff"
+            } !important`,
           },
         }}
         withCodeHighlightStyles

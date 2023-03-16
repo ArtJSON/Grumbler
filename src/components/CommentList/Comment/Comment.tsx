@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { Heart } from "tabler-icons-react";
 import { api } from "../../../utils/api";
+import { useThemeContext } from "../../ThemeManager/ThemeManager";
 import styles from "./Comment.module.scss";
 
 interface CommentProps {
@@ -28,9 +29,14 @@ export function Comment({
   const likeCommentMutation = api.comment.likeComment.useMutation();
   const unlikeCommentMutation = api.comment.unlikeComment.useMutation();
   const [isLiked, setIsLiked] = useState<boolean>(liked);
+  const theme = useThemeContext();
 
   return (
-    <div className={styles.comment}>
+    <div
+      className={`${styles.comment} ${
+        theme.theme === "dark" ? styles.dark : ""
+      }`}
+    >
       <div className={styles.header}>
         <div className={styles.userInfo}>
           <Image src={userImgUrl} alt="User image" width={32} height={32} />
@@ -57,7 +63,7 @@ export function Comment({
           </div>
         </div>
       </div>
-      {text}
+      <span className={styles.content}>{text}</span>
     </div>
   );
 }

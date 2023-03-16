@@ -3,6 +3,7 @@ import { useState } from "react";
 import { CommentInput } from "../../components/CommentInput/CommentInput";
 import { CommentList } from "../../components/CommentList/CommentList";
 import { PostDetailed } from "../../components/Post/PostDetailed/PostDetailed";
+import { useThemeContext } from "../../components/ThemeManager/ThemeManager";
 import { api } from "../../utils/api";
 import styles from "./PostPage.module.scss";
 
@@ -11,6 +12,7 @@ interface PostPagePropsType {
 }
 
 export default function PostPage({ postId }: PostPagePropsType) {
+  const theme = useThemeContext();
   const { data: postData, refetch } = api.post.getById.useQuery(
     { id: postId },
     {
@@ -28,7 +30,11 @@ export default function PostPage({ postId }: PostPagePropsType) {
   }
 
   return (
-    <div className={styles.postPage}>
+    <div
+      className={`${styles.postPage} ${
+        theme.theme === "dark" ? styles.dark : ""
+      }`}
+    >
       <div className={styles.postInfo}>
         <PostDetailed
           {...postData.post}

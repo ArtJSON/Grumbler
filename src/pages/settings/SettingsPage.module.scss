@@ -7,6 +7,17 @@
     border-bottom: 0;
   }
 
+  .option {
+    color: $gray-800;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    svg {
+      color: $gray-800;
+    }
+  }
+
   .form {
     display: flex;
     flex-direction: column;
@@ -21,6 +32,28 @@
       margin-top: 0.5rem;
       cursor: pointer;
       width: fit-content;
+    }
+  }
+
+  &.dark {
+    .option {
+      color: $gray-200;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-weight: 400;
+
+      svg {
+        color: $gray-200;
+        stroke-width: 1.25px;
+      }
+    }
+
+    .form {
+      .submitButton {
+        background-color: $blue-700;
+        color: $gray-200;
+      }
     }
   }
 }

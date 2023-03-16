@@ -104,8 +104,10 @@ export default function ThemeManager({
                       backgroundColor: "#303136",
                       color: "#e4e5e7",
                     },
-                    blockquote: {
+                    "blockquote > *": {
                       color: "#e4e5e7",
+                    },
+                    blockquote: {
                       borderColor: "#494a50",
                     },
                   },
@@ -113,6 +115,7 @@ export default function ThemeManager({
                     overflowY: "scroll",
                     maxHeight: 500,
                     fontSize: 16,
+                    backgroundColor: "unset",
                   },
                   toolbar: {
                     backgroundColor: "#303136",

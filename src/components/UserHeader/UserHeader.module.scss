@@ -29,7 +29,14 @@
       .displayName {
         color: $gray-600;
         font-weight: 500;
+        font-size: 1.25rem;
         display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        svg {
+          color: $gray-600;
+        }
       }
 
       .username {
@@ -72,5 +79,51 @@
     border-top: $post-border-light;
     font-size: 0.75rem;
     color: $gray-600;
+  }
+
+  &.dark {
+    border-color: $gray-800;
+
+    @media screen and (min-width: $breakpoint-desktop) {
+      background-color: $gray-800;
+    }
+
+    .infoImageContainer {
+      .userInfo {
+        .displayName {
+          color: $gray-200;
+
+          svg {
+            color: $gray-200;
+          }
+        }
+
+        .username {
+          color: $gray-300;
+        }
+
+        .joinedAt {
+          color: $gray-400;
+        }
+
+        .followButton {
+          background-color: $blue-700;
+          color: $blue-100;
+
+          &:hover {
+            background-color: $blue-800;
+          }
+        }
+      }
+    }
+
+    .bio {
+      color: $gray-200;
+    }
+
+    .followerInfo {
+      border-color: $gray-700;
+      color: $gray-300;
+    }
   }
 }
