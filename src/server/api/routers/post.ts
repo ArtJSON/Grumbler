@@ -376,7 +376,7 @@ export const postRouter = createTRPCRouter({
         },
       });
 
-      if (!reportInDb) {
+      if (reportInDb === null) {
         await ctx.prisma.report.create({
           data: {
             userId: ctx.session.user.id,
