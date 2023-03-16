@@ -16,10 +16,11 @@
     width: 100%;
 
     @media screen and (min-width: $breakpoint-desktop) {
+      padding-left: 280px;
+
       .childrenContainer {
         max-width: 720px;
         margin: 0 auto;
-        padding-left: 280px;
       }
     }
   }

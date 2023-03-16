@@ -15,7 +15,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
     >
       <Sidebar inAdminPanel={router.pathname.split("/")[1] === "admin"} />
       <div className={styles.pageWrapper}>
-        <div className={styles.childrenContainer}>{children}</div>
+        {router.pathname.split("/")[1] === "admin" ? (
+          <>{children}</>
+        ) : (
+          <div className={styles.childrenContainer}>{children}</div>
+        )}
       </div>
     </div>
   );
