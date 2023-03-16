@@ -361,4 +361,29 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
+  report: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+        reason: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input: { postId, reason } }) => {
+      const reportInDb = await ctx.prisma.report.findFirst({
+        where: {
+          userId: ctx.session.user.id,
+          postId: postId,
+        },
+      });
+
+      if (!reportInDb) {
+        await ctx.prisma.report.create({
+          data: {
+            userId: ctx.session.user.id,
+            postId,
+            reason,
+          },
+        });
+      }
+    }),
 });

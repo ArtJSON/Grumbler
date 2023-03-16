@@ -1,3 +1,3 @@
-export default function ReportsPage() {
+export default function PostsPage() {
   return <div></div>;
 }
