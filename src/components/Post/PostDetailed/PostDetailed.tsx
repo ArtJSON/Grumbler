@@ -1,3 +1,6 @@
+import { Modal, Textarea } from "@mantine/core";
+import { useForm, zodResolver } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
 import { RichTextEditor } from "@mantine/tiptap";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import TextAlign from "@tiptap/extension-text-align";
@@ -6,12 +9,15 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { lowlight } from "lowlight";
 import { useEffect, useState } from "react";
+import { z } from "zod";
+import { api } from "../../../utils/api";
 import { useThemeContext } from "../../ThemeManager/ThemeManager";
 import { PostInfoHeader } from "../PostFragments/PostInfoHeader/PostInfoHeader";
 import { PostReactionsFooter } from "../PostFragments/PostReactionsFooter/PostReactionsFooter";
 import styles from "./PostDetailed.module.scss";
 
 interface PostDetailedProps {
+  id: string;
   imageUrl: string;
   displayName: string;
   username: string;
@@ -26,6 +32,7 @@ interface PostDetailedProps {
 }
 
 export function PostDetailed({
+  id,
   imageUrl,
   displayName,
   username,
@@ -56,6 +63,19 @@ export function PostDetailed({
     ],
   });
 
+  const form = useForm({
+    validate: zodResolver(
+      z.object({
+        reason: z.string().max(320),
+      })
+    ),
+    initialValues: {
+      reason: "",
+    },
+  });
+  const reportPostMutation = api.post.report.useMutation();
+  const [opened, { open, close }] = useDisclosure(false);
+
   useEffect(() => {
     if (editor && !editor.isDestroyed) {
       editor.commands.setContent(extendedContent ?? "");
@@ -68,6 +88,23 @@ export function PostDetailed({
         theme.theme === "dark" ? styles.dark : ""
       }`}
     >
+      <Modal opened={opened} onClose={close} title="Report">
+        <form
+          onSubmit={form.onSubmit((values) => {
+            reportPostMutation.mutate({
+              postId: id,
+              reason: values.reason,
+            });
+            form.reset();
+            close();
+          })}
+        >
+          <Textarea maxLength={320} {...form.getInputProps("reason")} />
+          <button className={styles.submitButton} type="submit">
+            Submit
+          </button>
+        </form>
+      </Modal>
       <PostInfoHeader
         imageUrl={imageUrl}
         displayName={displayName}
@@ -97,6 +134,7 @@ export function PostDetailed({
         viewsCount={viewsCount}
         liked={liked}
         onLikeClick={onLikeClick}
+        onReportClick={open}
       />
     </div>
   );
