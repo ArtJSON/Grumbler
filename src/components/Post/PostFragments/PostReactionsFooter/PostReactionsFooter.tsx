@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   ArrowUpRightCircle,
   Eye,
+  Flag,
   Heart,
   MessageCircle,
 } from "tabler-icons-react";
@@ -14,6 +15,7 @@ interface PostReactionsFooterProps {
   viewsCount: number;
   liked: boolean;
   onLikeClick: () => void;
+  onReportClick: () => void;
 }
 
 export function PostReactionsFooter({
@@ -22,6 +24,7 @@ export function PostReactionsFooter({
   viewsCount,
   liked,
   onLikeClick,
+  onReportClick,
 }: PostReactionsFooterProps) {
   const theme = useThemeContext();
 
@@ -31,23 +34,30 @@ export function PostReactionsFooter({
         theme.theme === "dark" ? styles.dark : ""
       }`}
     >
+      <div className={styles.reactionContainer}>
+        <span
+          className={`${styles.item} ${liked ? styles.liked : ""}`}
+          onClick={(e) => {
+            e.preventDefault();
+            onLikeClick();
+          }}
+        >
+          {likesCount}
+          <Heart />
+        </span>
+        <span className={styles.item}>
+          {commentsCount}
+          <MessageCircle />
+        </span>
+      </div>
       <span
-        className={`${styles.item} ${liked ? styles.liked : ""}`}
+        className={styles.item}
         onClick={(e) => {
           e.preventDefault();
-          onLikeClick();
+          onReportClick();
         }}
       >
-        {likesCount}
-        <Heart />
-      </span>
-      <span className={styles.item}>
-        {commentsCount}
-        <MessageCircle />
-      </span>
-      <span className={styles.item}>
-        {viewsCount}
-        <Eye />
+        <Flag />
       </span>
     </div>
   );

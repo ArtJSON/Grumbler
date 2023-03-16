@@ -35,6 +35,7 @@ export default function ThemeManager({
       <MantineProvider
         theme={{
           fontFamily: "Roboto Flex, sans-serif",
+          colorScheme: "dark",
           other: {
             mode: theme,
           },
