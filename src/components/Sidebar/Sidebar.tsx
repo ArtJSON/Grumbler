@@ -21,10 +21,7 @@ import styles from "./Sidebar.module.scss";
 interface SidebarProps {
   inAdminPanel: boolean;
 }
-// options
-// -review reports
-// -manage posts
-// -go back to main app
+
 export function Sidebar({ inAdminPanel }: SidebarProps) {
   const { data: sessionData } = useSession();
   const theme = useThemeContext();
@@ -130,9 +127,9 @@ export function Sidebar({ inAdminPanel }: SidebarProps) {
               <div
                 className={`${styles.option} ${styles.desktopOnly}`}
                 onClick={() => {
-                  void (async () => {
-                    await signOut();
-                  })();
+                  signOut({
+                    callbackUrl: `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/v2/logout`,
+                  });
                 }}
               >
                 <Login size={32} strokeWidth={2} color={"black"} />

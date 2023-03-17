@@ -74,9 +74,9 @@ export default function SettingsPage() {
           <div
             className={styles.option}
             onClick={() => {
-              void (async () => {
-                await signOut();
-              })();
+              signOut({
+                callbackUrl: `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/v2/logout`,
+              });
             }}
           >
             <Login size={24} strokeWidth={2} />

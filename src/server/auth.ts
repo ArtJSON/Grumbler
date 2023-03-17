@@ -40,6 +40,7 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  **/
 export const authOptions: NextAuthOptions = {
+  debug: true,
   callbacks: {
     async session({ session, user }) {
       if (session.user) {
@@ -56,6 +57,9 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      return Promise.resolve(url);
+    },
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -63,11 +67,6 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.AUTH0_CLIENT_ID ?? "",
       clientSecret: process.env.AUTH0_CLIENT_SECRET ?? "",
       issuer: process.env.AUTH0_ISSUER,
-      authorization: {
-        params: {
-          prompt: "login",
-        },
-      },
     }),
 
     /**
