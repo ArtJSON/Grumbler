@@ -92,6 +92,15 @@ export default function ThemeManager({
           },
         },
       },
+      Modal: {
+        styles: (theme) => ({
+          root: {
+            [`@media screen and (min-width: 1280px)`]: {
+              marginLeft: 280,
+            },
+          },
+        }),
+      },
       RichTextEditor: {
         defaultProps: {
           styles: {
@@ -165,6 +174,15 @@ export default function ThemeManager({
             },
           },
         },
+      },
+      Modal: {
+        styles: (theme) => ({
+          root: {
+            [`@media screen and (min-width: 1280px)`]: {
+              marginLeft: 280,
+            },
+          },
+        }),
       },
       RichTextEditor: {
         defaultProps: {
