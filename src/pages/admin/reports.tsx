@@ -1,7 +1,8 @@
 import { Table, Pagination, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowsSort } from "tabler-icons-react";
+import { AdminPost } from "../../components/Post/AdminPost/AdminPost";
 import { api } from "../../utils/api";
 
 import styles from "./AdminPage.module.scss";
@@ -17,9 +18,21 @@ export default function ReportsPage() {
     sortOption,
   });
 
-  const { data: postData } = api.admin.getReportedPost.useQuery({
-    reportId: selectedReport,
-  });
+  const { data: postData, refetch: postDataRefetch } =
+    api.admin.getReportedPost.useQuery(
+      {
+        reportId: selectedReport,
+      },
+      {
+        enabled: false,
+      }
+    );
+
+  useEffect(() => {
+    if (selectedReport) {
+      postDataRefetch();
+    }
+  }, [selectedReport]);
 
   if (!reportsData) {
     return <></>;
@@ -29,7 +42,14 @@ export default function ReportsPage() {
 
   return (
     <div className={styles.adminPage}>
-      <Modal opened={opened} onClose={close} title="Review"></Modal>
+      <Modal opened={opened} onClose={close} title="Review">
+        {postData && (
+          <AdminPost
+            content={postData.post.content}
+            extendedContent={postData.post.extendedContent ?? undefined}
+          />
+        )}
+      </Modal>
       <ReportsTable
         onReviewClick={(id) => {
           setSelectedReport(id);
@@ -38,7 +58,7 @@ export default function ReportsPage() {
         onSortClick={() => {
           setSortOption((prev) => (prev === "asc" ? "desc" : "asc"));
         }}
-        reports={reportsData.reports}
+        reports={[...reportsData.reports]}
       />
       <div className={styles.paginationContainer}>
         <Pagination total={reportsData.pages} page={page} onChange={setPage} />
