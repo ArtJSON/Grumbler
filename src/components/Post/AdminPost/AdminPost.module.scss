@@ -1,0 +1,15 @@
+@import "../../../styles/variables";
+
+.adminPost {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .extendedContent {
+    white-space: pre;
+  }
+
+  &.dark {
+    color: $gray-200;
+  }
+}
