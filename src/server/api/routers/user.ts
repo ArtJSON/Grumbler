@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import dateFormat from "dateformat";
 import { z } from "zod";
 import { errorMessages } from "../../../utils/errorMessages";
 
@@ -147,7 +148,7 @@ export const userRouter = createTRPCRouter({
           bio: userInDb.bio ?? undefined,
           imageUrl: userInDb.avatar,
           displayName: userInDb.displayName ?? "",
-          joinedAt: userInDb.joinedAt.toDateString(),
+          joinedAt: dateFormat(userInDb.joinedAt, "dd/mm/yyyy, HH:MM:ss"),
           followers: userInDb._count.followedBy,
           following: userInDb._count.following,
           posts: userInDb._count.posts,
@@ -156,7 +157,7 @@ export const userRouter = createTRPCRouter({
         },
         posts: postInDb.map((p) => ({
           id: p.id,
-          createdAt: p.createdAt.toDateString(),
+          createdAt: dateFormat(p.createdAt, "dd/mm/yyyy, HH:MM:ss"),
           userId: p.user.id,
           userImage: p.user.avatar,
           displayName: p.user.displayName ?? "",

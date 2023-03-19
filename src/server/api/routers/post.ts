@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import dateFormat from "dateformat";
 import { z } from "zod";
 import { errorMessages } from "../../../utils/errorMessages";
 
@@ -48,7 +49,7 @@ export const postRouter = createTRPCRouter({
         nextCursor: nextCursor,
         posts: postsInDb.map((p) => ({
           id: p.id,
-          createdAt: p.createdAt.toDateString(),
+          createdAt: dateFormat(p.createdAt, "dd/mm/yyyy, HH:MM:ss"),
           userId: p.user.id,
           userImage: p.user.avatar,
           displayName: p.user.displayName ?? "",
@@ -109,7 +110,7 @@ export const postRouter = createTRPCRouter({
       return {
         post: {
           id: postInDb.id,
-          createdAt: postInDb.createdAt.toDateString(),
+          createdAt: dateFormat(postInDb.createdAt, "dd/mm/yyyy, HH:MM:ss"),
           userId: postInDb.user.id,
           imageUrl: postInDb.user.avatar ?? "/defaultUserImage.webp",
           displayName: postInDb.user.displayName ?? "",
@@ -126,7 +127,7 @@ export const postRouter = createTRPCRouter({
         comments: postInDb.comments.map((c) => ({
           commentId: c.id,
           text: c.text,
-          createdAt: c.createdAt.toDateString(),
+          createdAt: dateFormat(c.createdAt, "dd/mm/yyyy, HH:MM:ss"),
           displayName: c.user.displayName ?? "",
           username: c.user.name ?? "",
           userImgUrl: c.user.avatar ?? "/defaultUserImage.webp",
@@ -208,7 +209,7 @@ export const postRouter = createTRPCRouter({
       return {
         posts: postsInDb.map((p) => ({
           id: p.id,
-          createdAt: p.createdAt.toDateString(),
+          createdAt: dateFormat(p.createdAt, "dd/mm/yyyy, HH:MM:ss"),
           userId: p.user.id,
           userImage: p.user.avatar,
           displayName: p.user.displayName ?? "",
