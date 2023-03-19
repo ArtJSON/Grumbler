@@ -60,6 +60,13 @@ export function Sidebar({ inAdminPanel }: SidebarProps) {
               <Files size={32} strokeWidth={2} color={"black"} />
               <span className={styles.optionText}>Manage posts</span>
             </Link>
+            <div
+              className={`${styles.option} ${styles.desktopOnly}`}
+              onClick={() => theme.toggleTheme()}
+            >
+              <Brightness size={32} strokeWidth={2} color={"black"} />
+              <span className={styles.optionText}>{theme.theme} mode</span>
+            </div>
           </>
         ) : (
           <>
