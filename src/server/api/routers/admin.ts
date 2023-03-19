@@ -47,7 +47,7 @@ export const adminRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input: { reportId } }) => {
-      const reportInDb = await ctx.prisma.report.findUnique({
+      const reportInDb = await ctx.prisma.report.findUniqueOrThrow({
         where: {
           id: reportId,
         },
@@ -55,8 +55,14 @@ export const adminRouter = createTRPCRouter({
       });
 
       return {
+        report: {
+          id: reportInDb.id,
+          reason: reportInDb.reason,
+        },
         post: {
-          content: reportInDb,
+          id: reportInDb.post.id,
+          content: reportInDb.post.content,
+          extendedContent: reportInDb.post.extendedContent,
         },
       };
     }),
