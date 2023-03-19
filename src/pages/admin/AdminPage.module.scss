@@ -1,0 +1,41 @@
+.adminPage {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  .table {
+    th {
+      user-select: none;
+      font-size: 1rem;
+    }
+
+    tr {
+      font-size: 1rem;
+    }
+
+    .sortHeader {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+    }
+    .elipsisField {
+      max-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .narrowField {
+      width: 150px;
+    }
+
+    .reviewButton {
+    }
+  }
+
+  .paginationContainer {
+    padding: 0 1rem 1rem 0;
+  }
+}
