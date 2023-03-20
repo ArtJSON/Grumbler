@@ -57,6 +57,7 @@ model User {
     role          String    @default("USER")
     avatar        String    @default("/defaultUserImage.webp")
     bio           String?
+    bannedUntil   DateTime?
     emailVerified DateTime?
     image         String?
     accounts      Account[]
@@ -145,12 +146,11 @@ model PostLike {
 }
 
 model Report {
-    id         String   @id @default(cuid())
-    createdAt  DateTime @default(now())
-    user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId     String
-    post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-    postId     String
-    reason     String
-    isResolved Boolean  @default(false)
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId    String
+    reason    String
 }
