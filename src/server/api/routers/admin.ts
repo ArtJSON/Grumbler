@@ -66,4 +66,33 @@ export const adminRouter = createTRPCRouter({
         },
       };
     }),
+  reviewReport: adminProcedure
+    .input(
+      z.object({
+        shouldPostBeRemoved: z.boolean(),
+        userBannedForDays: z.number().optional(),
+        reportId: z.string(),
+      })
+    )
+    .mutation(
+      async ({
+        ctx,
+        input: { shouldPostBeRemoved, reportId, userBannedForDays },
+      }) => {
+        const reportInDb = await ctx.prisma.report.findUniqueOrThrow({
+          where: { id: reportId },
+        });
+
+        if (shouldPostBeRemoved) {
+          await ctx.prisma.post.delete({
+            where: {
+              id: reportInDb.postId,
+            },
+          });
+        }
+
+        if (userBannedForDays) {
+        }
+      }
+    ),
 });
