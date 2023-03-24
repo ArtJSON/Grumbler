@@ -1,17 +1,21 @@
 import { Table } from "@mantine/core";
-import { ArrowsSort } from "tabler-icons-react";
+import { ArrowsSort, Triangle, TriangleInverted } from "tabler-icons-react";
 import styles from "./AdminPage.module.scss";
 
 export default function UsersPage() {
-  return <div></div>;
+  return (
+    <div className={styles.adminPage}>
+      <UserTable onReviewClick={() => {}} onSortClick={() => {}} users={[]} />
+    </div>
+  );
 }
 
 function UserTable({
-  reports,
+  users,
   onSortClick,
   onReviewClick,
 }: {
-  reports: {
+  users: {
     id: string;
     postId: string;
     createdAt: string;
@@ -38,17 +42,11 @@ function UserTable({
     </tr>
   );
 
-  const rows = reports.map((r) => (
+  const rows = users.map((r) => (
     <tr key={r.id}>
-      <td className={styles.narrowField}>{r.createdAt}</td>
-      <td className={styles.elipsisField}>{r.reason}</td>
+      <td></td>
       <td className={styles.narrowField}>
-        <button
-          className={styles.actionButton}
-          onClick={() => onReviewClick(r.id)}
-        >
-          Review
-        </button>
+        <button className={styles.actionButton}>Review</button>
       </td>
     </tr>
   ));
