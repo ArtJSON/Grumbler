@@ -1,4 +1,4 @@
-import { Table, Pagination, Modal, Text, Flex } from "@mantine/core";
+import { Table, Pagination, Modal, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { ArrowsSort, Ban, ThumbUp } from "tabler-icons-react";
