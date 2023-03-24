@@ -1,7 +1,7 @@
-import { Table, Pagination, Modal } from "@mantine/core";
+import { Table, Pagination, Modal, Text, Flex } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
-import { ArrowsSort } from "tabler-icons-react";
+import { ArrowsSort, Ban, ThumbUp } from "tabler-icons-react";
 import { AdminPost } from "../../components/Post/AdminPost/AdminPost";
 import { api } from "../../utils/api";
 
@@ -18,7 +18,7 @@ export default function ReportsPage() {
     sortOption,
   });
 
-  const { data: postData, refetch: postDataRefetch } =
+  const { data: reportData, refetch: reportDataRefetch } =
     api.admin.getReportedPost.useQuery(
       {
         reportId: selectedReport,
@@ -30,7 +30,7 @@ export default function ReportsPage() {
 
   useEffect(() => {
     if (selectedReport) {
-      postDataRefetch();
+      reportDataRefetch();
     }
   }, [selectedReport]);
 
@@ -38,17 +38,35 @@ export default function ReportsPage() {
     return <></>;
   }
 
-  console.log(postData);
-
   return (
     <div className={styles.adminPage}>
-      <Modal opened={opened} onClose={close} title="Review">
-        {postData && (
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="Review"
+        className={styles.modal}
+      >
+        {reportData && (
           <AdminPost
-            content={postData.post.content}
-            extendedContent={postData.post.extendedContent ?? undefined}
+            content={reportData.post.content}
+            extendedContent={reportData.post.extendedContent ?? undefined}
           />
         )}
+        <div className={styles.actionsContainer}>
+          <button className={styles.positive}>
+            <ThumbUp size={20} />
+            <Text>Leave</Text>
+          </button>
+          <button
+            className={styles.danger}
+            onClick={() => {
+              close();
+            }}
+          >
+            <Ban size={20} />
+            <span>Remove</span>
+          </button>
+        </div>
       </Modal>
       <ReportsTable
         onReviewClick={(id) => {
