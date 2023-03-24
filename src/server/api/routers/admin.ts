@@ -70,29 +70,26 @@ export const adminRouter = createTRPCRouter({
     .input(
       z.object({
         shouldPostBeRemoved: z.boolean(),
-        userBannedForDays: z.number().optional(),
         reportId: z.string(),
       })
     )
-    .mutation(
-      async ({
-        ctx,
-        input: { shouldPostBeRemoved, reportId, userBannedForDays },
-      }) => {
-        const reportInDb = await ctx.prisma.report.findUniqueOrThrow({
-          where: { id: reportId },
+    .mutation(async ({ ctx, input: { shouldPostBeRemoved, reportId } }) => {
+      const reportInDb = await ctx.prisma.report.findUniqueOrThrow({
+        where: { id: reportId },
+      });
+
+      if (shouldPostBeRemoved) {
+        await ctx.prisma.post.delete({
+          where: {
+            id: reportInDb.postId,
+          },
         });
-
-        if (shouldPostBeRemoved) {
-          await ctx.prisma.post.delete({
-            where: {
-              id: reportInDb.postId,
-            },
-          });
-        }
-
-        if (userBannedForDays) {
-        }
+      } else {
+        await ctx.prisma.report.delete({
+          where: {
+            id: reportInDb.id,
+          },
+        });
       }
-    ),
+    }),
 });
