@@ -79,6 +79,12 @@ export const adminRouter = createTRPCRouter({
       });
 
       if (shouldPostBeRemoved) {
+        await ctx.prisma.report.delete({
+          where: {
+            id: reportInDb.id,
+          },
+        });
+
         await ctx.prisma.post.delete({
           where: {
             id: reportInDb.postId,
