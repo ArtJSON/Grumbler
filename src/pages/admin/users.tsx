@@ -49,17 +49,46 @@ function UserTable({
     <tr>
       <th
         onClick={() => {
-          onSortClick("username");
+          onSortClick("usr");
         }}
       >
         <ArrowsSort size={12} style={{ marginRight: 6 }} />
         Username
       </th>
-      <th>Display name</th>
+      <th
+        onClick={() => {
+          onSortClick("dsp");
+        }}
+      >
+        <ArrowsSort size={12} style={{ marginRight: 6 }} />
+        Display name
+      </th>
+      <th
+        onClick={() => {
+          onSortClick("rol");
+        }}
+      >
+        <ArrowsSort size={12} style={{ marginRight: 6 }} />
+        Role
+      </th>
+      <th
+        onClick={() => {
+          onSortClick("flw");
+        }}
+      >
+        <ArrowsSort size={12} style={{ marginRight: 6 }} />
+        Followers
+      </th>
+      <th
+        onClick={() => {
+          onSortClick("jdt");
+        }}
+      >
+        <ArrowsSort size={12} style={{ marginRight: 6 }} />
+        Joined at
+      </th>
       <th>E-mail</th>
-      <th>Role</th>
-      <th>Bio</th>
-      <th>Followers</th>
+      <th>Action</th>
     </tr>
   );
 
@@ -73,7 +102,7 @@ function UserTable({
   ));
 
   return (
-    <Table className={styles.table}>
+    <Table className={styles.table} withColumnBorders>
       <thead>{ths}</thead>
       <tbody>{rows}</tbody>
     </Table>
