@@ -33,7 +33,12 @@
       width: 150px;
     }
 
-    .reviewButton {
+    .actionButton {
+      cursor: pointer;
+      color: inherit;
+      border: transparent;
+      background-color: transparent;
+      padding: 0;
     }
   }
 

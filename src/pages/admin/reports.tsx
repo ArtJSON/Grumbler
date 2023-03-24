@@ -137,7 +137,7 @@ function ReportsTable({
       <td className={styles.elipsisField}>{r.reason}</td>
       <td className={styles.narrowField}>
         <button
-          className={styles.reviewButton}
+          className={styles.actionButton}
           onClick={() => onReviewClick(r.id)}
         >
           Review
