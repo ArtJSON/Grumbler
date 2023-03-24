@@ -12,13 +12,15 @@ export default function ReportsPage() {
   const [sortOption, setSortOption] = useState("asc");
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedReport, setSelectedReport] = useState("");
+  const reviewReportMutation = api.admin.reviewReport.useMutation();
 
-  const { data: reportsData } = api.admin.getReports.useQuery({
-    page: page,
-    sortOption,
-  });
+  const { data: reportsData, refetch: refetchReportsData } =
+    api.admin.getReports.useQuery({
+      page: page,
+      sortOption,
+    });
 
-  const { data: reportData, refetch: reportDataRefetch } =
+  const { data: selectedReportData, refetch: selectedReportDataRefetch } =
     api.admin.getReportedPost.useQuery(
       {
         reportId: selectedReport,
@@ -30,7 +32,7 @@ export default function ReportsPage() {
 
   useEffect(() => {
     if (selectedReport) {
-      reportDataRefetch();
+      selectedReportDataRefetch();
     }
   }, [selectedReport]);
 
@@ -46,20 +48,39 @@ export default function ReportsPage() {
         title="Review"
         className={styles.modal}
       >
-        {reportData && (
+        {selectedReportData && (
           <AdminPost
-            content={reportData.post.content}
-            extendedContent={reportData.post.extendedContent ?? undefined}
+            content={selectedReportData.post.content}
+            extendedContent={
+              selectedReportData.post.extendedContent ?? undefined
+            }
           />
         )}
         <div className={styles.actionsContainer}>
-          <button className={styles.positive}>
+          <button
+            className={styles.positive}
+            onClick={async () => {
+              await reviewReportMutation.mutate({
+                reportId: selectedReport,
+                shouldPostBeRemoved: false,
+              });
+              refetchReportsData();
+              setSelectedReport("");
+              close();
+            }}
+          >
             <ThumbUp size={20} />
             <Text>Leave</Text>
           </button>
           <button
             className={styles.danger}
-            onClick={() => {
+            onClick={async () => {
+              await reviewReportMutation.mutate({
+                reportId: selectedReport,
+                shouldPostBeRemoved: true,
+              });
+              refetchReportsData();
+              setSelectedReport("");
               close();
             }}
           >
