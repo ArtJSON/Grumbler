@@ -19,12 +19,12 @@ model Account {
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
+    refresh_token     String? @db.Text
+    access_token      String? @db.Text
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? // @db.Text
+    id_token          String? @db.Text
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -54,16 +54,16 @@ model VerificationToken {
 model User {
     id            String    @id @default(cuid())
     joinedAt      DateTime  @default(now())
-    displayName   String?
-    name          String?
+    displayName   String?   @db.Text
+    name          String?   @db.Text
     username      String?   @unique
     email         String?   @unique
-    role          String    @default("USER")
-    avatar        String    @default("/defaultUserImage.webp")
-    bio           String?
+    role          String    @default("USER") @db.Text
+    avatar        String    @default("/defaultUserImage.webp") @db.Text
+    bio           String?   @db.Text
     bannedUntil   DateTime?
     emailVerified DateTime?
-    image         String?
+    image         String?   @db.Text
     accounts      Account[]
     sessions      Session[]
 
@@ -91,7 +91,7 @@ model Follows {
 model Comment {
     id          String        @id @default(cuid())
     createdAt   DateTime      @default(now())
-    text        String
+    text        String        @db.Text
     userId      String
     post        Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId      String
@@ -124,9 +124,9 @@ model Post {
     responseId      String?
     responses       Post[]        @relation("response")
     views           Int           @default(0)
-    content         String
+    content         String        @db.Text
     // TODO: add a field that is used to store photos/videos data (cloudinary)
-    extendedContent String?
+    extendedContent String?       @db.Text
     comments        Comment[]
     postLikes       PostLike[]
     postHashtag     PostHashtag[]
@@ -172,7 +172,7 @@ model Report {
     userId    String
     post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId    String
-    reason    String
+    reason    String   @db.Text
 
     @@index([userId])
     @@index([postId])
