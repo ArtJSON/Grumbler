@@ -55,6 +55,17 @@ export default function ThemeManager({
           },
         },
       },
+      Table: {
+        defaultProps: {
+          withColumnBorders: true,
+          withBorder: true,
+          style: {
+            borderTop: "0",
+            borderLeft: "0",
+            borderRight: "0",
+          },
+        },
+      },
       TextInput: {
         defaultProps: {
           styles: {
@@ -153,6 +164,17 @@ export default function ThemeManager({
             input: {
               fontSize: 16,
             },
+          },
+        },
+      },
+      Table: {
+        defaultProps: {
+          withColumnBorders: true,
+          withBorder: true,
+          style: {
+            borderTop: "0",
+            borderLeft: "0",
+            borderRight: "0",
           },
         },
       },
