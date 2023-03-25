@@ -166,6 +166,16 @@ export const adminRouter = createTRPCRouter({
             joinedAt: "desc" as Prisma.SortOrder,
           };
           break;
+        case "bdu-asc":
+          orderBy = {
+            bannedUntil: "asc" as Prisma.SortOrder,
+          };
+          break;
+        case "bdu-des":
+          orderBy = {
+            bannedUntil: "desc" as Prisma.SortOrder,
+          };
+          break;
       }
 
       const usersInDb = await ctx.prisma.user.findMany({
@@ -190,6 +200,9 @@ export const adminRouter = createTRPCRouter({
           role: r.role,
           followers: r._count.followedBy,
           joinedAt: dateFormat(r.joinedAt, "dd/mm/yyyy, HH:MM:ss"),
+          bannedUntil: r.bannedUntil
+            ? dateFormat(r.bannedUntil, "dd/mm/yyyy, HH:MM:ss")
+            : "",
           email: r.email ?? "",
         })),
       };

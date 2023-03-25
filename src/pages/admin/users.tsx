@@ -7,6 +7,7 @@ import {
   Table,
   Tabs,
   Group,
+  Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -21,6 +22,7 @@ export default function UsersPage() {
   const [sortOption, setSortOption] = useState("usr-asc");
   const [page, setPage] = useState(1);
   const [selectedUserId, setSelectedUser] = useState("");
+  const [banDate, setBanDate] = useState<Date | null>(null);
 
   const { data: usersData, refetch: refetchUsersData } =
     api.admin.getUsers.useQuery({
@@ -56,6 +58,7 @@ export default function UsersPage() {
     close();
     resetUserForm.reset();
     roleForm.reset();
+    setBanDate(null);
   };
 
   const handleSortCLick = (newSortOption: string) => {
@@ -167,16 +170,35 @@ export default function UsersPage() {
                     defaultDate={selectedUserData.banTime}
                     defaultValue={selectedUserData.banTime}
                     minDate={new Date()}
+                    onChange={setBanDate}
                   />
                 </Group>
-                <Button type="submit" mt={8}>
+                <Button
+                  mt={8}
+                  onClick={() => {
+                    console.log(banDate);
+                    handleFormClose();
+                  }}
+                  disabled={banDate === null}
+                >
                   Save changes
                 </Button>
               </>
             )}
           </Tabs.Panel>
           <Tabs.Panel value="remove" pt="md">
-            Remove
+            <Text>This action is destructive and irreversible</Text>
+            <Group position="center">
+              <Button
+                color="red"
+                mt={16}
+                onClick={() => {
+                  handleFormClose();
+                }}
+              >
+                Remove user
+              </Button>
+            </Group>
           </Tabs.Panel>
         </Tabs>
       </Modal>
@@ -207,6 +229,7 @@ function UserTable({
     role: string;
     followers: number;
     joinedAt: string;
+    bannedUntil: string;
     email: string;
   }[];
   onSortClick: (option: string) => void;
@@ -259,6 +282,15 @@ function UserTable({
         <ArrowsSort size={12} style={{ marginRight: 6 }} />
         Joined at
       </th>
+      <th
+        className={styles.sortHeader}
+        onClick={() => {
+          onSortClick("bdu");
+        }}
+      >
+        <ArrowsSort size={12} style={{ marginRight: 6 }} />
+        Banned until
+      </th>
       <th>E-mail</th>
       <th>Action</th>
     </tr>
@@ -271,6 +303,7 @@ function UserTable({
       <td>{r.role}</td>
       <td>{r.followers}</td>
       <td>{r.joinedAt}</td>
+      <td>{r.bannedUntil}</td>
       <td>{r.email}</td>
       <td className={styles.narrowField}>
         <button
