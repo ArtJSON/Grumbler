@@ -91,7 +91,14 @@ export default function SettingsPage() {
             label="Display name"
           />
           <TextInput {...form.getInputProps("username")} label="Username" />
-          <Textarea {...form.getInputProps("bio")} label="Bio" />
+          <Textarea
+            {...form.getInputProps("bio")}
+            placeholder="Tell something about yourself..."
+            label="Bio"
+            maxLength={320}
+            minRows={3}
+            autosize
+          />
           <button className={styles.submitButton} type="submit">
             Save changes
           </button>

@@ -1,6 +1,5 @@
 import styles from "./TrendingPage.module.scss";
 import Head from "next/head";
-import { Textarea, TextInput } from "@mantine/core";
 import { api } from "../../utils/api";
 import { PostList } from "../../components/PostList/PostList";
 

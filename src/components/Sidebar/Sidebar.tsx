@@ -124,7 +124,7 @@ export function Sidebar({ inAdminPanel }: SidebarProps) {
             {sessionData && sessionData.user.role === "ADMIN" && (
               <Link
                 className={`${styles.option} ${styles.desktopOnly}`}
-                href="/admin"
+                href="/admin/reports"
               >
                 <ServerBolt size={32} strokeWidth={2} color={"black"} />
                 <span className={styles.optionText}>Admin panel</span>

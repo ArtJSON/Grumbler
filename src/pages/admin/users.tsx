@@ -51,7 +51,9 @@ export default function UsersPage() {
             <Tabs.Tab value="reset">Reset user data</Tabs.Tab>
             <Tabs.Tab value="role">Change role</Tabs.Tab>
             <Tabs.Tab value="ban">Change ban time</Tabs.Tab>
-            <Tabs.Tab value="remove">Remove user</Tabs.Tab>
+            <Tabs.Tab value="remove" color="red">
+              Remove user
+            </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="reset" pt="md">
             Reset
