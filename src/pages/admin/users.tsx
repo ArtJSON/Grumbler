@@ -1,4 +1,4 @@
-import { Modal, Pagination, Table } from "@mantine/core";
+import { Modal, Pagination, Table, Tabs } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import { ArrowsSort } from "tabler-icons-react";
@@ -46,7 +46,26 @@ export default function UsersPage() {
         title="Manage"
         className={styles.modal}
       >
-        <div className={styles.actionsContainer}></div>
+        <Tabs color="indigo" defaultValue="reset">
+          <Tabs.List>
+            <Tabs.Tab value="reset">Reset user data</Tabs.Tab>
+            <Tabs.Tab value="role">Change role</Tabs.Tab>
+            <Tabs.Tab value="ban">Change ban time</Tabs.Tab>
+            <Tabs.Tab value="remove">Remove user</Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Panel value="reset" pt="md">
+            Reset
+          </Tabs.Panel>
+          <Tabs.Panel value="role" pt="md">
+            Role
+          </Tabs.Panel>
+          <Tabs.Panel value="ban" pt="md">
+            Ban
+          </Tabs.Panel>
+          <Tabs.Panel value="remove" pt="md">
+            Remove
+          </Tabs.Panel>
+        </Tabs>
       </Modal>
       <UserTable
         onActionClick={() => {
