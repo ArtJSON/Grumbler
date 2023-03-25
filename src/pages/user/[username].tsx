@@ -4,6 +4,7 @@ import Head from "next/head";
 import { api } from "../../utils/api";
 import { PostList } from "../../components/PostList/PostList";
 import { UserHeader } from "../../components/UserHeader/UserHeader";
+import { Loader } from "../../components/Loader/Loader";
 
 interface UserPagePropsType {
   username: string;
@@ -19,7 +20,7 @@ export default function UserPage({ username }: UserPagePropsType) {
   const unfollowMutation = api.user.unfollow.useMutation();
 
   if (!userData) {
-    return <></>;
+    return <Loader />;
   }
 
   return (

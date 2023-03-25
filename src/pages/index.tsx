@@ -5,6 +5,7 @@ import { api } from "../utils/api";
 import { PostInput } from "../components/PostInput/PostInput";
 import { PostList } from "../components/PostList/PostList";
 import InfiniteScrollTrigger from "../components/InfiniteScrollTrigger/InfiniteScrollTrigger";
+import { Loader } from "@mantine/core";
 
 const Home: NextPage = () => {
   const {
@@ -19,7 +20,7 @@ const Home: NextPage = () => {
   );
 
   if (!postsData) {
-    return <></>;
+    return <Loader />;
   }
 
   return (

@@ -1,7 +1,7 @@
 import styles from "./SettingsPage.module.scss";
 import Head from "next/head";
 import { useForm, zodResolver } from "@mantine/form";
-import { Textarea, TextInput } from "@mantine/core";
+import { Loader, Textarea, TextInput } from "@mantine/core";
 import { z } from "zod";
 import { api } from "../../utils/api";
 import { useRouter } from "next/router";
@@ -50,7 +50,7 @@ export default function SettingsPage() {
   }, [settingsData]);
 
   if (!settingsData) {
-    return <></>;
+    return <Loader />;
   }
 
   return (

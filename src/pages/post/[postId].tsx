@@ -1,3 +1,4 @@
+import { Loader } from "@mantine/core";
 import type { GetServerSideProps } from "next";
 import { useState } from "react";
 import { CommentInput } from "../../components/CommentInput/CommentInput";
@@ -26,7 +27,7 @@ export default function PostPage({ postId }: PostPagePropsType) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
 
   if (!postData) {
-    return;
+    return <Loader />;
   }
 
   return (

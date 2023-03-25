@@ -2,12 +2,13 @@ import styles from "./TrendingPage.module.scss";
 import Head from "next/head";
 import { api } from "../../utils/api";
 import { PostList } from "../../components/PostList/PostList";
+import { Loader } from "../../components/Loader/Loader";
 
 export default function SettingsPage() {
   const { data: trendingData } = api.post.getTrending.useQuery({ page: 0 });
 
   if (!trendingData) {
-    return <></>;
+    return <Loader />;
   }
 
   return (
