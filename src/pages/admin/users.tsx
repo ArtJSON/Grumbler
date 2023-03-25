@@ -6,6 +6,12 @@ import { Loader } from "../../components/Loader/Loader";
 import { api } from "../../utils/api";
 import styles from "./AdminPage.module.scss";
 
+// User management options:
+// - reset user data
+// - remove user
+// - change ban time
+// - change role
+
 export default function UsersPage() {
   const [sortOption, setSortOption] = useState("usr-asc");
   const [page, setPage] = useState(1);
@@ -37,7 +43,7 @@ export default function UsersPage() {
       <Modal
         opened={opened}
         onClose={close}
-        title="Review"
+        title="Manage"
         className={styles.modal}
       >
         <div className={styles.actionsContainer}></div>

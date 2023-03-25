@@ -194,4 +194,38 @@ export const adminRouter = createTRPCRouter({
         })),
       };
     }),
+  resetUserData: adminProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        resetUsername: z.boolean(),
+        resetDisplayName: z.boolean(),
+        resetBio: z.boolean(),
+        removeAllPosts: z.boolean(),
+      })
+    )
+    .mutation(async ({ ctx, input: {} }) => {}),
+  removeUser: adminProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input: {} }) => {}),
+  updateBanTime: adminProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        newBanTime: z.date(),
+      })
+    )
+    .mutation(async ({ ctx, input: {} }) => {}),
+  changeRole: adminProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        role: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input: {} }) => {}),
 });
