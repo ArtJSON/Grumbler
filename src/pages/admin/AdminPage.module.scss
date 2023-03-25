@@ -18,10 +18,9 @@
     }
 
     .sortHeader {
-      display: flex;
-      gap: 0.25rem;
-      align-items: center;
+      cursor: pointer;
     }
+
     .elipsisField {
       max-width: 0;
       white-space: nowrap;
