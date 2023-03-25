@@ -39,7 +39,6 @@ export const adminRouter = createTRPCRouter({
         })),
       };
     }),
-
   getReportedPost: adminProcedure
     .input(
       z.object({
@@ -97,5 +96,102 @@ export const adminRouter = createTRPCRouter({
           },
         });
       }
+    }),
+  getUsers: adminProcedure
+    .input(
+      z.object({
+        page: z.number(),
+        limit: z.number().min(1).max(100).nullish(),
+        sortOption: z.string().optional(),
+      })
+    )
+    .query(async ({ ctx, input: { page, limit, sortOption = "usr-asc" } }) => {
+      const pageLimit = limit ?? 25;
+      const usersCount = await ctx.prisma.user.count();
+
+      let orderBy;
+
+      switch (sortOption) {
+        case "usr-asc":
+          orderBy = {
+            username: "asc" as Prisma.SortOrder,
+          };
+          break;
+        case "usr-des":
+          orderBy = {
+            username: "desc" as Prisma.SortOrder,
+          };
+          break;
+        case "dsp-asc":
+          orderBy = {
+            displayName: "asc" as Prisma.SortOrder,
+          };
+          break;
+        case "dsp-des":
+          orderBy = {
+            displayName: "desc" as Prisma.SortOrder,
+          };
+          break;
+        case "rol-asc":
+          orderBy = {
+            role: "asc" as Prisma.SortOrder,
+          };
+          break;
+        case "rol-des":
+          orderBy = {
+            role: "desc" as Prisma.SortOrder,
+          };
+          break;
+        case "flw-asc":
+          orderBy = {
+            followedBy: {
+              _count: "asc" as Prisma.SortOrder,
+            },
+          };
+          break;
+        case "flw-des":
+          orderBy = {
+            followedBy: {
+              _count: "desc" as Prisma.SortOrder,
+            },
+          };
+          break;
+        case "jdt-asc":
+          orderBy = {
+            joinedAt: "asc" as Prisma.SortOrder,
+          };
+          break;
+        case "jdt-des":
+          orderBy = {
+            joinedAt: "desc" as Prisma.SortOrder,
+          };
+          break;
+      }
+
+      const usersInDb = await ctx.prisma.user.findMany({
+        orderBy,
+        include: {
+          _count: {
+            select: {
+              followedBy: true,
+            },
+          },
+        },
+        take: pageLimit,
+        skip: (page - 1) * pageLimit,
+      });
+
+      return {
+        pages: Math.ceil(usersCount / pageLimit),
+        users: usersInDb.map((r) => ({
+          id: r.id,
+          username: r.username ?? "",
+          displayName: r.displayName ?? "",
+          role: r.role,
+          followers: r._count.followedBy,
+          joinedAt: dateFormat(r.joinedAt, "dd/mm/yyyy, HH:MM:ss"),
+          email: r.email ?? "",
+        })),
+      };
     }),
 });
