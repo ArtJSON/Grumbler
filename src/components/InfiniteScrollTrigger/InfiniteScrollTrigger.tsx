@@ -1,11 +1,13 @@
-import { useState, useEffect, RefObject, useRef } from "react";
+import { useState, useEffect, type RefObject, useRef } from "react";
 
-function useOnScreen(ref: RefObject<any>, rootMargin = "0px") {
+function useOnScreen(ref: RefObject<HTMLElement>, rootMargin = "0px") {
   const [isIntersecting, setIntersecting] = useState(false);
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIntersecting(entry!.isIntersecting);
+        if (entry) {
+          setIntersecting(entry.isIntersecting);
+        }
       },
       {
         rootMargin,
@@ -17,7 +19,8 @@ function useOnScreen(ref: RefObject<any>, rootMargin = "0px") {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [ref, rootMargin]);
+
   return isIntersecting;
 }
 
@@ -35,7 +38,7 @@ export default function InfiniteScrollTrigger({
     if (isInViewport) {
       onScreenEnter();
     }
-  }, [isInViewport]);
+  }, [isInViewport, onScreenEnter]);
 
   return <div ref={ref} />;
 }

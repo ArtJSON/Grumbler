@@ -1,4 +1,4 @@
-import { GetServerSideProps } from "next";
+import type { GetServerSideProps } from "next";
 import { useState } from "react";
 import { CommentInput } from "../../components/CommentInput/CommentInput";
 import { CommentList } from "../../components/CommentList/CommentList";

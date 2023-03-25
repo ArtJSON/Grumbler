@@ -7,7 +7,7 @@ import {
 import Auth0Provider from "next-auth/providers/auth0";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "./db";
-import { UserRole } from "../types/types.js";
+import type { UserRole } from "../types/types.js";
 
 /**
  * Module augmentation for `next-auth` types.
@@ -57,7 +57,7 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    async redirect({ url, baseUrl }) {
+    async redirect({ url }) {
       return Promise.resolve(url);
     },
   },

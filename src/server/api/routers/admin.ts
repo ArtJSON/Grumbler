@@ -1,10 +1,7 @@
-import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { errorMessages } from "../../../utils/errorMessages";
-import dateFormat, { masks } from "dateformat";
-
+import dateFormat from "dateformat";
 import { createTRPCRouter, adminProcedure } from "../trpc";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 
 export const adminRouter = createTRPCRouter({
   getReports: adminProcedure
@@ -217,14 +214,56 @@ export const adminRouter = createTRPCRouter({
         removeAllPosts: z.boolean(),
       })
     )
-    .mutation(async ({ ctx, input: {} }) => {}),
+    .mutation(
+      async ({
+        ctx,
+        input: {
+          userId,
+          resetBio,
+          resetDisplayName,
+          resetUsername,
+          removeAllPosts,
+        },
+      }) => {
+        if (resetBio) {
+          await ctx.prisma.user.update({
+            where: { id: userId },
+            data: { bio: null },
+          });
+        }
+
+        if (resetDisplayName) {
+          await ctx.prisma.user.update({
+            where: { id: userId },
+            data: { displayName: null },
+          });
+        }
+
+        if (resetUsername) {
+          await ctx.prisma.user.update({
+            where: { id: userId },
+            data: { username: null },
+          });
+        }
+
+        if (removeAllPosts) {
+          await ctx.prisma.post.deleteMany({
+            where: {
+              userId: userId,
+            },
+          });
+        }
+      }
+    ),
   removeUser: adminProcedure
     .input(
       z.object({
         userId: z.string(),
       })
     )
-    .mutation(async ({ ctx, input: {} }) => {}),
+    .mutation(async ({ ctx, input: { userId } }) => {
+      await ctx.prisma.user.delete({ where: { id: userId } });
+    }),
   updateBanTime: adminProcedure
     .input(
       z.object({
@@ -232,15 +271,25 @@ export const adminRouter = createTRPCRouter({
         newBanTime: z.date(),
       })
     )
-    .mutation(async ({ ctx, input: {} }) => {}),
-  changeRole: adminProcedure
+    .mutation(async ({ ctx, input: { userId, newBanTime } }) => {
+      await ctx.prisma.user.update({
+        where: { id: userId },
+        data: { bannedUntil: newBanTime },
+      });
+    }),
+  updateRole: adminProcedure
     .input(
       z.object({
         userId: z.string(),
         role: z.string(),
       })
     )
-    .mutation(async ({ ctx, input: {} }) => {}),
+    .mutation(async ({ ctx, input: { userId, role } }) => {
+      await ctx.prisma.user.update({
+        where: { id: userId },
+        data: { role: role },
+      });
+    }),
   getUserData: adminProcedure
     .input(
       z.object({

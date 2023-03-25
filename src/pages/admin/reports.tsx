@@ -34,7 +34,7 @@ export default function ReportsPage() {
     if (selectedReport) {
       selectedReportDataRefetch();
     }
-  }, [selectedReport]);
+  }, [selectedReport, selectedReportDataRefetch]);
 
   if (!reportsData) {
     return <></>;

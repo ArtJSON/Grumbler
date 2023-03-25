@@ -24,11 +24,11 @@ export default function UsersPage() {
   const [selectedUserId, setSelectedUser] = useState("");
   const [banDate, setBanDate] = useState<Date | null>(null);
 
-  const { data: usersData, refetch: refetchUsersData } =
-    api.admin.getUsers.useQuery({
-      page: page,
-      sortOption,
-    });
+  const resetUserMutation = api.admin.resetUserData.useMutation();
+  const updateRoleMutation = api.admin.updateRole.useMutation();
+  const updateBanTimeMutation = api.admin.updateBanTime.useMutation();
+  const removeUserMutation = api.admin.removeUser.useMutation();
+
   const { data: selectedUserData, refetch: refetchSelectedUserData } =
     api.admin.getUserData.useQuery(
       { userId: selectedUserId },
@@ -36,12 +36,17 @@ export default function UsersPage() {
         enabled: false,
       }
     );
+  const { data: usersData, refetch: refetchUsersData } =
+    api.admin.getUsers.useQuery({
+      page: page,
+      sortOption,
+    });
 
   useEffect(() => {
     if (selectedUserId) {
       refetchSelectedUserData();
     }
-  }, [selectedUserId]);
+  }, [selectedUserId, refetchSelectedUserData]);
 
   const [opened, { open, close }] = useDisclosure(false);
   const resetUserForm = useForm({
@@ -58,6 +63,7 @@ export default function UsersPage() {
     close();
     resetUserForm.reset();
     roleForm.reset();
+    setSelectedUser("");
     setBanDate(null);
   };
 
@@ -98,8 +104,15 @@ export default function UsersPage() {
           <Tabs.Panel value="reset" pt="md">
             <form
               onSubmit={resetUserForm.onSubmit((values) => {
-                console.log(values);
-                close();
+                resetUserMutation
+                  .mutateAsync({
+                    ...values,
+                    userId: selectedUserId,
+                  })
+                  .then(() => {
+                    refetchUsersData();
+                  });
+                handleFormClose();
               })}
               className={styles.actionForm}
             >
@@ -144,8 +157,15 @@ export default function UsersPage() {
             {selectedUserData && (
               <form
                 onSubmit={roleForm.onSubmit((values) => {
-                  console.log(values);
-                  close();
+                  updateRoleMutation
+                    .mutateAsync({
+                      userId: selectedUserId,
+                      role: values.newRole as string,
+                    })
+                    .then(() => {
+                      refetchUsersData();
+                    });
+                  handleFormClose();
                 })}
                 className={styles.actionForm}
               >
@@ -176,8 +196,17 @@ export default function UsersPage() {
                 <Button
                   mt={8}
                   onClick={() => {
-                    console.log(banDate);
-                    handleFormClose();
+                    if (banDate) {
+                      updateBanTimeMutation
+                        .mutateAsync({
+                          userId: selectedUserId,
+                          newBanTime: banDate,
+                        })
+                        .then(() => {
+                          refetchUsersData();
+                        });
+                      handleFormClose();
+                    }
                   }}
                   disabled={banDate === null}
                 >
@@ -193,6 +222,13 @@ export default function UsersPage() {
                 color="red"
                 mt={16}
                 onClick={() => {
+                  removeUserMutation
+                    .mutateAsync({
+                      userId: selectedUserId,
+                    })
+                    .then(() => {
+                      refetchUsersData();
+                    });
                   handleFormClose();
                 }}
               >

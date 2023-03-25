@@ -8,7 +8,7 @@ import Underline from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { lowlight } from "lowlight";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { z } from "zod";
 import { api } from "../../../utils/api";
 import { useThemeContext } from "../../ThemeManager/ThemeManager";
@@ -41,7 +41,6 @@ export function PostDetailed({
   extendedContent,
   likesCount,
   commentsCount,
-  viewsCount,
   liked,
   onLikeClick,
 }: PostDetailedProps) {
@@ -131,7 +130,6 @@ export function PostDetailed({
       <PostReactionsFooter
         likesCount={likesCount}
         commentsCount={commentsCount}
-        viewsCount={viewsCount}
         liked={liked}
         onLikeClick={onLikeClick}
         onReportClick={open}

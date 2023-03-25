@@ -46,7 +46,7 @@ export default function SettingsPage() {
         username: settingsData?.username ?? "",
       });
     }
-  }, [settingsData]);
+  }, [settingsData, form]);
 
   if (!settingsData) {
     return <></>;

@@ -1,18 +1,10 @@
-import { useState } from "react";
-import {
-  ArrowUpRightCircle,
-  Eye,
-  Flag,
-  Heart,
-  MessageCircle,
-} from "tabler-icons-react";
+import { Flag, Heart, MessageCircle } from "tabler-icons-react";
 import { useThemeContext } from "../../../ThemeManager/ThemeManager";
 import styles from "./PostReactionsFooter.module.scss";
 
 interface PostReactionsFooterProps {
   likesCount: number;
   commentsCount: number;
-  viewsCount: number;
   liked: boolean;
   onLikeClick: () => void;
   onReportClick: () => void;
@@ -21,7 +13,6 @@ interface PostReactionsFooterProps {
 export function PostReactionsFooter({
   likesCount,
   commentsCount,
-  viewsCount,
   liked,
   onLikeClick,
   onReportClick,
