@@ -1,7 +1,7 @@
 import { Pagination, Table } from "@mantine/core";
 import { useState } from "react";
 import { ArrowsSort } from "tabler-icons-react";
-import { LoadingBlocker } from "../../components/LoadingBlocker/LoadingBlocker";
+import { Loader } from "../../components/Loader/Loader";
 import { api } from "../../utils/api";
 import styles from "./AdminPage.module.scss";
 
@@ -25,6 +25,10 @@ export default function UsersPage() {
       setSortOption(newSortOption + "-asc");
     }
   };
+
+  if (!usersData) {
+    return <Loader />;
+  }
 
   return (
     <div className={styles.adminPage}>
