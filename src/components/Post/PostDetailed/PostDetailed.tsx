@@ -88,7 +88,7 @@ export function PostDetailed({
         theme.theme === "dark" ? styles.dark : ""
       }`}
     >
-      <Modal opened={opened} onClose={close} title="Report">
+      <Modal opened={opened} onClose={close} title="Report" size="md">
         <form
           onSubmit={form.onSubmit((values) => {
             reportPostMutation.mutate({

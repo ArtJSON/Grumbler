@@ -104,6 +104,9 @@ export default function ThemeManager({
         },
       },
       Modal: {
+        defaultProps: {
+          size: "xl",
+        },
         styles: (theme) => ({
           root: {
             [`@media screen and (min-width: 1280px)`]: {
@@ -204,6 +207,9 @@ export default function ThemeManager({
         },
       },
       Modal: {
+        defaultProps: {
+          size: "xl",
+        },
         styles: (theme) => ({
           root: {
             [`@media screen and (min-width: 1280px)`]: {

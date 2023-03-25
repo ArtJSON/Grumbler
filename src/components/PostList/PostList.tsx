@@ -34,7 +34,7 @@ export function PostList({ posts }: PostListProps) {
   if (posts.length) {
     return (
       <div className={styles.postList}>
-        <Modal opened={opened} onClose={close} title="Report">
+        <Modal opened={opened} onClose={close} title="Report" size="md">
           <form
             onSubmit={form.onSubmit((values) => {
               reportPostMutation.mutate({
