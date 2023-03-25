@@ -1,6 +1,6 @@
 import {
   PostListingItem,
-  PostListingItemProps,
+  type PostListingItemProps,
 } from "./PostListingItem/PostListingItem";
 import styles from "./PostList.module.scss";
 import { Modal, Textarea } from "@mantine/core";

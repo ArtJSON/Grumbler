@@ -71,7 +71,7 @@ export function PostInput({ onSubmit }: PostInputProps) {
       onSubmit={form.onSubmit((values) => {
         postCreateMutation.mutate({
           content: values.content,
-          extendedConent: extended ? editor!.getHTML() : undefined,
+          extendedConent: extended ? editor?.getHTML() : undefined,
         });
         editor?.commands.clearContent();
         form.reset();

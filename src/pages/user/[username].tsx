@@ -1,5 +1,5 @@
 import styles from "./UserPage.module.scss";
-import { GetServerSideProps } from "next";
+import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import { api } from "../../utils/api";
 import { PostList } from "../../components/PostList/PostList";

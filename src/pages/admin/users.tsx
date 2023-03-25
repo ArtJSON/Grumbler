@@ -46,7 +46,7 @@ export default function UsersPage() {
     if (selectedUserId) {
       refetchSelectedUserData();
     }
-  }, [selectedUserId]);
+  }, [selectedUserId, refetchSelectedUserData]);
 
   const [opened, { open, close }] = useDisclosure(false);
   const resetUserForm = useForm({

@@ -1,6 +1,5 @@
 import { RichTextEditor } from "@mantine/tiptap";
-import { Editor } from "@tiptap/react";
-
+import type { Editor } from "@tiptap/react";
 import { useRef } from "react";
 
 export function TiptapEditor({
