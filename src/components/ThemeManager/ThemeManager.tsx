@@ -148,6 +148,12 @@ export default function ThemeManager({
           },
         },
       },
+      Loader: {
+        defaultProps: {
+          size: 48,
+          color: "indigo",
+        },
+      },
     },
   };
 
@@ -216,6 +222,12 @@ export default function ThemeManager({
               backgroundColor: "unset",
             },
           },
+        },
+      },
+      Loader: {
+        defaultProps: {
+          size: 48,
+          color: "indigo",
         },
       },
     },
