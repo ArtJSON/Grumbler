@@ -35,6 +35,7 @@
       text-decoration: inherit;
       color: inherit;
       cursor: pointer;
+      user-select: none;
 
       @media screen and (min-width: $breakpoint-desktop) {
         gap: 1rem;

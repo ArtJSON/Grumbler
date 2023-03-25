@@ -11,7 +11,7 @@ import { useState } from "react";
 import { api } from "../../utils/api";
 
 interface PostListProps {
-  posts: PostListingItemProps[];
+  posts: Omit<PostListingItemProps, "onReportClick">[];
 }
 
 export function PostList({ posts }: PostListProps) {
