@@ -1,4 +1,5 @@
-import { Pagination, Table } from "@mantine/core";
+import { Modal, Pagination, Table } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import { ArrowsSort } from "tabler-icons-react";
 import { Loader } from "../../components/Loader/Loader";
@@ -13,6 +14,7 @@ export default function UsersPage() {
       page: page,
       sortOption,
     });
+  const [opened, { open, close }] = useDisclosure(false);
 
   const handleSortCLick = (newSortOption: string) => {
     if (newSortOption === sortOption.substring(0, 3)) {
@@ -32,8 +34,18 @@ export default function UsersPage() {
 
   return (
     <div className={styles.adminPage}>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="Review"
+        className={styles.modal}
+      >
+        <div className={styles.actionsContainer}></div>
+      </Modal>
       <UserTable
-        onActionClick={() => {}}
+        onActionClick={() => {
+          open();
+        }}
         onSortClick={handleSortCLick}
         users={usersData.users}
       />
@@ -64,6 +76,7 @@ function UserTable({
   const ths = (
     <tr>
       <th
+        className={styles.sortHeader}
         onClick={() => {
           onSortClick("usr");
         }}
@@ -72,6 +85,7 @@ function UserTable({
         Username
       </th>
       <th
+        className={styles.sortHeader}
         onClick={() => {
           onSortClick("dsp");
         }}
@@ -80,6 +94,7 @@ function UserTable({
         Display name
       </th>
       <th
+        className={styles.sortHeader}
         onClick={() => {
           onSortClick("rol");
         }}
@@ -88,6 +103,7 @@ function UserTable({
         Role
       </th>
       <th
+        className={styles.sortHeader}
         onClick={() => {
           onSortClick("flw");
         }}
@@ -96,6 +112,7 @@ function UserTable({
         Followers
       </th>
       <th
+        className={styles.sortHeader}
         onClick={() => {
           onSortClick("jdt");
         }}
@@ -117,7 +134,14 @@ function UserTable({
       <td>{r.joinedAt}</td>
       <td>{r.email}</td>
       <td className={styles.narrowField}>
-        <button className={styles.actionButton}>Review</button>
+        <button
+          className={styles.actionButton}
+          onClick={() => {
+            onActionClick(r.id);
+          }}
+        >
+          Manage
+        </button>
       </td>
     </tr>
   ));
