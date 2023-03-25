@@ -7,7 +7,6 @@ import { api } from "../utils/api";
 import "../styles/globals.scss";
 import React from "react";
 import { Layout } from "../components/Layout/Layout";
-import RouteGuard from "../components/RouteGuard/RouteGuard";
 import ThemeManager from "../components/ThemeManager/ThemeManager";
 
 const MyApp: AppType<{
@@ -15,13 +14,11 @@ const MyApp: AppType<{
 }> = ({ Component, pageProps: { session, ...pageProps } }) => {
   return (
     <SessionProvider session={session}>
-      <RouteGuard>
-        <ThemeManager>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ThemeManager>
-      </RouteGuard>
+      <ThemeManager>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ThemeManager>
     </SessionProvider>
   );
 };
