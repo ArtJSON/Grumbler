@@ -1,12 +1,18 @@
-import { Table } from "@mantine/core";
+import { Pagination, Table } from "@mantine/core";
 import { useState } from "react";
-import { ArrowsSort, Triangle, TriangleInverted } from "tabler-icons-react";
+import { ArrowsSort } from "tabler-icons-react";
+import { LoadingBlocker } from "../../components/LoadingBlocker/LoadingBlocker";
+import { api } from "../../utils/api";
 import styles from "./AdminPage.module.scss";
 
 export default function UsersPage() {
   const [sortOption, setSortOption] = useState("usr-asc");
-
-  console.log(sortOption);
+  const [page, setPage] = useState(1);
+  const { data: usersData, refetch: refetchUsersData } =
+    api.admin.getUsers.useQuery({
+      page: page,
+      sortOption,
+    });
 
   const handleSortCLick = (newSortOption: string) => {
     if (newSortOption === sortOption.substring(0, 3)) {
@@ -23,10 +29,13 @@ export default function UsersPage() {
   return (
     <div className={styles.adminPage}>
       <UserTable
-        onReviewClick={() => {}}
+        onActionClick={() => {}}
         onSortClick={handleSortCLick}
-        users={[]}
+        users={usersData.users}
       />
+      <div className={styles.paginationContainer}>
+        <Pagination total={usersData.pages} page={page} onChange={setPage} />
+      </div>
     </div>
   );
 }
@@ -34,16 +43,19 @@ export default function UsersPage() {
 function UserTable({
   users,
   onSortClick,
-  onReviewClick,
+  onActionClick,
 }: {
   users: {
     id: string;
-    postId: string;
-    createdAt: string;
-    reason: string;
+    username: string;
+    displayName: string;
+    role: string;
+    followers: number;
+    joinedAt: string;
+    email: string;
   }[];
   onSortClick: (option: string) => void;
-  onReviewClick: (id: string) => void;
+  onActionClick: (id: string) => void;
 }) {
   const ths = (
     <tr>
@@ -94,7 +106,12 @@ function UserTable({
 
   const rows = users.map((r) => (
     <tr key={r.id}>
-      <td></td>
+      <td>{r.username}</td>
+      <td>{r.displayName}</td>
+      <td>{r.role}</td>
+      <td>{r.followers}</td>
+      <td>{r.joinedAt}</td>
+      <td>{r.email}</td>
       <td className={styles.narrowField}>
         <button className={styles.actionButton}>Review</button>
       </td>
@@ -102,7 +119,7 @@ function UserTable({
   ));
 
   return (
-    <Table className={styles.table} withColumnBorders>
+    <Table className={styles.table}>
       <thead>{ths}</thead>
       <tbody>{rows}</tbody>
     </Table>
