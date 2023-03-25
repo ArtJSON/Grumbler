@@ -26,7 +26,6 @@ interface PostDetailedProps {
   extendedContent?: string;
   likesCount: number;
   commentsCount: number;
-  viewsCount: number;
   liked: boolean;
   onLikeClick: () => void;
 }

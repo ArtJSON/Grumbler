@@ -16,7 +16,6 @@ export interface PostListingItemProps {
   content: string;
   commentsCount: number;
   likesCount: number;
-  viewsCount: number;
   liked: boolean;
   hasExtendedContent: boolean;
   likeButtonActive: boolean;
@@ -32,7 +31,6 @@ export function PostListingItem({
   content,
   commentsCount,
   likesCount,
-  viewsCount,
   hasExtendedContent,
   liked,
   likeButtonActive,
@@ -62,7 +60,6 @@ export function PostListingItem({
       <PostReactionsFooter
         likesCount={likesCount - Number(liked) + Number(isLiked)}
         commentsCount={commentsCount}
-        viewsCount={viewsCount}
         liked={isLiked}
         onLikeClick={() => {
           if (!likeButtonActive) {

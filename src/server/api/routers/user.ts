@@ -165,7 +165,6 @@ export const userRouter = createTRPCRouter({
           content: p.content,
           commentsCount: p._count.comments,
           likesCount: p._count.postLikes,
-          viewsCount: p.views,
           liked: ctx.session !== null && p.postLikes.length !== 0,
           hasExtendedContent: p.extendedContent !== null,
           likeButtonActive: ctx.session !== null,
