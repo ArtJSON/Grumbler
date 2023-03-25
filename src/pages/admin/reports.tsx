@@ -100,7 +100,7 @@ export default function ReportsPage() {
         reports={[...reportsData.reports]}
       />
       <div className={styles.paginationContainer}>
-        <Pagination total={reportsData.pages} page={page} onChange={setPage} />
+        <Pagination total={reportsData.pages} value={page} onChange={setPage} />
       </div>
     </div>
   );

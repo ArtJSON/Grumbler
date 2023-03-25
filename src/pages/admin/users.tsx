@@ -1,26 +1,62 @@
-import { Modal, Pagination, Table, Tabs } from "@mantine/core";
+import {
+  Button,
+  Checkbox,
+  Modal,
+  Pagination,
+  Select,
+  Table,
+  Tabs,
+  Group,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowsSort } from "tabler-icons-react";
 import { Loader } from "../../components/Loader/Loader";
 import { api } from "../../utils/api";
 import styles from "./AdminPage.module.scss";
-
-// User management options:
-// - reset user data
-// - remove user
-// - change ban time
-// - change role
+import { DatePicker } from "@mantine/dates";
 
 export default function UsersPage() {
   const [sortOption, setSortOption] = useState("usr-asc");
   const [page, setPage] = useState(1);
+  const [selectedUserId, setSelectedUser] = useState("");
+
   const { data: usersData, refetch: refetchUsersData } =
     api.admin.getUsers.useQuery({
       page: page,
       sortOption,
     });
+  const { data: selectedUserData, refetch: refetchSelectedUserData } =
+    api.admin.getUserData.useQuery(
+      { userId: selectedUserId },
+      {
+        enabled: false,
+      }
+    );
+
+  useEffect(() => {
+    if (selectedUserId) {
+      refetchSelectedUserData();
+    }
+  }, [selectedUserId]);
+
   const [opened, { open, close }] = useDisclosure(false);
+  const resetUserForm = useForm({
+    initialValues: {
+      resetUsername: false,
+      resetDisplayName: false,
+      resetBio: false,
+      removeAllPosts: false,
+    },
+  });
+  const roleForm = useForm();
+
+  const handleFormClose = () => {
+    close();
+    resetUserForm.reset();
+    roleForm.reset();
+  };
 
   const handleSortCLick = (newSortOption: string) => {
     if (newSortOption === sortOption.substring(0, 3)) {
@@ -42,9 +78,10 @@ export default function UsersPage() {
     <div className={styles.adminPage}>
       <Modal
         opened={opened}
-        onClose={close}
+        onClose={handleFormClose}
         title="Manage"
         className={styles.modal}
+        size="lg"
       >
         <Tabs color="indigo" defaultValue="reset">
           <Tabs.List>
@@ -56,13 +93,87 @@ export default function UsersPage() {
             </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="reset" pt="md">
-            Reset
+            <form
+              onSubmit={resetUserForm.onSubmit((values) => {
+                console.log(values);
+                close();
+              })}
+              className={styles.actionForm}
+            >
+              <Checkbox
+                label="Username"
+                {...resetUserForm.getInputProps("resetUsername", {
+                  type: "checkbox",
+                })}
+              />
+              <Checkbox
+                label="Display nme"
+                {...resetUserForm.getInputProps("resetDisplayName", {
+                  type: "checkbox",
+                })}
+              />
+              <Checkbox
+                label="Bio"
+                {...resetUserForm.getInputProps("resetBio", {
+                  type: "checkbox",
+                })}
+              />
+              <Checkbox
+                color="red"
+                label="Remove all posts"
+                {...resetUserForm.getInputProps("removeAllPosts", {
+                  type: "checkbox",
+                })}
+              />
+              <Button
+                type="submit"
+                mt={8}
+                color={resetUserForm.values.removeAllPosts ? "red" : "blue"}
+                style={{
+                  transition: "0.2s background-color",
+                }}
+              >
+                Reset data
+              </Button>
+            </form>
           </Tabs.Panel>
           <Tabs.Panel value="role" pt="md">
-            Role
+            {selectedUserData && (
+              <form
+                onSubmit={roleForm.onSubmit((values) => {
+                  console.log(values);
+                  close();
+                })}
+                className={styles.actionForm}
+              >
+                <Select
+                  data={["USER", "ADMIN"]}
+                  label="Role"
+                  {...roleForm.getInputProps("newRole")}
+                  defaultValue={selectedUserData.role}
+                  zIndex={1000}
+                />
+                <Button type="submit" mt={8}>
+                  Save changes
+                </Button>
+              </form>
+            )}
           </Tabs.Panel>
           <Tabs.Panel value="ban" pt="md">
-            Ban
+            {selectedUserData && (
+              <>
+                <Group position="center">
+                  <DatePicker
+                    defaultDate={selectedUserData.banTime}
+                    defaultValue={selectedUserData.banTime}
+                    minDate={new Date()}
+                  />
+                </Group>
+                <Button type="submit" mt={8}>
+                  Save changes
+                </Button>
+              </>
+            )}
           </Tabs.Panel>
           <Tabs.Panel value="remove" pt="md">
             Remove
@@ -70,14 +181,15 @@ export default function UsersPage() {
         </Tabs>
       </Modal>
       <UserTable
-        onActionClick={() => {
+        onActionClick={(id) => {
+          setSelectedUser(id);
           open();
         }}
         onSortClick={handleSortCLick}
         users={usersData.users}
       />
       <div className={styles.paginationContainer}>
-        <Pagination total={usersData.pages} page={page} onChange={setPage} />
+        <Pagination total={usersData.pages} value={page} onChange={setPage} />
       </div>
     </div>
   );

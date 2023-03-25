@@ -228,4 +228,26 @@ export const adminRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input: {} }) => {}),
+  getUserData: adminProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input: { userId } }) => {
+      const userInDb = await ctx.prisma.user.findUniqueOrThrow({
+        where: {
+          id: userId,
+        },
+      });
+      const currentDate = new Date();
+
+      return {
+        banTime:
+          userInDb.bannedUntil && userInDb.bannedUntil > currentDate
+            ? userInDb.bannedUntil
+            : undefined,
+        role: userInDb.role,
+      };
+    }),
 });

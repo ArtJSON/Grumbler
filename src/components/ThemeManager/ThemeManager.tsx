@@ -90,30 +90,9 @@ export default function ThemeManager({
             label: {
               fontSize: 12,
               paddingLeft: 4,
-              color: "#e4e5e7",
-            },
-            input: {
-              backgroundColor: "#303136",
-              borderColor: "#303136",
-              ":checked": {
-                backgroundColor: "#494a50",
-                borderColor: "#303136",
-              },
             },
           },
         },
-      },
-      Modal: {
-        defaultProps: {
-          size: "xl",
-        },
-        styles: (theme) => ({
-          root: {
-            [`@media screen and (min-width: 1280px)`]: {
-              marginLeft: 280,
-            },
-          },
-        }),
       },
       RichTextEditor: {
         defaultProps: {
@@ -205,18 +184,6 @@ export default function ThemeManager({
             },
           },
         },
-      },
-      Modal: {
-        defaultProps: {
-          size: "xl",
-        },
-        styles: (theme) => ({
-          root: {
-            [`@media screen and (min-width: 1280px)`]: {
-              marginLeft: 280,
-            },
-          },
-        }),
       },
       RichTextEditor: {
         defaultProps: {
