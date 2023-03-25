@@ -5,7 +5,6 @@ import {
   ArrowBack,
   BellRinging,
   Brightness,
-  Files,
   Flag,
   Home2,
   Login,
@@ -52,13 +51,6 @@ export function Sidebar({ inAdminPanel }: SidebarProps) {
             >
               <Users size={32} strokeWidth={2} color={"black"} />
               <span className={styles.optionText}>Manage users</span>
-            </Link>
-            <Link
-              className={`${styles.option} ${styles.desktopOnly}`}
-              href="/admin/posts"
-            >
-              <Files size={32} strokeWidth={2} color={"black"} />
-              <span className={styles.optionText}>Manage posts</span>
             </Link>
             <div
               className={`${styles.option} ${styles.desktopOnly}`}
