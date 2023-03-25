@@ -1,7 +1,7 @@
 import styles from "./SettingsPage.module.scss";
 import Head from "next/head";
 import { useForm, zodResolver } from "@mantine/form";
-import { Loader, Textarea, TextInput } from "@mantine/core";
+import { Textarea, TextInput } from "@mantine/core";
 import { z } from "zod";
 import { api } from "../../utils/api";
 import { useRouter } from "next/router";
@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useThemeContext } from "../../components/ThemeManager/ThemeManager";
 import { Brightness, Login } from "tabler-icons-react";
 import { signOut } from "next-auth/react";
+import { Loader } from "../../components/Loader/Loader";
 
 const schema = z.object({
   displayName: z

@@ -1,8 +1,8 @@
-import { Loader } from "@mantine/core";
 import type { GetServerSideProps } from "next";
 import { useState } from "react";
 import { CommentInput } from "../../components/CommentInput/CommentInput";
 import { CommentList } from "../../components/CommentList/CommentList";
+import { Loader } from "../../components/Loader/Loader";
 import { PostDetailed } from "../../components/Post/PostDetailed/PostDetailed";
 import { useThemeContext } from "../../components/ThemeManager/ThemeManager";
 import { api } from "../../utils/api";

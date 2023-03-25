@@ -1,7 +1,8 @@
-import { Table, Pagination, Modal, Text, Loader } from "@mantine/core";
+import { Table, Pagination, Modal, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { ArrowsSort, Ban, ThumbUp } from "tabler-icons-react";
+import { Loader } from "../../components/Loader/Loader";
 import { AdminPost } from "../../components/Post/AdminPost/AdminPost";
 import { api } from "../../utils/api";
 

@@ -5,7 +5,7 @@ import { api } from "../utils/api";
 import { PostInput } from "../components/PostInput/PostInput";
 import { PostList } from "../components/PostList/PostList";
 import InfiniteScrollTrigger from "../components/InfiniteScrollTrigger/InfiniteScrollTrigger";
-import { Loader } from "@mantine/core";
+import { Loader } from "../components/Loader/Loader";
 
 const Home: NextPage = () => {
   const {
