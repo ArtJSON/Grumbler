@@ -46,7 +46,8 @@ export default function SettingsPage() {
         username: settingsData?.username ?? "",
       });
     }
-  }, [settingsData, form]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settingsData]);
 
   if (!settingsData) {
     return <></>;

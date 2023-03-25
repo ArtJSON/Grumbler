@@ -15,11 +15,13 @@ const MyApp: AppType<{
 }> = ({ Component, pageProps: { session, ...pageProps } }) => {
   return (
     <SessionProvider session={session}>
-      <ThemeManager>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ThemeManager>
+      <RouteGuard>
+        <ThemeManager>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeManager>
+      </RouteGuard>
     </SessionProvider>
   );
 };
