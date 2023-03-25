@@ -70,10 +70,6 @@ export function Sidebar({ inAdminPanel }: SidebarProps) {
               <TrendingUp size={32} strokeWidth={2} color={"black"} />
               <span className={styles.optionText}>Trending</span>
             </Link>
-            <Link className={styles.option} href="#">
-              <BellRinging size={32} strokeWidth={2} color={"black"} />
-              <span className={styles.optionText}>Notifications</span>
-            </Link>
             {sessionData ? (
               <>
                 <Link
