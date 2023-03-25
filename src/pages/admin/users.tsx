@@ -17,6 +17,7 @@ import { Loader } from "../../components/Loader/Loader";
 import { api } from "../../utils/api";
 import styles from "./AdminPage.module.scss";
 import { DatePicker } from "@mantine/dates";
+import Head from "next/head";
 
 export default function UsersPage() {
   const [sortOption, setSortOption] = useState("usr-asc");
@@ -84,83 +85,34 @@ export default function UsersPage() {
   }
 
   return (
-    <div className={styles.adminPage}>
-      <Modal
-        opened={opened}
-        onClose={handleFormClose}
-        title="Manage"
-        className={styles.modal}
-        size="lg"
-      >
-        <Tabs color="indigo" defaultValue="reset">
-          <Tabs.List>
-            <Tabs.Tab value="reset">Reset user data</Tabs.Tab>
-            <Tabs.Tab value="role">Change role</Tabs.Tab>
-            <Tabs.Tab value="ban">Change ban time</Tabs.Tab>
-            <Tabs.Tab value="remove" color="red">
-              Remove user
-            </Tabs.Tab>
-          </Tabs.List>
-          <Tabs.Panel value="reset" pt="md">
-            <form
-              onSubmit={resetUserForm.onSubmit((values) => {
-                resetUserMutation
-                  .mutateAsync({
-                    ...values,
-                    userId: selectedUserId,
-                  })
-                  .then(() => {
-                    refetchUsersData();
-                  });
-                handleFormClose();
-              })}
-              className={styles.actionForm}
-            >
-              <Checkbox
-                label="Username"
-                {...resetUserForm.getInputProps("resetUsername", {
-                  type: "checkbox",
-                })}
-              />
-              <Checkbox
-                label="Display nme"
-                {...resetUserForm.getInputProps("resetDisplayName", {
-                  type: "checkbox",
-                })}
-              />
-              <Checkbox
-                label="Bio"
-                {...resetUserForm.getInputProps("resetBio", {
-                  type: "checkbox",
-                })}
-              />
-              <Checkbox
-                color="red"
-                label="Remove all posts"
-                {...resetUserForm.getInputProps("removeAllPosts", {
-                  type: "checkbox",
-                })}
-              />
-              <Button
-                type="submit"
-                mt={8}
-                color={resetUserForm.values.removeAllPosts ? "red" : "blue"}
-                style={{
-                  transition: "0.2s background-color",
-                }}
-              >
-                Reset data
-              </Button>
-            </form>
-          </Tabs.Panel>
-          <Tabs.Panel value="role" pt="md">
-            {selectedUserData && (
+    <>
+      <Head>
+        <title>Grumbler | Manage users</title>
+      </Head>
+      <div className={styles.adminPage}>
+        <Modal
+          opened={opened}
+          onClose={handleFormClose}
+          title="Manage"
+          className={styles.modal}
+          size="lg"
+        >
+          <Tabs color="indigo" defaultValue="reset">
+            <Tabs.List>
+              <Tabs.Tab value="reset">Reset user data</Tabs.Tab>
+              <Tabs.Tab value="role">Change role</Tabs.Tab>
+              <Tabs.Tab value="ban">Change ban time</Tabs.Tab>
+              <Tabs.Tab value="remove" color="red">
+                Remove user
+              </Tabs.Tab>
+            </Tabs.List>
+            <Tabs.Panel value="reset" pt="md">
               <form
-                onSubmit={roleForm.onSubmit((values) => {
-                  updateRoleMutation
+                onSubmit={resetUserForm.onSubmit((values) => {
+                  resetUserMutation
                     .mutateAsync({
+                      ...values,
                       userId: selectedUserId,
-                      role: values.newRole as string,
                     })
                     .then(() => {
                       refetchUsersData();
@@ -169,87 +121,141 @@ export default function UsersPage() {
                 })}
                 className={styles.actionForm}
               >
-                <Select
-                  data={["USER", "ADMIN"]}
-                  label="Role"
-                  {...roleForm.getInputProps("newRole")}
-                  defaultValue={selectedUserData.role}
-                  zIndex={1000}
+                <Checkbox
+                  label="Username"
+                  {...resetUserForm.getInputProps("resetUsername", {
+                    type: "checkbox",
+                  })}
                 />
-                <Button type="submit" mt={8}>
-                  Save changes
+                <Checkbox
+                  label="Display nme"
+                  {...resetUserForm.getInputProps("resetDisplayName", {
+                    type: "checkbox",
+                  })}
+                />
+                <Checkbox
+                  label="Bio"
+                  {...resetUserForm.getInputProps("resetBio", {
+                    type: "checkbox",
+                  })}
+                />
+                <Checkbox
+                  color="red"
+                  label="Remove all posts"
+                  {...resetUserForm.getInputProps("removeAllPosts", {
+                    type: "checkbox",
+                  })}
+                />
+                <Button
+                  type="submit"
+                  mt={8}
+                  color={resetUserForm.values.removeAllPosts ? "red" : "blue"}
+                  style={{
+                    transition: "0.2s background-color",
+                  }}
+                >
+                  Reset data
                 </Button>
               </form>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel value="ban" pt="md">
-            {selectedUserData && (
-              <>
-                <Group position="center">
-                  <DatePicker
-                    defaultDate={selectedUserData.banTime}
-                    defaultValue={selectedUserData.banTime}
-                    minDate={new Date()}
-                    onChange={setBanDate}
-                  />
-                </Group>
-                <Button
-                  mt={8}
-                  onClick={() => {
-                    if (banDate) {
-                      updateBanTimeMutation
-                        .mutateAsync({
-                          userId: selectedUserId,
-                          newBanTime: banDate,
-                        })
-                        .then(() => {
-                          refetchUsersData();
-                        });
-                      handleFormClose();
-                    }
-                  }}
-                  disabled={banDate === null}
+            </Tabs.Panel>
+            <Tabs.Panel value="role" pt="md">
+              {selectedUserData && (
+                <form
+                  onSubmit={roleForm.onSubmit((values) => {
+                    updateRoleMutation
+                      .mutateAsync({
+                        userId: selectedUserId,
+                        role: values.newRole as string,
+                      })
+                      .then(() => {
+                        refetchUsersData();
+                      });
+                    handleFormClose();
+                  })}
+                  className={styles.actionForm}
                 >
-                  Save changes
+                  <Select
+                    data={["USER", "ADMIN"]}
+                    label="Role"
+                    {...roleForm.getInputProps("newRole")}
+                    defaultValue={selectedUserData.role}
+                    zIndex={1000}
+                  />
+                  <Button type="submit" mt={8}>
+                    Save changes
+                  </Button>
+                </form>
+              )}
+            </Tabs.Panel>
+            <Tabs.Panel value="ban" pt="md">
+              {selectedUserData && (
+                <>
+                  <Group position="center">
+                    <DatePicker
+                      defaultDate={selectedUserData.banTime}
+                      defaultValue={selectedUserData.banTime}
+                      minDate={new Date()}
+                      onChange={setBanDate}
+                    />
+                  </Group>
+                  <Button
+                    mt={8}
+                    onClick={() => {
+                      if (banDate) {
+                        updateBanTimeMutation
+                          .mutateAsync({
+                            userId: selectedUserId,
+                            newBanTime: banDate,
+                          })
+                          .then(() => {
+                            refetchUsersData();
+                          });
+                        handleFormClose();
+                      }
+                    }}
+                    disabled={banDate === null}
+                  >
+                    Save changes
+                  </Button>
+                </>
+              )}
+            </Tabs.Panel>
+            <Tabs.Panel value="remove" pt="md">
+              <Text>This action is destructive and irreversible</Text>
+              <Group position="center">
+                <Button
+                  color="red"
+                  mt={16}
+                  onClick={() => {
+                    removeUserMutation
+                      .mutateAsync({
+                        userId: selectedUserId,
+                      })
+                      .then(() => {
+                        refetchUsersData();
+                      });
+                    handleFormClose();
+                  }}
+                >
+                  Remove user
                 </Button>
-              </>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel value="remove" pt="md">
-            <Text>This action is destructive and irreversible</Text>
-            <Group position="center">
-              <Button
-                color="red"
-                mt={16}
-                onClick={() => {
-                  removeUserMutation
-                    .mutateAsync({
-                      userId: selectedUserId,
-                    })
-                    .then(() => {
-                      refetchUsersData();
-                    });
-                  handleFormClose();
-                }}
-              >
-                Remove user
-              </Button>
-            </Group>
-          </Tabs.Panel>
-        </Tabs>
-      </Modal>
-      <UserTable
-        onActionClick={(id) => {
-          setSelectedUser(id);
-          open();
-        }}
-        onSortClick={handleSortCLick}
-        users={usersData.users}
-      />
-      <div className={styles.paginationContainer}>
-        <Pagination total={usersData.pages} value={page} onChange={setPage} />
+              </Group>
+            </Tabs.Panel>
+          </Tabs>
+        </Modal>
+        <UserTable
+          onActionClick={(id) => {
+            setSelectedUser(id);
+            open();
+          }}
+          onSortClick={handleSortCLick}
+          users={usersData.users}
+        />
+        <div className={styles.paginationContainer}>
+          <Pagination total={usersData.pages} value={page} onChange={setPage} />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

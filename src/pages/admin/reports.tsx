@@ -1,5 +1,6 @@
 import { Table, Pagination, Modal, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import { ArrowsSort, Ban, ThumbUp } from "tabler-icons-react";
 import { Loader } from "../../components/Loader/Loader";
@@ -42,68 +43,77 @@ export default function ReportsPage() {
   }
 
   return (
-    <div className={styles.adminPage}>
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Review"
-        className={styles.modal}
-      >
-        {selectedReportData && (
-          <AdminPost
-            content={selectedReportData.post.content}
-            extendedContent={
-              selectedReportData.post.extendedContent ?? undefined
-            }
+    <>
+      <Head>
+        <title>Grumbler | Resolve reports</title>
+      </Head>
+      <div className={styles.adminPage}>
+        <Modal
+          opened={opened}
+          onClose={close}
+          title="Review"
+          className={styles.modal}
+        >
+          {selectedReportData && (
+            <AdminPost
+              content={selectedReportData.post.content}
+              extendedContent={
+                selectedReportData.post.extendedContent ?? undefined
+              }
+            />
+          )}
+          <div className={styles.actionsContainer}>
+            <button
+              className={styles.positive}
+              onClick={async () => {
+                await reviewReportMutation.mutateAsync({
+                  reportId: selectedReport,
+                  shouldPostBeRemoved: false,
+                });
+                refetchReportsData();
+                setSelectedReport("");
+                close();
+              }}
+            >
+              <ThumbUp size={20} />
+              <Text>Leave</Text>
+            </button>
+            <button
+              className={styles.danger}
+              onClick={async () => {
+                await reviewReportMutation.mutateAsync({
+                  reportId: selectedReport,
+                  shouldPostBeRemoved: true,
+                });
+                refetchReportsData();
+                setSelectedReport("");
+                close();
+              }}
+            >
+              <Ban size={20} />
+              <span>Remove</span>
+            </button>
+          </div>
+        </Modal>
+        <ReportsTable
+          onReviewClick={(id) => {
+            setSelectedReport(id);
+            open();
+          }}
+          onSortClick={() => {
+            setSortOption((prev) => (prev === "asc" ? "desc" : "asc"));
+          }}
+          reports={[...reportsData.reports]}
+        />
+        <div className={styles.paginationContainer}>
+          <Pagination
+            total={reportsData.pages}
+            value={page}
+            onChange={setPage}
           />
-        )}
-        <div className={styles.actionsContainer}>
-          <button
-            className={styles.positive}
-            onClick={async () => {
-              await reviewReportMutation.mutateAsync({
-                reportId: selectedReport,
-                shouldPostBeRemoved: false,
-              });
-              refetchReportsData();
-              setSelectedReport("");
-              close();
-            }}
-          >
-            <ThumbUp size={20} />
-            <Text>Leave</Text>
-          </button>
-          <button
-            className={styles.danger}
-            onClick={async () => {
-              await reviewReportMutation.mutateAsync({
-                reportId: selectedReport,
-                shouldPostBeRemoved: true,
-              });
-              refetchReportsData();
-              setSelectedReport("");
-              close();
-            }}
-          >
-            <Ban size={20} />
-            <span>Remove</span>
-          </button>
         </div>
-      </Modal>
-      <ReportsTable
-        onReviewClick={(id) => {
-          setSelectedReport(id);
-          open();
-        }}
-        onSortClick={() => {
-          setSortOption((prev) => (prev === "asc" ? "desc" : "asc"));
-        }}
-        reports={[...reportsData.reports]}
-      />
-      <div className={styles.paginationContainer}>
-        <Pagination total={reportsData.pages} value={page} onChange={setPage} />
       </div>
-    </div>
+    </>
   );
 }
 

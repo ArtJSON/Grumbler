@@ -1,4 +1,5 @@
 import type { GetServerSideProps } from "next";
+import Head from "next/head";
 import { useState } from "react";
 import { CommentInput } from "../../components/CommentInput/CommentInput";
 import { CommentList } from "../../components/CommentList/CommentList";
@@ -31,38 +32,43 @@ export default function PostPage({ postId }: PostPagePropsType) {
   }
 
   return (
-    <div
-      className={`${styles.postPage} ${
-        theme.theme === "dark" ? styles.dark : ""
-      }`}
-    >
-      <div className={styles.postInfo}>
-        <PostDetailed
-          {...postData.post}
-          onLikeClick={function (): void {
-            if (!postData.post.likeButtonActive) {
-              return;
-            }
+    <>
+      <Head>
+        <title>Grumbler | {postData.post.displayName}'s post</title>
+      </Head>
+      <div
+        className={`${styles.postPage} ${
+          theme.theme === "dark" ? styles.dark : ""
+        }`}
+      >
+        <div className={styles.postInfo}>
+          <PostDetailed
+            {...postData.post}
+            onLikeClick={function (): void {
+              if (!postData.post.likeButtonActive) {
+                return;
+              }
 
-            if (isLiked) {
-              unlikePostMutation.mutate({ postId: postId });
-            } else {
-              likePostMutation.mutate({ postId: postId });
-            }
+              if (isLiked) {
+                unlikePostMutation.mutate({ postId: postId });
+              } else {
+                likePostMutation.mutate({ postId: postId });
+              }
 
-            setIsLiked((prev) => !prev);
-          }}
-          likesCount={
-            postData.post.likesCount -
-            Number(postData.post.liked) +
-            Number(isLiked)
-          }
-          liked={isLiked}
-        />
-        <CommentInput postId={postId} onSubmit={refetch} />
+              setIsLiked((prev) => !prev);
+            }}
+            likesCount={
+              postData.post.likesCount -
+              Number(postData.post.liked) +
+              Number(isLiked)
+            }
+            liked={isLiked}
+          />
+          <CommentInput postId={postId} onSubmit={refetch} />
+        </div>
+        {postData.comments && <CommentList comments={postData.comments} />}
       </div>
-      {postData.comments && <CommentList comments={postData.comments} />}
-    </div>
+    </>
   );
 }
 
