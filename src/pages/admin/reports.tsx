@@ -60,7 +60,7 @@ export default function ReportsPage() {
           <button
             className={styles.positive}
             onClick={async () => {
-              await reviewReportMutation.mutate({
+              await reviewReportMutation.mutateAsync({
                 reportId: selectedReport,
                 shouldPostBeRemoved: false,
               });
@@ -75,7 +75,7 @@ export default function ReportsPage() {
           <button
             className={styles.danger}
             onClick={async () => {
-              await reviewReportMutation.mutate({
+              await reviewReportMutation.mutateAsync({
                 reportId: selectedReport,
                 shouldPostBeRemoved: true,
               });
