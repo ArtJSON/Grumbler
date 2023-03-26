@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowBack,
-  BellRinging,
   Brightness,
   Flag,
   Home2,

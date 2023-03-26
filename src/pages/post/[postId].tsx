@@ -34,7 +34,7 @@ export default function PostPage({ postId }: PostPagePropsType) {
   return (
     <>
       <Head>
-        <title>Grumbler | {postData.post.displayName}'s post</title>
+        <title>Grumbler | {postData.post.displayName}&apos;s post</title>
       </Head>
       <div
         className={`${styles.postPage} ${
