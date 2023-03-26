@@ -101,7 +101,10 @@ export const commentRouter = createTRPCRouter({
       ) {
         return await ctx.prisma.commentLike.delete({
           where: {
-            id: commentLikeInDb.id,
+            userId_commentId: {
+              commentId: commentLikeInDb.commentId,
+              userId: commentLikeInDb.userId,
+            },
           },
         });
       }
