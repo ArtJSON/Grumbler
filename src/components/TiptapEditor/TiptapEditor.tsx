@@ -19,6 +19,7 @@ export function TiptapEditor({
       sx={{
         marginTop: extended ? 16 : 0,
         opacity: extended ? 1 : 0,
+        overflow: "hidden",
         height: extended
           ? (contentRef.current?.scrollHeight ?? 0) +
             (toolbarRef.current?.scrollHeight ?? 0)
