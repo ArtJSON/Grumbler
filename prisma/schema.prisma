@@ -58,8 +58,8 @@ model User {
     name          String?   @db.Text
     username      String?   @unique
     email         String?   @unique
-    role          String    @default("USER") @db.Text
-    avatar        String    @default("/defaultUserImage.webp") @db.Text
+    role          String    @default("USER")
+    avatar        String    @default("/defaultUserImage.webp") @db.VarChar(255)
     bio           String?   @db.Text
     bannedUntil   DateTime?
     emailVerified DateTime?
