@@ -102,15 +102,14 @@ model Comment {
     @@index([postId])
 }
 
-// TODO: Change id to composite key of userId and commentId and change trpc procedures to match new key
 model CommentLike {
-    id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId    String
     comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
     commentId String
 
+    @@id([userId, commentId])
     @@index([commentId])
     @@index([userId])
 }
@@ -125,7 +124,6 @@ model Post {
     responses       Post[]        @relation("response")
     views           Int           @default(0)
     content         String        @db.Text
-    // TODO: add a field that is used to store photos/videos data (cloudinary)
     extendedContent String?       @db.Text
     comments        Comment[]
     postLikes       PostLike[]
@@ -152,15 +150,14 @@ model Hashtag {
     postHashtag PostHashtag[]
 }
 
-// TODO: Change id to composite key of userId and postId and change trpc procedures to match new key
 model PostLike {
-    id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId    String
     post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId    String
 
+    @@id([userId, postId])
     @@index([userId])
     @@index([postId])
 }
