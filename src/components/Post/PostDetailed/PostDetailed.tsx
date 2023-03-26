@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { z } from "zod";
 import { api } from "../../../utils/api";
 import { useThemeContext } from "../../ThemeManager/ThemeManager";
+import { Content } from "../Content/Content";
 import { PostInfoHeader } from "../PostFragments/PostInfoHeader/PostInfoHeader";
 import { PostReactionsFooter } from "../PostFragments/PostReactionsFooter/PostReactionsFooter";
 import styles from "./PostDetailed.module.scss";
@@ -109,7 +110,9 @@ export function PostDetailed({
         username={username}
         createdAt={createdAt}
       />
-      <div className={styles.content}>{content}</div>
+      <div className={styles.content}>
+        <Content content={content} />
+      </div>
       {extendedContent && <div className={styles.extendedContent}></div>}
       <RichTextEditor
         editor={editor}

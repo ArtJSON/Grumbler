@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import dateFormat from "dateformat";
 import { z } from "zod";
 import { errorMessages } from "../../../utils/errorMessages";
+import { extractUniqueHashtags } from "../../../utils/helpers";
 
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 
@@ -226,14 +227,37 @@ export const postRouter = createTRPCRouter({
       z.object({ content: z.string(), extendedConent: z.string().optional() })
     )
     .mutation(async ({ ctx, input: { content, extendedConent } }) => {
-      // TODO: Add hashtag extraction
-
-      return await ctx.prisma.post.create({
+      const postInDb = await ctx.prisma.post.create({
         data: {
           content: content,
           extendedContent: extendedConent,
           userId: ctx.session.user.id,
         },
+      });
+
+      const hashtags = extractUniqueHashtags(content);
+
+      hashtags.map(async (h) => {
+        const hashtagInDb = await ctx.prisma.hashtag.findUnique({
+          where: {
+            name: h,
+          },
+        });
+
+        if (hashtagInDb === null) {
+          await ctx.prisma.hashtag.create({
+            data: {
+              name: h,
+            },
+          });
+        }
+
+        ctx.prisma.postHashtag.create({
+          data: {
+            hashtagName: h,
+            postId: postInDb.id,
+          },
+        });
       });
     }),
   delete: protectedProcedure
