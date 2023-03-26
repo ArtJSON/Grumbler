@@ -15,13 +15,12 @@
   .pageWrapper {
     width: 100%;
 
-    @media screen and (min-width: $breakpoint-desktop) {
-      padding-left: 280px;
+    .childrenContainer {
+      height: 100%;
 
-      .childrenContainer {
+      @media screen and (min-width: $breakpoint-desktop) {
         max-width: 720px;
         margin: 0 auto;
-        height: 100%;
       }
     }
   }
