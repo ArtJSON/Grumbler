@@ -19,19 +19,23 @@ export function PostInfoHeader({
   const theme = useThemeContext();
 
   return (
-    <Flex justify="space-between" align="center">
+    <Flex justify="space-between" align="flex-start" gap="xs">
       <Link href={`/user/${username}`} style={{ zIndex: 1 }}>
-        <Flex gap="xs" align="center">
-          <Image src={imageUrl} alt="User image" width={40} height={40} />
+        <Flex gap="xs" align="flex-start">
+          <Image src={imageUrl} alt="User image" width={36} height={36} />
           <Stack spacing={0}>
-            <Text size="sm">{displayName}</Text>
-            <Text color="dark.2" size="sm">
+            <Text size="xs" sx={{ overflowWrap: "anywhere" }}>
+              {displayName}
+            </Text>
+            <Text color="dark.2" size="xs" sx={{ overflowWrap: "anywhere" }}>
               @{username}
             </Text>
           </Stack>
         </Flex>
       </Link>
-      <Text>{createdAt}</Text>
+      <Text size="xs" align="end">
+        {createdAt}
+      </Text>
     </Flex>
   );
 }

@@ -14,7 +14,7 @@ export function Content({ content }: ContentProps) {
 
   if (!hashtags) {
     return (
-      <Text size="lg" component="span">
+      <Text size="lg" component="span" sx={{ overflowWrap: "anywhere" }}>
         {content}
       </Text>
     );
@@ -26,7 +26,11 @@ export function Content({ content }: ContentProps) {
         if (idx < hashtags.length) {
           return (
             <>
-              <Text size="lg" component="span">
+              <Text
+                size="lg"
+                component="span"
+                sx={{ overflowWrap: "anywhere" }}
+              >
                 {frag}
               </Text>
               <Anchor

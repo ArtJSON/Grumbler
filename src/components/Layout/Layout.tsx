@@ -46,9 +46,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
           hidden={!opened}
           width={{ sm: 300, lg: 300 }}
         >
-          <Navbar.Section>
-            <Text size="xl">Grumbler</Text>
-          </Navbar.Section>
+          <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+            <Navbar.Section py={16}>
+              <Text
+                size={36}
+                style={{ fontFamily: "Big Shoulders Display, cursive" }}
+                align="center"
+              >
+                Grumbler
+              </Text>
+            </Navbar.Section>
+          </MediaQuery>
           <Navbar.Section grow mt="md">
             <MainLinks />
           </Navbar.Section>
@@ -73,16 +81,34 @@ export function Layout({ children }: { children: React.ReactNode }) {
       }
       header={
         <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-          <Header height={{ base: 50, sm: 0 }} p="md">
+          <Header height={{ base: 48, sm: 0 }}>
             <div
-              style={{ display: "flex", alignItems: "center", height: "100%" }}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                position: "relative",
+                height: "100%",
+              }}
             >
               <Burger
                 opened={opened}
                 onClick={() => setOpened((o) => !o)}
-                size="sm"
+                size={24}
                 mr="xl"
+                pos="absolute"
+                top={8}
+                left={8}
               />
+              <Text
+                size={24}
+                style={{
+                  fontFamily: "Big Shoulders Display, cursive",
+                }}
+                align="center"
+              >
+                Grumbler
+              </Text>
             </div>
           </Header>
         </MediaQuery>
