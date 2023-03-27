@@ -35,6 +35,7 @@ export default function ThemeManager({
       <MantineProvider
         theme={{
           colorScheme: theme,
+          fontFamily: "Roboto Flex, sans-serif",
           primaryColor: "teal",
           components: {
             Text: {
