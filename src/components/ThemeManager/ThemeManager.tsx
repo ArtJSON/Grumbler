@@ -35,15 +35,36 @@ export default function ThemeManager({
       <MantineProvider
         theme={{
           colorScheme: theme,
+          primaryColor: "teal",
           components: {
             Text: {
               defaultProps: (t) => ({
                 color: t.colorScheme === "dark" ? t.colors.dark[0] : t.black,
               }),
             },
-            Button: {
+            RichTextEditor: {
               defaultProps: (t) => ({
-                color: "teal",
+                styles: {
+                  root: {
+                    overflow: "clip",
+                    ".ProseMirror": {
+                      backgroundColor:
+                        t.colorScheme === "dark" ? t.colors.dark[6] : t.white,
+                    },
+                  },
+                  content: {
+                    overflowY: "scroll",
+                    maxHeight: 500,
+                    fontSize: 16,
+                  },
+                  toolbar: {
+                    backgroundColor:
+                      t.colorScheme === "dark"
+                        ? t.colors.dark[7]
+                        : t.colors.gray[1],
+                  },
+                  control: {},
+                },
               }),
             },
           },

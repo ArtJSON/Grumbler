@@ -17,7 +17,7 @@ export function TiptapEditor({
       editor={editor}
       withCodeHighlightStyles
       sx={{
-        marginTop: extended ? 16 : 0,
+        marginTop: extended ? 0 : -16,
         opacity: extended ? 1 : 0,
         overflow: "hidden",
         height: extended
