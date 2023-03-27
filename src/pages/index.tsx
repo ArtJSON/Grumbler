@@ -12,6 +12,7 @@ const Home: NextPage = () => {
     data: postsData,
     refetch,
     fetchNextPage,
+    isFetching,
   } = api.post.getRecent.useInfiniteQuery(
     {},
     {
@@ -28,7 +29,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Grumbler</title>
       </Head>
-      <Stack spacing={48} pt={16}>
+      <Stack spacing={48} py={16}>
         <PostInput
           onSubmit={() => {
             refetch();
@@ -36,7 +37,7 @@ const Home: NextPage = () => {
         />
         <PostList posts={postsData.pages.map((p) => p.posts).flat(1)} />
       </Stack>
-      <InfiniteScrollTrigger onScreenEnter={fetchNextPage} />
+      {!isFetching && <InfiniteScrollTrigger onScreenEnter={fetchNextPage} />}
     </>
   );
 };
