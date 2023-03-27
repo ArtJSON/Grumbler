@@ -1,6 +1,5 @@
+import { Flex, Group, Text, useMantineTheme } from "@mantine/core";
 import { Flag, Heart, MessageCircle } from "tabler-icons-react";
-import { useThemeContext } from "../../../ThemeManager/ThemeManager";
-import styles from "./PostReactionsFooter.module.scss";
 
 interface PostReactionsFooterProps {
   likesCount: number;
@@ -17,39 +16,59 @@ export function PostReactionsFooter({
   onLikeClick,
   onReportClick,
 }: PostReactionsFooterProps) {
-  const theme = useThemeContext();
+  const theme = useMantineTheme();
 
   return (
-    <div
-      className={`${styles.postReactionsFooter} ${
-        theme.theme === "dark" ? styles.dark : ""
-      }`}
-    >
-      <div className={styles.reactionContainer}>
-        <span
-          className={`${styles.item} ${liked ? styles.liked : ""}`}
+    <Flex justify="space-between">
+      <Group spacing="lg">
+        <Text
+          p={0}
           onClick={(e) => {
             e.preventDefault();
             onLikeClick();
           }}
+          sx={{
+            cursor: "pointer",
+            userSelect: "none",
+            zIndex: 1,
+          }}
         >
-          {likesCount}
-          <Heart />
-        </span>
-        <span className={styles.item}>
-          {commentsCount}
-          <MessageCircle />
-        </span>
-      </div>
-      <span
-        className={styles.item}
+          <Flex justify="space-between" align="center" gap={4}>
+            <Text size="xl">{likesCount}</Text>
+            <Heart
+              style={{
+                fill: liked ? theme.colors.teal[6] : undefined,
+                stroke: liked ? theme.colors.teal[6] : undefined,
+              }}
+            />
+          </Flex>
+        </Text>
+        <Text
+          p={0}
+          sx={{
+            cursor: "pointer",
+            userSelect: "none",
+          }}
+        >
+          <Flex justify="space-commentsCount" align="center" gap={4}>
+            <Text size="xl">{commentsCount}</Text>
+            <MessageCircle />
+          </Flex>
+        </Text>
+      </Group>
+      <Text
         onClick={(e) => {
           e.preventDefault();
           onReportClick();
         }}
+        sx={{
+          cursor: "pointer",
+          userSelect: "none",
+          zIndex: 1,
+        }}
       >
         <Flag />
-      </span>
-    </div>
+      </Text>
+    </Flex>
   );
 }

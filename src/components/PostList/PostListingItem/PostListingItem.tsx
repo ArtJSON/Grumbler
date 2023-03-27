@@ -1,16 +1,16 @@
 import Link from "next/link";
-import styles from "./PostListingItem.module.scss";
 import { PostInfoHeader } from "../../Post/PostFragments/PostInfoHeader/PostInfoHeader";
 import { PostReactionsFooter } from "../../Post/PostFragments/PostReactionsFooter/PostReactionsFooter";
 import { api } from "../../../utils/api";
 import { useState } from "react";
 import { useThemeContext } from "../../ThemeManager/ThemeManager";
+import { Container, Stack, Text } from "@mantine/core";
 
 export interface PostListingItemProps {
   id: string;
   createdAt: string;
   userId: string;
-  userImage?: string;
+  userImage: string;
   displayName: string;
   username: string;
   content: string;
@@ -42,40 +42,57 @@ export function PostListingItem({
   const theme = useThemeContext();
 
   return (
-    <div
-      className={`${styles.post} ${theme.theme === "dark" ? styles.dark : ""}`}
+    <Stack
+      sx={(t) => ({
+        backgroundColor: t.colorScheme === "dark" ? t.colors.dark[6] : t.white,
+        borderRadius: t.radius.sm,
+        border: `0.0625rem solid ${
+          t.colorScheme === "dark" ? t.colors.dark[4] : t.colors.gray[4]
+        }`,
+        position: "relative",
+        overflow: "hidden",
+      })}
+      spacing="sm"
     >
-      <PostInfoHeader
-        imageUrl={userImage ?? "/defaultUserImage.webp"}
-        displayName={displayName}
-        username={username}
-        createdAt={createdAt}
-      />
-      <Link href={`/post/${id}`} className={styles.content}>
-        <div>{content}</div>
-        {hasExtendedContent && (
-          <div className={styles.readMore}>Click to read more...</div>
-        )}
-      </Link>
-      <PostReactionsFooter
-        likesCount={likesCount - Number(liked) + Number(isLiked)}
-        commentsCount={commentsCount}
-        liked={isLiked}
-        onLikeClick={() => {
-          if (!likeButtonActive) {
-            return;
-          }
+      <Stack p={16}>
+        <PostInfoHeader
+          imageUrl={userImage}
+          displayName={displayName}
+          username={username}
+          createdAt={createdAt}
+        />
+        <Container w="100%" p={0}>
+          <Text size="lg">{content}</Text>
+          {hasExtendedContent && <Text size="xs">Click to read more...</Text>}
+        </Container>
+        <PostReactionsFooter
+          likesCount={likesCount - Number(liked) + Number(isLiked)}
+          commentsCount={commentsCount}
+          liked={isLiked}
+          onLikeClick={() => {
+            if (!likeButtonActive) {
+              return;
+            }
 
-          if (isLiked) {
-            unlikePostMutation.mutate({ postId: id });
-          } else {
-            likePostMutation.mutate({ postId: id });
-          }
+            if (isLiked) {
+              unlikePostMutation.mutate({ postId: id });
+            } else {
+              likePostMutation.mutate({ postId: id });
+            }
 
-          setIsLiked((prev) => !prev);
+            setIsLiked((prev) => !prev);
+          }}
+          onReportClick={onReportClick}
+        />
+      </Stack>
+      <Link
+        href={`/post/${id}`}
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "absolute",
         }}
-        onReportClick={onReportClick}
       />
-    </div>
+    </Stack>
   );
 }

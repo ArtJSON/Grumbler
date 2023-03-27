@@ -1,7 +1,7 @@
+import { Flex, Stack, Text } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
 import { useThemeContext } from "../../../ThemeManager/ThemeManager";
-import styles from "./PostInfoHeader.module.scss";
 
 interface PostInfoHeaderProps {
   imageUrl: string;
@@ -19,19 +19,19 @@ export function PostInfoHeader({
   const theme = useThemeContext();
 
   return (
-    <div
-      className={`${styles.postInfoHeader} ${
-        theme.theme === "dark" ? styles.dark : ""
-      }`}
-    >
-      <Link href={`/user/${username}`} className={styles.userInfo}>
-        <Image src={imageUrl} alt="User image" width={32} height={32} />
-        <div className={styles.namesContainer}>
-          <span className={styles.displayName}>{displayName}</span>
-          <span className={styles.username}>@{username}</span>
-        </div>
+    <Flex justify="space-between" align="center">
+      <Link href={`/user/${username}`} style={{ zIndex: 1 }}>
+        <Flex gap="xs" align="center">
+          <Image src={imageUrl} alt="User image" width={40} height={40} />
+          <Stack spacing={0}>
+            <Text size="sm">{displayName}</Text>
+            <Text color="dark.2" size="sm">
+              @{username}
+            </Text>
+          </Stack>
+        </Flex>
       </Link>
-      <div className={styles.date}>{createdAt}</div>
-    </div>
+      <Text>{createdAt}</Text>
+    </Flex>
   );
 }
