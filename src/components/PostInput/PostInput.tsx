@@ -80,6 +80,7 @@ export function PostInput({ onSubmit }: PostInputProps) {
           placeholder="Tell others what you think..."
           maxLength={320}
           minRows={3}
+          maxRows={8}
           autosize
           {...form.getInputProps("content")}
         />

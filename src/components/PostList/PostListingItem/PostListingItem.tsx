@@ -5,6 +5,7 @@ import { api } from "../../../utils/api";
 import { useState } from "react";
 import { useThemeContext } from "../../ThemeManager/ThemeManager";
 import { Container, Stack, Text } from "@mantine/core";
+import { Content } from "../../Post/Content/Content";
 
 export interface PostListingItemProps {
   id: string;
@@ -62,7 +63,7 @@ export function PostListingItem({
           createdAt={createdAt}
         />
         <Container w="100%" p={0}>
-          <Text size="lg">{content}</Text>
+          <Content content={content} />
           {hasExtendedContent && <Text size="xs">Click to read more...</Text>}
         </Container>
         <PostReactionsFooter

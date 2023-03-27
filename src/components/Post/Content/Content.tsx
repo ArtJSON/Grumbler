@@ -1,3 +1,4 @@
+import { Anchor, Text } from "@mantine/core";
 import Link from "next/link";
 
 interface ContentProps {
@@ -12,7 +13,11 @@ export function Content({ content }: ContentProps) {
     ?.map((hashtag) => hashtag.slice(1).toLowerCase());
 
   if (!hashtags) {
-    return <>{content}</>;
+    return (
+      <Text size="lg" component="span">
+        {content}
+      </Text>
+    );
   }
 
   return (
@@ -21,8 +26,17 @@ export function Content({ content }: ContentProps) {
         if (idx < hashtags.length) {
           return (
             <>
-              {frag}
-              <Link href={`/hashtag/${hashtags[idx]}`}>#{hashtags[idx]}</Link>
+              <Text size="lg" component="span">
+                {frag}
+              </Text>
+              <Anchor
+                component={Link}
+                href={`/hashtag/${hashtags[idx]}`}
+                size="lg"
+                style={{ zIndex: 1, position: "relative" }}
+              >
+                #{hashtags[idx]}
+              </Anchor>
             </>
           );
         }

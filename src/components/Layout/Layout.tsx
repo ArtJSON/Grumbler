@@ -1,5 +1,4 @@
 import { AppShell, Button, Container, Flex, Navbar, Text } from "@mantine/core";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { Brightness, Login } from "tabler-icons-react";
 import { useThemeContext } from "../ThemeManager/ThemeManager";
