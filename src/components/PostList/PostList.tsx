@@ -2,8 +2,7 @@ import {
   PostListingItem,
   type PostListingItemProps,
 } from "./PostListingItem/PostListingItem";
-import styles from "./PostList.module.scss";
-import { Modal, Textarea } from "@mantine/core";
+import { Button, Modal, Stack, Text, Textarea } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
@@ -33,7 +32,7 @@ export function PostList({ posts }: PostListProps) {
 
   if (posts.length) {
     return (
-      <div className={styles.postList}>
+      <Stack>
         <Modal opened={opened} onClose={close} title="Report" size="md">
           <form
             onSubmit={form.onSubmit((values) => {
@@ -45,10 +44,18 @@ export function PostList({ posts }: PostListProps) {
               close();
             })}
           >
-            <Textarea maxLength={320} {...form.getInputProps("reason")} />
-            <button className={styles.submitButton} type="submit">
-              Submit
-            </button>
+            <Stack>
+              <Textarea
+                minRows={3}
+                maxRows={8}
+                autosize
+                maxLength={320}
+                {...form.getInputProps("reason")}
+              />
+              <Button style={{ alignSelf: "flex-start" }} type="submit">
+                Submit report
+              </Button>
+            </Stack>
           </form>
         </Modal>
         {posts.map((p) => (
@@ -61,9 +68,9 @@ export function PostList({ posts }: PostListProps) {
             }}
           />
         ))}
-      </div>
+      </Stack>
     );
   } else {
-    return <div className={styles.emptyText}>No posts</div>;
+    return <Text align="center">No posts</Text>;
   }
 }

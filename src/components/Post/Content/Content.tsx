@@ -1,5 +1,6 @@
 import { Anchor, Text } from "@mantine/core";
 import Link from "next/link";
+import { Fragment } from "react";
 
 interface ContentProps {
   content: string;
@@ -14,7 +15,12 @@ export function Content({ content }: ContentProps) {
 
   if (!hashtags) {
     return (
-      <Text size="lg" component="span" sx={{ overflowWrap: "anywhere" }}>
+      <Text
+        key={content}
+        size="lg"
+        component="span"
+        sx={{ overflowWrap: "anywhere" }}
+      >
         {content}
       </Text>
     );
@@ -25,11 +31,12 @@ export function Content({ content }: ContentProps) {
       {splitContent.map((frag, idx) => {
         if (idx < hashtags.length) {
           return (
-            <>
+            <Fragment key={idx}>
               <Text
                 size="lg"
                 component="span"
                 sx={{ overflowWrap: "anywhere" }}
+                key={idx + frag}
               >
                 {frag}
               </Text>
@@ -38,14 +45,24 @@ export function Content({ content }: ContentProps) {
                 href={`/hashtag/${hashtags[idx]}`}
                 size="lg"
                 style={{ zIndex: 1, position: "relative" }}
+                key={hashtags[idx]! + idx}
               >
                 #{hashtags[idx]}
               </Anchor>
-            </>
+            </Fragment>
           );
         }
 
-        return <>{frag}</>;
+        return (
+          <Text
+            size="lg"
+            component="span"
+            sx={{ overflowWrap: "anywhere" }}
+            key={frag + idx}
+          >
+            {frag}
+          </Text>
+        );
       })}
     </>
   );

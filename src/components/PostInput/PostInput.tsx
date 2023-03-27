@@ -96,7 +96,7 @@ export function PostInput({ onSubmit }: PostInputProps) {
         </Flex>
         <TiptapEditor extended={extended} editor={editor} />
         <Button type="submit" style={{ alignSelf: "flex-start" }}>
-          Submit
+          Post
         </Button>
       </Stack>
     </form>

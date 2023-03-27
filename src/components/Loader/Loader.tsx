@@ -1,10 +1,9 @@
-import { Loader as MantineLoader } from "@mantine/core";
-import styles from "./Loader.module.scss";
+import { Flex, Loader as MantineLoader } from "@mantine/core";
 
 export function Loader() {
   return (
-    <div className={styles.loaderContainer}>
-      <MantineLoader />
-    </div>
+    <Flex h="100vh" justify="center" align="center">
+      <MantineLoader size={64} />
+    </Flex>
   );
 }
