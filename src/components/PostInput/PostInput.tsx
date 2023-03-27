@@ -1,5 +1,4 @@
-import styles from "./PostInput.module.scss";
-import { Checkbox, Textarea } from "@mantine/core";
+import { Button, Checkbox, Flex, Stack, Text, Textarea } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import { TiptapEditor } from "../TiptapEditor/TiptapEditor";
@@ -65,9 +64,6 @@ export function PostInput({ onSubmit }: PostInputProps) {
 
   return (
     <form
-      className={`${styles.postInput} ${
-        theme.theme === "dark" ? styles.dark : ""
-      }`}
       onSubmit={form.onSubmit((values) => {
         postCreateMutation.mutate({
           content: values.content,
@@ -78,30 +74,30 @@ export function PostInput({ onSubmit }: PostInputProps) {
         setExtended(false);
       })}
     >
-      <Textarea
-        withAsterisk
-        placeholder="Tell others what you think..."
-        maxLength={320}
-        minRows={3}
-        autosize
-        {...form.getInputProps("content")}
-      />
-      <div className={styles.options}>
-        <Checkbox
-          label="Extended content"
-          checked={extended}
-          onChange={(event) => {
-            setExtended(event.target.checked);
-          }}
+      <Stack>
+        <Textarea
+          withAsterisk
+          placeholder="Tell others what you think..."
+          maxLength={320}
+          minRows={3}
+          autosize
+          {...form.getInputProps("content")}
         />
-        <span className={styles.contentLength}>
-          {form.values.content.length} / 320 characters
-        </span>
-      </div>
-      <TiptapEditor extended={extended} editor={editor} />
-      <button className={styles.submitButton} type="submit">
-        Submit
-      </button>
+        <Flex justify="space-between">
+          <Checkbox
+            label="Extended content"
+            checked={extended}
+            onChange={(event) => {
+              setExtended(event.target.checked);
+            }}
+          />
+          <Text size="sm">{form.values.content.length} / 320 characters</Text>
+        </Flex>
+        <TiptapEditor extended={extended} editor={editor} />
+        <Button type="submit" style={{ alignSelf: "flex-start" }}>
+          Submit
+        </Button>
+      </Stack>
     </form>
   );
 }
