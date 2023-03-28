@@ -1,9 +1,9 @@
-import { Flex, Loader as MantineLoader } from "@mantine/core";
+import { Flex, Loader as MantineLoader, MediaQuery } from "@mantine/core";
 
 export function Loader() {
   return (
     <Flex
-      h="100vh"
+      h="calc(100vh - 32px)"
       justify="center"
       align="center"
       sx={{ boxSizing: "border-box" }}

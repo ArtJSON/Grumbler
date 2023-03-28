@@ -25,8 +25,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (opened) {
       setOpened(false);
-    }
-  }, [router.pathname, opened]);
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.pathname]);
 
   return (
     <AppShell
