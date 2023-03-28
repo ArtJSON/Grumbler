@@ -73,7 +73,7 @@ export default function SettingsPage() {
         <Tabs.Panel value="general" pt="xs">
           <form
             onSubmit={form.onSubmit(async (values) => {
-              await updateSettingsMutation.mutate(values);
+              await updateSettingsMutation.mutateAsync(values);
               router.reload();
             })}
           >

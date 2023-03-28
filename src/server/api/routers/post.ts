@@ -88,7 +88,7 @@ export const postRouter = createTRPCRouter({
                 select: {
                   displayName: true,
                   avatar: true,
-                  name: true,
+                  username: true,
                 },
               },
               commentLike: {
@@ -128,7 +128,7 @@ export const postRouter = createTRPCRouter({
           text: c.text,
           createdAt: dateFormat(c.createdAt, "dd/mm/yyyy, HH:MM:ss"),
           displayName: c.user.displayName ?? "",
-          username: c.user.name ?? "",
+          username: c.user.username ?? "",
           userImgUrl: c.user.avatar ?? "/defaultUserImage.webp",
           userId: c.userId ?? "",
           liked: c.commentLike.length != 0,
