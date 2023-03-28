@@ -13,10 +13,9 @@ import {
 import { z } from "zod";
 import { api } from "../../utils/api";
 import { useRouter } from "next/router";
-import { useThemeContext } from "../../components/ThemeManager/ThemeManager";
 import { Photo, Upload, X } from "tabler-icons-react";
 import { Loader } from "../../components/Loader/Loader";
-import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 
 const schema = z.object({
   displayName: z
@@ -92,16 +91,21 @@ export default function SettingsPage() {
                 minRows={3}
                 autosize
               />
-              <Button type="submit">Save changes</Button>
+              <Button type="submit" style={{ alignSelf: "flex-start" }}>
+                Save changes
+              </Button>
             </Stack>
           </form>
         </Tabs.Panel>
         <Tabs.Panel value="image" pt="xs">
+          <Text size={14} weight="500" style={{ lineHeight: "26px" }}>
+            Profile image
+          </Text>
           <Dropzone
             onDrop={(files) => console.log("accepted files", files)}
             onReject={(files) => console.log("rejected files", files)}
-            maxSize={3 * 1024 ** 2}
-            accept={IMAGE_MIME_TYPE}
+            maxSize={1024 ** 2}
+            accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}
           >
             <Group
               position="center"
@@ -121,11 +125,10 @@ export default function SettingsPage() {
               </Dropzone.Idle>
               <div>
                 <Text size="xl" inline>
-                  Drag images here or click to select files
+                  Drag image here or click to select the file
                 </Text>
                 <Text size="sm" color="dimmed" inline mt={7}>
-                  Attach as many files as you like, each file should not exceed
-                  5mb
+                  Attach a picture in jpeg, jpg or png format up to 1MB
                 </Text>
               </div>
             </Group>
