@@ -3,8 +3,7 @@ import { PostInfoHeader } from "../../Post/PostFragments/PostInfoHeader/PostInfo
 import { PostReactionsFooter } from "../../Post/PostFragments/PostReactionsFooter/PostReactionsFooter";
 import { api } from "../../../utils/api";
 import { useState } from "react";
-import { useThemeContext } from "../../ThemeManager/ThemeManager";
-import { Container, Stack, Text } from "@mantine/core";
+import { Container, Stack, Text, useMantineTheme } from "@mantine/core";
 import { Content } from "../../Post/Content/Content";
 
 export interface PostListingItemProps {
@@ -40,7 +39,6 @@ export function PostListingItem({
   const likePostMutation = api.post.like.useMutation();
   const unlikePostMutation = api.post.unlike.useMutation();
   const [isLiked, setIsLiked] = useState<boolean>(liked);
-  const theme = useThemeContext();
 
   return (
     <Stack

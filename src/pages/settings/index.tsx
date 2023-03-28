@@ -1,15 +1,22 @@
-import styles from "./SettingsPage.module.scss";
 import Head from "next/head";
 import { useForm, zodResolver } from "@mantine/form";
-import { Textarea, TextInput } from "@mantine/core";
+import {
+  Button,
+  Group,
+  Stack,
+  Tabs,
+  Text,
+  Textarea,
+  TextInput,
+  useMantineTheme,
+} from "@mantine/core";
 import { z } from "zod";
 import { api } from "../../utils/api";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { useThemeContext } from "../../components/ThemeManager/ThemeManager";
-import { Brightness, Login } from "tabler-icons-react";
-import { signOut } from "next-auth/react";
+import { Photo, Upload, X } from "tabler-icons-react";
 import { Loader } from "../../components/Loader/Loader";
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 
 const schema = z.object({
   displayName: z
@@ -36,19 +43,19 @@ export default function SettingsPage() {
   });
   const router = useRouter();
   const updateSettingsMutation = api.user.updateSettings.useMutation();
-  const { data: settingsData } = api.user.getSettings.useQuery();
-  const theme = useThemeContext();
-
-  useEffect(() => {
-    if (settingsData) {
-      form.setValues({
-        bio: settingsData?.bio ?? "",
-        displayName: settingsData?.displayName ?? "",
-        username: settingsData?.username ?? "",
-      });
+  const { data: settingsData } = api.user.getSettings.useQuery(
+    {},
+    {
+      onSuccess: (data) => {
+        form.setValues({
+          bio: data.bio ?? "",
+          displayName: data.displayName ?? "",
+          username: data.username ?? "",
+        });
+      },
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settingsData]);
+  );
+  const theme = useMantineTheme();
 
   if (!settingsData) {
     return <Loader />;
@@ -59,51 +66,72 @@ export default function SettingsPage() {
       <Head>
         <title>Grumbler | Settings</title>
       </Head>
-      <div
-        className={`${styles.settingsPage} ${
-          theme.theme === "dark" ? styles.dark : ""
-        }`}
-      >
-        <form
-          className={styles.form}
-          onSubmit={form.onSubmit(async (values) => {
-            await updateSettingsMutation.mutate(values);
-            router.reload();
-          })}
-        >
-          <div
-            className={styles.option}
-            onClick={() => {
-              signOut({
-                callbackUrl: `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/v2/logout`,
-              });
-            }}
+      <Tabs defaultValue="general">
+        <Tabs.List>
+          <Tabs.Tab value="general">Gallery</Tabs.Tab>
+          <Tabs.Tab value="image">Image</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="general" pt="xs">
+          <form
+            onSubmit={form.onSubmit(async (values) => {
+              await updateSettingsMutation.mutate(values);
+              router.reload();
+            })}
           >
-            <Login size={24} strokeWidth={2} />
-            <span className={styles.optionText}>Sign out</span>
-          </div>
-          <div className={styles.option} onClick={() => theme.toggleTheme()}>
-            <Brightness size={24} strokeWidth={2} />
-            <span className={styles.optionText}>Toggle theme</span>
-          </div>
-          <TextInput
-            {...form.getInputProps("displayName")}
-            label="Display name"
-          />
-          <TextInput {...form.getInputProps("username")} label="Username" />
-          <Textarea
-            {...form.getInputProps("bio")}
-            placeholder="Tell something about yourself..."
-            label="Bio"
-            maxLength={320}
-            minRows={3}
-            autosize
-          />
-          <button className={styles.submitButton} type="submit">
-            Save changes
-          </button>
-        </form>
-      </div>
+            <Stack>
+              <TextInput
+                {...form.getInputProps("displayName")}
+                label="Display name"
+              />
+              <TextInput {...form.getInputProps("username")} label="Username" />
+              <Textarea
+                {...form.getInputProps("bio")}
+                placeholder="Tell something about yourself..."
+                label="Bio"
+                maxLength={320}
+                minRows={3}
+                autosize
+              />
+              <Button type="submit">Save changes</Button>
+            </Stack>
+          </form>
+        </Tabs.Panel>
+        <Tabs.Panel value="image" pt="xs">
+          <Dropzone
+            onDrop={(files) => console.log("accepted files", files)}
+            onReject={(files) => console.log("rejected files", files)}
+            maxSize={3 * 1024 ** 2}
+            accept={IMAGE_MIME_TYPE}
+          >
+            <Group
+              position="center"
+              spacing="xl"
+              style={{ minHeight: 220, pointerEvents: "none" }}
+            >
+              <Dropzone.Accept>
+                <Upload color={theme.colors.teal[6]} size="3.2rem" />
+              </Dropzone.Accept>
+              <Dropzone.Reject>
+                <X color={theme.colors.red[6]} size="3.2rem" />
+              </Dropzone.Reject>
+              <Dropzone.Idle>
+                <Text size={0}>
+                  <Photo size="3.2rem" />
+                </Text>
+              </Dropzone.Idle>
+              <div>
+                <Text size="xl" inline>
+                  Drag images here or click to select files
+                </Text>
+                <Text size="sm" color="dimmed" inline mt={7}>
+                  Attach as many files as you like, each file should not exceed
+                  5mb
+                </Text>
+              </div>
+            </Group>
+          </Dropzone>
+        </Tabs.Panel>
+      </Tabs>
     </>
   );
 }

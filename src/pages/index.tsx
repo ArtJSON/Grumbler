@@ -29,7 +29,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Grumbler</title>
       </Head>
-      <Stack spacing={48} py={16}>
+      <Stack spacing={48}>
         <PostInput
           onSubmit={() => {
             refetch();
