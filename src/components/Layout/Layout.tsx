@@ -9,6 +9,7 @@ import {
   Navbar,
   Text,
 } from "@mantine/core";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Brightness, Login } from "tabler-icons-react";
@@ -17,6 +18,7 @@ import { MainLinks } from "./MainLinks/MainLinks";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const { data } = useSession();
   const theme = useThemeContext();
   const [opened, setOpened] = useState(false);
 
@@ -62,10 +64,30 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </Navbar.Section>
           <Navbar.Section>
             <Flex justify="space-between" gap={8}>
-              <Button style={{ flexGrow: 1 }}>
-                <Login size="1.25rem" style={{ marginRight: 4 }} />
-                <span>Sign out</span>
-              </Button>
+              {data?.user ? (
+                <Button
+                  style={{ flexGrow: 1 }}
+                  onClick={() => {
+                    signOut({
+                      callbackUrl: `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/v2/logout`,
+                    });
+                  }}
+                >
+                  <Login size="1.25rem" style={{ marginRight: 4 }} />
+                  <span>Sign out</span>
+                </Button>
+              ) : (
+                <Button
+                  style={{ flexGrow: 1 }}
+                  onClick={() => {
+                    signIn();
+                  }}
+                >
+                  <Login size="1.25rem" style={{ marginRight: 4 }} />
+                  <span>Sign in</span>
+                </Button>
+              )}
+
               <Button
                 onClick={() => {
                   theme.toggleTheme();
