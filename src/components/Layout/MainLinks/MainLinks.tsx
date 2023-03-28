@@ -19,7 +19,7 @@ interface MainLinkProps {
   active?: boolean;
 }
 
-function MainLink({ icon, label, href }: MainLinkProps) {
+function MainLink({ icon, label, href, active }: MainLinkProps) {
   return (
     <NavLink
       component={Link}
@@ -29,6 +29,7 @@ function MainLink({ icon, label, href }: MainLinkProps) {
           <Text size="lg">{label}</Text>
         </Group>
       }
+      active={active}
       href={href}
       sx={(theme) => ({
         display: "block",
@@ -142,7 +143,11 @@ export function MainLinks() {
     return (
       <>
         {adminPanelLinks.map((link) => (
-          <MainLink {...link} key={link.label} />
+          <MainLink
+            {...link}
+            key={link.label}
+            active={router.asPath === link.href}
+          />
         ))}
       </>
     );
@@ -152,7 +157,11 @@ export function MainLinks() {
     return (
       <>
         {adminLinks.map((link) => (
-          <MainLink {...link} key={link.label} />
+          <MainLink
+            {...link}
+            key={link.label}
+            active={router.asPath === link.href}
+          />
         ))}
       </>
     );
@@ -162,7 +171,11 @@ export function MainLinks() {
     return (
       <>
         {loggedLinks.map((link) => (
-          <MainLink {...link} key={link.label} />
+          <MainLink
+            {...link}
+            key={link.label}
+            active={router.asPath === link.href}
+          />
         ))}
       </>
     );
@@ -171,7 +184,11 @@ export function MainLinks() {
   return (
     <>
       {notLoggedLinks.map((link) => (
-        <MainLink {...link} key={link.label} />
+        <MainLink
+          {...link}
+          key={link.label}
+          active={router.asPath === link.href}
+        />
       ))}
     </>
   );
