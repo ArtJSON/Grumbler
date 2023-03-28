@@ -1,3 +1,4 @@
+import { Stack } from "@mantine/core";
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useState } from "react";
@@ -7,7 +8,6 @@ import { Loader } from "../../components/Loader/Loader";
 import { PostDetailed } from "../../components/Post/PostDetailed/PostDetailed";
 import { useThemeContext } from "../../components/ThemeManager/ThemeManager";
 import { api } from "../../utils/api";
-import styles from "./PostPage.module.scss";
 
 interface PostPagePropsType {
   postId: string;
@@ -36,38 +36,32 @@ export default function PostPage({ postId }: PostPagePropsType) {
       <Head>
         <title>Grumbler | {postData.post.displayName}&apos;s post</title>
       </Head>
-      <div
-        className={`${styles.postPage} ${
-          theme.theme === "dark" ? styles.dark : ""
-        }`}
-      >
-        <div className={styles.postInfo}>
-          <PostDetailed
-            {...postData.post}
-            onLikeClick={function (): void {
-              if (!postData.post.likeButtonActive) {
-                return;
-              }
-
-              if (isLiked) {
-                unlikePostMutation.mutate({ postId: postId });
-              } else {
-                likePostMutation.mutate({ postId: postId });
-              }
-
-              setIsLiked((prev) => !prev);
-            }}
-            likesCount={
-              postData.post.likesCount -
-              Number(postData.post.liked) +
-              Number(isLiked)
+      <Stack spacing={48}>
+        <PostDetailed
+          {...postData.post}
+          onLikeClick={function (): void {
+            if (!postData.post.likeButtonActive) {
+              return;
             }
-            liked={isLiked}
-          />
-          <CommentInput postId={postId} onSubmit={refetch} />
-        </div>
+
+            if (isLiked) {
+              unlikePostMutation.mutate({ postId: postId });
+            } else {
+              likePostMutation.mutate({ postId: postId });
+            }
+
+            setIsLiked((prev) => !prev);
+          }}
+          likesCount={
+            postData.post.likesCount -
+            Number(postData.post.liked) +
+            Number(isLiked)
+          }
+          liked={isLiked}
+        />
+        <CommentInput postId={postId} onSubmit={refetch} />
         {postData.comments && <CommentList comments={postData.comments} />}
-      </div>
+      </Stack>
     </>
   );
 }

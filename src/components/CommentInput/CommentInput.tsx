@@ -1,8 +1,7 @@
 import { useForm, zodResolver } from "@mantine/form";
-import styles from "./CommentInput.module.scss";
 import { z } from "zod";
 import { api } from "../../utils/api";
-import { Textarea } from "@mantine/core";
+import { Button, Flex, Stack, Text, Textarea } from "@mantine/core";
 import { useThemeContext } from "../ThemeManager/ThemeManager";
 
 interface CommentInputProps {
@@ -37,9 +36,6 @@ export function CommentInput({ postId, onSubmit }: CommentInputProps) {
 
   return (
     <form
-      className={`${styles.commentInput} ${
-        theme.theme === "dark" ? styles.dark : ""
-      }`}
       onSubmit={form.onSubmit((values) => {
         commentCreateMutation.mutate({
           postId: postId,
@@ -48,22 +44,22 @@ export function CommentInput({ postId, onSubmit }: CommentInputProps) {
         form.reset();
       })}
     >
-      <Textarea
-        withAsterisk
-        placeholder="Leave a comment..."
-        maxLength={320}
-        minRows={3}
-        autosize
-        {...form.getInputProps("comment")}
-      />
-      <div className={styles.footer}>
-        <button className={styles.submitButton} type="submit">
-          Submit
-        </button>
-        <span className={styles.contentLength}>
-          {form.values.comment.length} / 320 characters
-        </span>
-      </div>
+      <Stack>
+        <Textarea
+          withAsterisk
+          placeholder="Leave a comment..."
+          maxLength={320}
+          minRows={3}
+          autosize
+          {...form.getInputProps("comment")}
+        />
+        <Flex justify="space-between" align="flex-start">
+          <Button type="submit">Submit</Button>
+          <Text inline size="sm">
+            {form.values.comment.length} / 320 characters
+          </Text>
+        </Flex>
+      </Stack>
     </form>
   );
 }

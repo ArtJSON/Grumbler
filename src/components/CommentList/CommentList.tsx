@@ -1,5 +1,5 @@
+import { Stack } from "@mantine/core";
 import { Comment } from "./Comment/Comment";
-import styles from "./CommentList.module.scss";
 
 interface CommentListProps {
   comments: {
@@ -17,7 +17,7 @@ interface CommentListProps {
 
 export function CommentList({ comments }: CommentListProps) {
   return (
-    <div className={styles.commentList}>
+    <Stack>
       {comments.map(
         ({
           username,
@@ -42,6 +42,6 @@ export function CommentList({ comments }: CommentListProps) {
           />
         )
       )}
-    </div>
+    </Stack>
   );
 }

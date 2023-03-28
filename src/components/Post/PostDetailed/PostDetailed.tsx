@@ -1,4 +1,4 @@
-import { Modal, Textarea, useMantineTheme } from "@mantine/core";
+import { Button, Modal, Stack, Textarea, useMantineTheme } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { RichTextEditor } from "@mantine/tiptap";
@@ -11,11 +11,9 @@ import { lowlight } from "lowlight";
 import { useEffect } from "react";
 import { z } from "zod";
 import { api } from "../../../utils/api";
-import { useThemeContext } from "../../ThemeManager/ThemeManager";
 import { Content } from "../Content/Content";
 import { PostInfoHeader } from "../PostFragments/PostInfoHeader/PostInfoHeader";
 import { PostReactionsFooter } from "../PostFragments/PostReactionsFooter/PostReactionsFooter";
-import styles from "./PostDetailed.module.scss";
 
 interface PostDetailedProps {
   id: string;
@@ -82,10 +80,16 @@ export function PostDetailed({
   }, [extendedContent, editor]);
 
   return (
-    <div
-      className={`${styles.postDetailed} ${
-        theme.theme === "dark" ? styles.dark : ""
-      }`}
+    <Stack
+      sx={(t) => ({
+        backgroundColor: t.colorScheme === "dark" ? t.colors.dark[6] : t.white,
+        borderRadius: t.radius.sm,
+        border: `0.0625rem solid ${
+          t.colorScheme === "dark" ? t.colors.dark[4] : t.colors.gray[4]
+        }`,
+      })}
+      spacing="sm"
+      p={16}
     >
       <Modal opened={opened} onClose={close} title="Report" size="md">
         <form
@@ -99,9 +103,7 @@ export function PostDetailed({
           })}
         >
           <Textarea maxLength={320} {...form.getInputProps("reason")} />
-          <button className={styles.submitButton} type="submit">
-            Submit
-          </button>
+          <Button type="submit">Submit</Button>
         </form>
       </Modal>
       <PostInfoHeader
@@ -110,34 +112,33 @@ export function PostDetailed({
         username={username}
         createdAt={createdAt}
       />
-      <div className={styles.content}>
-        <Content content={content} />
-      </div>
-      {extendedContent && <div className={styles.extendedContent}></div>}
-      <RichTextEditor
-        editor={editor}
-        sx={{
-          border: "0",
-          ".ProseMirror": {
-            padding: "0 !important",
-            backgroundColor: "transparent !important",
-          },
-          ".mantine-RichTextEditor-content": {
-            backgroundColor: "transparent ",
-            maxHeight: "unset !important",
-          },
-          pre: {
-            background: `${
-              theme.colorScheme === "dark"
-                ? theme.colors.dark[6]
-                : theme.colors.gray[2]
-            } !important`,
-          },
-        }}
-        withCodeHighlightStyles
-      >
-        <RichTextEditor.Content />
-      </RichTextEditor>
+      <Content content={content} />
+      {extendedContent && (
+        <RichTextEditor
+          editor={editor}
+          sx={{
+            border: "0",
+            ".ProseMirror": {
+              padding: "0 !important",
+              backgroundColor: "transparent !important",
+            },
+            ".mantine-RichTextEditor-content": {
+              backgroundColor: "transparent ",
+              maxHeight: "unset !important",
+            },
+            pre: {
+              background: `${
+                theme.colorScheme === "dark"
+                  ? theme.colors.dark[7]
+                  : theme.colors.gray[1]
+              } !important`,
+            },
+          }}
+          withCodeHighlightStyles
+        >
+          <RichTextEditor.Content />
+        </RichTextEditor>
+      )}
       <PostReactionsFooter
         likesCount={likesCount}
         commentsCount={commentsCount}
@@ -145,6 +146,6 @@ export function PostDetailed({
         onLikeClick={onLikeClick}
         onReportClick={open}
       />
-    </div>
+    </Stack>
   );
 }

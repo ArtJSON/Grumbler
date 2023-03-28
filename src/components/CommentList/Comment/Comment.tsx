@@ -1,9 +1,8 @@
-import Image from "next/image";
+import { Flex, Stack, Text, useMantineTheme } from "@mantine/core";
 import { useState } from "react";
 import { Heart } from "tabler-icons-react";
 import { api } from "../../../utils/api";
-import { useThemeContext } from "../../ThemeManager/ThemeManager";
-import styles from "./Comment.module.scss";
+import { PostInfoHeader } from "../../Post/PostFragments/PostInfoHeader/PostInfoHeader";
 
 interface CommentProps {
   userImgUrl: string;
@@ -29,41 +28,52 @@ export function Comment({
   const likeCommentMutation = api.comment.likeComment.useMutation();
   const unlikeCommentMutation = api.comment.unlikeComment.useMutation();
   const [isLiked, setIsLiked] = useState<boolean>(liked);
-  const theme = useThemeContext();
+  const theme = useMantineTheme();
 
   return (
-    <div
-      className={`${styles.comment} ${
-        theme.theme === "dark" ? styles.dark : ""
-      }`}
+    <Stack
+      sx={(t) => ({
+        backgroundColor: t.colorScheme === "dark" ? t.colors.dark[6] : t.white,
+        borderRadius: t.radius.sm,
+        border: `0.0625rem solid ${
+          t.colorScheme === "dark" ? t.colors.dark[4] : t.colors.gray[4]
+        }`,
+      })}
+      p={16}
     >
-      <div className={styles.header}>
-        <div className={styles.userInfo}>
-          <Image src={userImgUrl} alt="User image" width={32} height={32} />
-          <div className={styles.namesContainer}>
-            <span className={styles.displayName}>{displayName}</span>
-            <span className={styles.username}>@{username}</span>
-          </div>
-        </div>
-        <div className={styles.dateLikeContainer}>
-          <div className={styles.date}>{createdAt}</div>
-          <div
-            className={`${styles.like} ${isLiked ? styles.liked : ""}`}
-            onClick={() => {
-              if (isLiked) {
-                unlikeCommentMutation.mutate({ commentId: commentId });
-              } else {
-                likeCommentMutation.mutate({ commentId: commentId });
-              }
-              setIsLiked((prev) => !prev);
+      <PostInfoHeader
+        imageUrl={userImgUrl}
+        displayName={displayName}
+        username={username}
+        createdAt={createdAt}
+      />
+      <Text size="lg">{text}</Text>
+      <Text
+        p={0}
+        onClick={() => {
+          if (isLiked) {
+            unlikeCommentMutation.mutate({ commentId: commentId });
+          } else {
+            likeCommentMutation.mutate({ commentId: commentId });
+          }
+          setIsLiked((prev) => !prev);
+        }}
+        sx={{
+          cursor: "pointer",
+          userSelect: "none",
+          zIndex: 1,
+        }}
+      >
+        <Flex justify="flex-start" align="center" gap={4}>
+          <Text size="xl">{likeAmount - Number(liked) + Number(isLiked)}</Text>
+          <Heart
+            style={{
+              fill: isLiked ? theme.colors.teal[6] : undefined,
+              stroke: isLiked ? theme.colors.teal[6] : undefined,
             }}
-          >
-            {likeAmount - Number(liked) + Number(isLiked)}
-            <Heart />
-          </div>
-        </div>
-      </div>
-      <span className={styles.content}>{text}</span>
-    </div>
+          />
+        </Flex>
+      </Text>
+    </Stack>
   );
 }
