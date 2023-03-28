@@ -10,7 +10,6 @@ export default function TrendingPage() {
     data: trendingData,
     fetchNextPage,
     isFetching,
-    hasNextPage,
   } = api.post.getTrending.useInfiniteQuery(
     {},
     {

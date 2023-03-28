@@ -12,7 +12,6 @@ import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { lowlight } from "lowlight";
 import { useEditor } from "@tiptap/react";
 import { api } from "../../utils/api";
-import { useThemeContext } from "../ThemeManager/ThemeManager";
 
 interface PostInputProps {
   onSubmit?: () => void;
@@ -20,7 +19,6 @@ interface PostInputProps {
 
 export function PostInput({ onSubmit }: PostInputProps) {
   const [extended, setExtended] = useState(false);
-  const theme = useThemeContext();
   const postCreateMutation = api.post.create.useMutation({
     onSuccess: () => {
       if (onSubmit) {

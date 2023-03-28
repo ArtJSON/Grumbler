@@ -1,6 +1,5 @@
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
-import { Loader } from "../../components/Loader/Loader";
 
 interface HashtagPagePropsType {
   hashtag: string;

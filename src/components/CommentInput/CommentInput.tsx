@@ -2,7 +2,6 @@ import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import { api } from "../../utils/api";
 import { Button, Flex, Stack, Text, Textarea } from "@mantine/core";
-import { useThemeContext } from "../ThemeManager/ThemeManager";
 
 interface CommentInputProps {
   postId: string;
@@ -10,8 +9,6 @@ interface CommentInputProps {
 }
 
 export function CommentInput({ postId, onSubmit }: CommentInputProps) {
-  const theme = useThemeContext();
-
   const commentCreateMutation = api.comment.comment.useMutation({
     onSuccess: () => {
       if (onSubmit) {

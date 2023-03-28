@@ -45,7 +45,7 @@ export function Content({ content }: ContentProps) {
                 href={`/hashtag/${hashtags[idx]}`}
                 size="lg"
                 style={{ zIndex: 1, position: "relative" }}
-                key={hashtags[idx]! + idx}
+                key={hashtags[idx] ?? "" + idx}
               >
                 #{hashtags[idx]}
               </Anchor>

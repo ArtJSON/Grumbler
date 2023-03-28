@@ -6,7 +6,6 @@ import { CommentInput } from "../../components/CommentInput/CommentInput";
 import { CommentList } from "../../components/CommentList/CommentList";
 import { Loader } from "../../components/Loader/Loader";
 import { PostDetailed } from "../../components/Post/PostDetailed/PostDetailed";
-import { useThemeContext } from "../../components/ThemeManager/ThemeManager";
 import { api } from "../../utils/api";
 
 interface PostPagePropsType {
@@ -14,7 +13,6 @@ interface PostPagePropsType {
 }
 
 export default function PostPage({ postId }: PostPagePropsType) {
-  const theme = useThemeContext();
   const { data: postData, refetch } = api.post.getById.useQuery(
     { id: postId },
     {

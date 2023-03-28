@@ -26,7 +26,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     if (opened) {
       setOpened(false);
     }
-  }, [router.pathname]);
+  }, [router.pathname, opened]);
 
   return (
     <AppShell

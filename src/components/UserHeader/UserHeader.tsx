@@ -1,11 +1,4 @@
-import {
-  Button,
-  Flex,
-  MediaQuery,
-  Stack,
-  Text,
-  useMantineTheme,
-} from "@mantine/core";
+import { Button, Flex, MediaQuery, Stack, Text } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
 import { Settings } from "tabler-icons-react";
@@ -37,8 +30,6 @@ export function UserHeader({
   isUserFollowing,
   isUserOwner,
 }: UserHeaderProps) {
-  const theme = useMantineTheme();
-
   return (
     <Stack
       sx={(t) => ({

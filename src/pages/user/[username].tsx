@@ -1,4 +1,3 @@
-import styles from "./UserPage.module.scss";
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import { api } from "../../utils/api";
@@ -41,6 +40,7 @@ export default function UserPage({ username }: UserPagePropsType) {
       </Head>
       <Stack spacing={48}>
         <UserHeader
+          // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
           {...userData.pages[0]!.user}
           onFollowClick={async () => {
             if (userData.pages[0]?.user.isUserFollowing) {
@@ -54,7 +54,12 @@ export default function UserPage({ username }: UserPagePropsType) {
         />
         <PostList posts={userData.pages.map((p) => p.posts).flat(1)} />
       </Stack>
-      {!isFetching && <InfiniteScrollTrigger onScreenEnter={fetchNextPage} />}
+      {!isFetching && (
+        <InfiniteScrollTrigger
+          isFetching={isFetching}
+          onScreenEnter={fetchNextPage}
+        />
+      )}
     </>
   );
 }

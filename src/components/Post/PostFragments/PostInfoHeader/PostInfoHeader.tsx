@@ -1,7 +1,6 @@
 import { Flex, Stack, Text } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
-import { useThemeContext } from "../../../ThemeManager/ThemeManager";
 
 interface PostInfoHeaderProps {
   imageUrl: string;
@@ -16,8 +15,6 @@ export function PostInfoHeader({
   username,
   createdAt,
 }: PostInfoHeaderProps) {
-  const theme = useThemeContext();
-
   return (
     <Flex justify="space-between" align="flex-start" gap="xs">
       <Link href={`/user/${username}`} style={{ zIndex: 1 }}>

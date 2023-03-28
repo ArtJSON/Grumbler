@@ -3,7 +3,7 @@ import { PostInfoHeader } from "../../Post/PostFragments/PostInfoHeader/PostInfo
 import { PostReactionsFooter } from "../../Post/PostFragments/PostReactionsFooter/PostReactionsFooter";
 import { api } from "../../../utils/api";
 import { useState } from "react";
-import { Container, Stack, Text, useMantineTheme } from "@mantine/core";
+import { Container, Stack, Text } from "@mantine/core";
 import { Content } from "../../Post/Content/Content";
 
 export interface PostListingItemProps {
