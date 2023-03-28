@@ -1,4 +1,4 @@
-import { Modal, Textarea } from "@mantine/core";
+import { Modal, Textarea, useMantineTheme } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { RichTextEditor } from "@mantine/tiptap";
@@ -44,7 +44,7 @@ export function PostDetailed({
   liked,
   onLikeClick,
 }: PostDetailedProps) {
-  const theme = useThemeContext();
+  const theme = useMantineTheme();
   const editor = useEditor({
     editable: false,
     content: extendedContent,
@@ -117,11 +117,20 @@ export function PostDetailed({
       <RichTextEditor
         editor={editor}
         sx={{
-          border: "none",
+          border: "0",
           ".ProseMirror": {
             padding: "0 !important",
-            backgroundColor: `${
-              theme.theme === "dark" ? "#111113" : "#fff"
+            backgroundColor: "transparent !important",
+          },
+          ".mantine-RichTextEditor-content": {
+            backgroundColor: "transparent ",
+            maxHeight: "unset !important",
+          },
+          pre: {
+            background: `${
+              theme.colorScheme === "dark"
+                ? theme.colors.dark[6]
+                : theme.colors.gray[2]
             } !important`,
           },
         }}
