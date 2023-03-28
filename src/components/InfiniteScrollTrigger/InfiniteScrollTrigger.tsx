@@ -40,5 +40,5 @@ export default function InfiniteScrollTrigger({
     }
   }, [isInViewport, onScreenEnter]);
 
-  return <div ref={ref} />;
+  return <div ref={ref} style={{ background: "transparent", height: 1 }} />;
 }
