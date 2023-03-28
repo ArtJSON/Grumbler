@@ -119,17 +119,26 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
 });
 
 const enforceUserIsAdmin = t.middleware(async ({ ctx, next }) => {
-  const userInDb = await ctx.prisma.user.findUnique({
-    where: {
-      id: ctx.session?.user.id,
-    },
-  });
-  if (!ctx.session || !ctx.session.user || userInDb?.role !== "ADMIN") {
+  if (!ctx.session || !ctx.session.user) {
     throw new TRPCError({
       code: "FORBIDDEN",
       message: errorMessages.FORBIDDEN,
     });
   }
+
+  const userInDb = await ctx.prisma.user.findUnique({
+    where: {
+      id: ctx.session?.user.id,
+    },
+  });
+
+  if (userInDb?.role !== "ADMIN") {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: errorMessages.FORBIDDEN,
+    });
+  }
+
   return next({
     ctx: {
       // infers the `session` as non-nullable

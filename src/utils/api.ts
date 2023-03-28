@@ -34,6 +34,9 @@ export const api = createTRPCNext<AppRouter>({
           queries: {
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
+            onError: (error: any) => {
+              notifications.show({ message: error.message, color: "red" });
+            },
           },
           mutations: {
             onError: (error: any) => {
