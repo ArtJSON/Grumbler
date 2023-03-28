@@ -42,7 +42,7 @@ export default function SettingsPage() {
   });
   const router = useRouter();
   const updateSettingsMutation = api.user.updateSettings.useMutation();
-  const { data: settingsData } = api.user.getSettings.useQuery(
+  const { data: settingsData, isFetching } = api.user.getSettings.useQuery(
     {},
     {
       onSuccess: (data) => {
@@ -56,7 +56,7 @@ export default function SettingsPage() {
   );
   const theme = useMantineTheme();
 
-  if (!settingsData) {
+  if (!settingsData || isFetching) {
     return <Loader />;
   }
 
