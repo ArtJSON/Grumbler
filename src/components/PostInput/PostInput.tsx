@@ -92,7 +92,7 @@ export function PostInput({ onSubmit }: PostInputProps) {
               setExtended(event.target.checked);
             }}
           />
-          <Text size="sm">{form.values.content.length} / 320 characters</Text>
+          <Text size="sm">{form.values.content.length} / 320</Text>
         </Flex>
         <TiptapEditor extended={extended} editor={editor} />
         <Button type="submit" style={{ alignSelf: "flex-start" }}>

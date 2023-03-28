@@ -42,11 +42,11 @@ export default function UserPage({ username }: UserPagePropsType) {
       <Stack spacing={48}>
         <UserHeader
           {...userData.pages[0]!.user}
-          onFollowClick={() => {
+          onFollowClick={async () => {
             if (userData.pages[0]?.user.isUserFollowing) {
-              unfollowMutation.mutate({ username });
+              await unfollowMutation.mutateAsync({ username });
             } else {
-              followMutation.mutate({ username });
+              await followMutation.mutateAsync({ username });
             }
 
             refetch();

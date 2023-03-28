@@ -22,8 +22,6 @@ export default function TrendingPage() {
     return <Loader />;
   }
 
-  console.log(hasNextPage);
-
   return (
     <>
       <Head>
