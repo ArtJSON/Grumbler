@@ -54,12 +54,10 @@ export default function UserPage({ username }: UserPagePropsType) {
         />
         <PostList posts={userData.pages.map((p) => p.posts).flat(1)} />
       </Stack>
-      {!isFetching && (
-        <InfiniteScrollTrigger
-          isFetching={isFetching}
-          onScreenEnter={fetchNextPage}
-        />
-      )}
+      <InfiniteScrollTrigger
+        isFetching={isFetching}
+        onScreenEnter={fetchNextPage}
+      />
     </>
   );
 }

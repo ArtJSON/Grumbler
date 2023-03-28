@@ -37,12 +37,10 @@ const Home: NextPage = () => {
         />
         <PostList posts={postsData.pages.map((p) => p.posts).flat(1)} />
       </Stack>
-      {!isFetching && (
-        <InfiniteScrollTrigger
-          isFetching={isFetching}
-          onScreenEnter={fetchNextPage}
-        />
-      )}
+      <InfiniteScrollTrigger
+        isFetching={isFetching}
+        onScreenEnter={fetchNextPage}
+      />
     </>
   );
 };

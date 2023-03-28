@@ -45,11 +45,12 @@ export default function InfiniteScrollTrigger({
 
   return (
     <>
-      <div ref={ref} style={{ background: "transparent", height: 1 }} />
-      {isFetching && (
+      {isFetching ? (
         <Center pt={48} pb={32}>
           <Loader size={64} />
         </Center>
+      ) : (
+        <div ref={ref} style={{ background: "transparent", height: 1 }} />
       )}
     </>
   );
