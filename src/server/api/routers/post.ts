@@ -178,14 +178,24 @@ export const postRouter = createTRPCRouter({
   getTrending: publicProcedure
     .input(
       z.object({
-        page: z.number().min(0),
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
       })
     )
-    .query(async ({ ctx, input: { page } }) => {
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 25;
+      const { cursor } = input;
       const trendingMinDate = new Date();
       trendingMinDate.setDate(trendingMinDate.getDate() - 7);
 
       const postsInDb = await ctx.prisma.post.findMany({
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          postLikes: {
+            _count: "desc",
+          },
+        },
+        take: limit + 1,
         where: {
           createdAt: {
             gt: trendingMinDate,
@@ -196,16 +206,16 @@ export const postRouter = createTRPCRouter({
           _count: true,
           postLikes: true,
         },
-        orderBy: {
-          postLikes: {
-            _count: "desc",
-          },
-        },
-        skip: page * 25,
-        take: 25,
       });
 
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (postsInDb.length > limit) {
+        const nextItem = postsInDb.pop();
+        nextCursor = nextItem?.id;
+      }
+
       return {
+        nextCursor: nextCursor,
         posts: postsInDb.map((p) => ({
           id: p.id,
           createdAt: dateFormat(p.createdAt, "dd/mm/yyyy, HH:MM:ss"),
