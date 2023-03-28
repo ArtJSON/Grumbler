@@ -102,8 +102,18 @@ export function PostDetailed({
             close();
           })}
         >
-          <Textarea maxLength={320} {...form.getInputProps("reason")} />
-          <Button type="submit">Submit</Button>
+          <Stack spacing={16}>
+            <Textarea
+              minRows={3}
+              maxRows={8}
+              autosize
+              maxLength={320}
+              {...form.getInputProps("reason")}
+            />
+            <Button sx={{ alignSelf: "flex-start" }} type="submit">
+              Submit
+            </Button>
+          </Stack>
         </form>
       </Modal>
       <PostInfoHeader

@@ -1,3 +1,4 @@
+import { Center, Loader } from "@mantine/core";
 import { useState, useEffect, type RefObject, useRef } from "react";
 
 function useOnScreen(ref: RefObject<HTMLElement>, rootMargin = "0px") {
@@ -26,10 +27,12 @@ function useOnScreen(ref: RefObject<HTMLElement>, rootMargin = "0px") {
 
 interface InfiniteScrollTriggerProps {
   onScreenEnter: () => void;
+  isFetching: boolean;
 }
 
 export default function InfiniteScrollTrigger({
   onScreenEnter,
+  isFetching,
 }: InfiniteScrollTriggerProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const isInViewport = useOnScreen(ref);
@@ -40,5 +43,14 @@ export default function InfiniteScrollTrigger({
     }
   }, [isInViewport, onScreenEnter]);
 
-  return <div ref={ref} style={{ background: "transparent", height: 1 }} />;
+  return (
+    <>
+      <div ref={ref} style={{ background: "transparent", height: 1 }} />
+      {isFetching && (
+        <Center pt={48} pb={32}>
+          <Loader size={64} />
+        </Center>
+      )}
+    </>
+  );
 }

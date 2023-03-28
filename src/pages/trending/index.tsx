@@ -30,7 +30,12 @@ export default function TrendingPage() {
       <Stack spacing={48}>
         <PostList posts={trendingData.pages.map((p) => p.posts).flat(1)} />
       </Stack>
-      {!isFetching && <InfiniteScrollTrigger onScreenEnter={fetchNextPage} />}
+      {!isFetching && (
+        <InfiniteScrollTrigger
+          isFetching={isFetching}
+          onScreenEnter={fetchNextPage}
+        />
+      )}
     </>
   );
 }

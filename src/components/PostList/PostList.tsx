@@ -33,7 +33,7 @@ export function PostList({ posts }: PostListProps) {
   if (posts.length) {
     return (
       <Stack>
-        <Modal opened={opened} onClose={close} title="Report" size="md">
+        <Modal opened={opened} onClose={close} title="Report">
           <form
             onSubmit={form.onSubmit((values) => {
               reportPostMutation.mutate({
@@ -44,7 +44,7 @@ export function PostList({ posts }: PostListProps) {
               close();
             })}
           >
-            <Stack>
+            <Stack spacing={16} sx={{ alignSelf: "flex-start" }}>
               <Textarea
                 minRows={3}
                 maxRows={8}

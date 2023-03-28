@@ -38,6 +38,17 @@ export default function ThemeManager({
           fontFamily: "Roboto Flex, sans-serif",
           primaryColor: "teal",
           components: {
+            Modal: {
+              defaultProps: {
+                styles: {
+                  root: {
+                    ".mantine-Modal-inner": {
+                      boxSizing: "border-box",
+                    },
+                  },
+                },
+              },
+            },
             Text: {
               defaultProps: (t) => ({
                 color: t.colorScheme === "dark" ? t.colors.dark[0] : t.black,
