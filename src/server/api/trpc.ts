@@ -67,6 +67,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
  */
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
+import { errorMessages } from "../../utils/errorMessages";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
@@ -104,7 +105,10 @@ export const publicProcedure = t.procedure;
  */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: errorMessages.UNAUTHORIZED,
+    });
   }
   return next({
     ctx: {
@@ -121,7 +125,10 @@ const enforceUserIsAdmin = t.middleware(async ({ ctx, next }) => {
     },
   });
   if (!ctx.session || !ctx.session.user || userInDb?.role !== "ADMIN") {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: errorMessages.FORBIDDEN,
+    });
   }
   return next({
     ctx: {

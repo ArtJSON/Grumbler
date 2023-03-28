@@ -9,6 +9,7 @@ import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
+import { notifications } from "@mantine/notifications";
 
 import { type AppRouter } from "../server/api/root";
 
@@ -33,6 +34,11 @@ export const api = createTRPCNext<AppRouter>({
           queries: {
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
+          },
+          mutations: {
+            onError: (error: any) => {
+              notifications.show({ message: error.message, color: "red" });
+            },
           },
         },
       },
