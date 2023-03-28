@@ -26,8 +26,9 @@ export default function UserPage({ username }: UserPagePropsType) {
     }
   );
 
-  const followMutation = api.user.follow.useMutation();
-  const unfollowMutation = api.user.unfollow.useMutation();
+  const { mutateAsync: followMutationAsync } = api.user.follow.useMutation();
+  const { mutateAsync: unfollowMutationAsync } =
+    api.user.unfollow.useMutation();
 
   if (!userData) {
     return <Loader />;
@@ -44,9 +45,9 @@ export default function UserPage({ username }: UserPagePropsType) {
           {...userData.pages[0]!.user}
           onFollowClick={async () => {
             if (userData.pages[0]?.user.isUserFollowing) {
-              await unfollowMutation.mutateAsync({ username });
+              await unfollowMutationAsync({ username });
             } else {
-              await followMutation.mutateAsync({ username });
+              await followMutationAsync({ username });
             }
 
             refetch();

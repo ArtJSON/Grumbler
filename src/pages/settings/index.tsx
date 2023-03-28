@@ -20,14 +20,32 @@ import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 const schema = z.object({
   displayName: z
     .string()
-    .min(3)
-    .max(32)
-    .regex(/^\S+(?: \S+)*$/),
+    .min(
+      3,
+      "Use from 3 to 32 characters. Do not use two or more consecutive spaces."
+    )
+    .max(
+      32,
+      "Use from 3 to 32 characters. Do not use two or more consecutive spaces."
+    )
+    .regex(
+      /^\S+(?: \S+)*$/,
+      "Use from 3 to 32 characters. Do not use two or more consecutive spaces."
+    ),
   username: z
     .string()
-    .min(3)
-    .max(32)
-    .regex(/^[a-z0-9._]+$/),
+    .min(
+      3,
+      "Use from 3 to 32 characters. Possible characters are latin letters, dots ( . ) and underscores ( _ )."
+    )
+    .max(
+      32,
+      "Use from 3 to 32 characters. Possible characters are latin letters, dots ( . ) and underscores ( _ )."
+    )
+    .regex(
+      /^[a-zA-Z0-9._]+$/,
+      "Use from 3 to 32 characters. Possible characters are latin letters, dots ( . ) and underscores ( _ )."
+    ),
   bio: z.string().max(320),
 });
 

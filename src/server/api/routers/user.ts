@@ -194,7 +194,7 @@ export const userRouter = createTRPCRouter({
           .string()
           .min(3)
           .max(32)
-          .regex(/^[a-z0-9._]+$/),
+          .regex(/^[a-zA-Z0-9._]+$/),
         bio: z.string().max(320),
       })
     )
