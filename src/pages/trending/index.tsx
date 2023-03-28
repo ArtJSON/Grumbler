@@ -29,7 +29,7 @@ export default function TrendingPage() {
       <Head>
         <title>Grumbler | Trending</title>
       </Head>
-      <Stack spacing={48} py={16}>
+      <Stack spacing={48}>
         <PostList posts={trendingData.pages.map((p) => p.posts).flat(1)} />
       </Stack>
       {!isFetching && <InfiniteScrollTrigger onScreenEnter={fetchNextPage} />}
