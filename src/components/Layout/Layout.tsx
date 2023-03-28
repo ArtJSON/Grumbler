@@ -139,7 +139,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {router.pathname.split("/")[1] === "admin" ? (
         <>{children}</>
       ) : (
-        <Container mih="100lvh">{children}</Container>
+        <Container mih="100lvh" p={16}>
+          {children}
+        </Container>
       )}
     </AppShell>
   );
