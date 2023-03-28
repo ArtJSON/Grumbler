@@ -84,20 +84,24 @@ export const userRouter = createTRPCRouter({
   getUser: publicProcedure
     .input(
       z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
         username: z.string(),
-        page: z.number().min(0),
       })
     )
-    .query(async ({ ctx, input: { username, page } }) => {
-      const postInDb = await ctx.prisma.post.findMany({
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 25;
+      const { cursor } = input;
+
+      const postsInDb = await ctx.prisma.post.findMany({
+        cursor: cursor ? { id: cursor } : undefined,
+        take: limit + 1,
         orderBy: {
           createdAt: "desc",
         },
-        skip: page * 25,
-        take: 25,
         where: {
           user: {
-            username: username,
+            username: input.username,
           },
         },
         include: {
@@ -118,9 +122,15 @@ export const userRouter = createTRPCRouter({
         },
       });
 
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (postsInDb.length > limit) {
+        const nextItem = postsInDb.pop();
+        nextCursor = nextItem?.id;
+      }
+
       const userInDb = await ctx.prisma.user.findUniqueOrThrow({
         where: {
-          username: username,
+          username: input.username,
         },
         include: {
           _count: {
@@ -137,12 +147,13 @@ export const userRouter = createTRPCRouter({
         where: {
           followerId: ctx.session?.user.id,
           following: {
-            username: username,
+            username: input.username,
           },
         },
       });
 
       return {
+        nextCursor: nextCursor,
         user: {
           username: userInDb.username ?? "",
           bio: userInDb.bio ?? undefined,
@@ -153,9 +164,9 @@ export const userRouter = createTRPCRouter({
           following: userInDb._count.following,
           posts: userInDb._count.posts,
           isUserFollowing: followInDb !== null ? true : false,
-          isUserOwner: ctx.session?.user.username === username,
+          isUserOwner: ctx.session?.user.username === input.username,
         },
-        posts: postInDb.map((p) => ({
+        posts: postsInDb.map((p) => ({
           id: p.id,
           createdAt: dateFormat(p.createdAt, "dd/mm/yyyy, HH:MM:ss"),
           userId: p.user.id,

@@ -5,16 +5,27 @@ import { api } from "../../utils/api";
 import { PostList } from "../../components/PostList/PostList";
 import { UserHeader } from "../../components/UserHeader/UserHeader";
 import { Loader } from "../../components/Loader/Loader";
+import { Stack } from "@mantine/core";
+import InfiniteScrollTrigger from "../../components/InfiniteScrollTrigger/InfiniteScrollTrigger";
 
 interface UserPagePropsType {
   username: string;
 }
 
 export default function UserPage({ username }: UserPagePropsType) {
-  const { data: userData, refetch } = api.user.getUser.useQuery({
-    page: 0,
-    username,
-  });
+  const {
+    data: userData,
+    refetch,
+    isFetching,
+    fetchNextPage,
+  } = api.user.getUser.useInfiniteQuery(
+    {
+      username,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
 
   const followMutation = api.user.follow.useMutation();
   const unfollowMutation = api.user.unfollow.useMutation();
@@ -26,13 +37,13 @@ export default function UserPage({ username }: UserPagePropsType) {
   return (
     <>
       <Head>
-        <title>Grumbler | {userData.user.displayName}</title>
+        <title>Grumbler | {userData.pages[0]?.user.displayName}</title>
       </Head>
-      <div className={styles.userPage}>
+      <Stack spacing={48}>
         <UserHeader
-          {...userData.user}
+          {...userData.pages[0]!.user}
           onFollowClick={() => {
-            if (userData.user.isUserFollowing) {
+            if (userData.pages[0]?.user.isUserFollowing) {
               unfollowMutation.mutate({ username });
             } else {
               followMutation.mutate({ username });
@@ -41,8 +52,9 @@ export default function UserPage({ username }: UserPagePropsType) {
             refetch();
           }}
         />
-        <PostList posts={userData.posts} />
-      </div>
+        <PostList posts={userData.pages.map((p) => p.posts).flat(1)} />
+      </Stack>
+      {!isFetching && <InfiniteScrollTrigger onScreenEnter={fetchNextPage} />}
     </>
   );
 }
