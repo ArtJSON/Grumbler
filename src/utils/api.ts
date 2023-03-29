@@ -34,11 +34,13 @@ export const api = createTRPCNext<AppRouter>({
           queries: {
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onError: (error: any) => {
               notifications.show({ message: error.message, color: "red" });
             },
           },
           mutations: {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onError: (error: any) => {
               notifications.show({ message: error.message, color: "red" });
             },

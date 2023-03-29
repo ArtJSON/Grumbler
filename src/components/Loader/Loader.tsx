@@ -1,4 +1,4 @@
-import { Flex, Loader as MantineLoader, MediaQuery } from "@mantine/core";
+import { Flex, Loader as MantineLoader } from "@mantine/core";
 
 export function Loader() {
   return (
