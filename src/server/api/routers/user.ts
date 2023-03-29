@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import dateFormat from "dateformat";
+import { env } from "process";
 import { z } from "zod";
 import { errorMessages } from "../../../utils/errorMessages";
 
@@ -204,6 +205,22 @@ export const userRouter = createTRPCRouter({
           bio,
           displayName,
           username,
+        },
+        where: {
+          id: ctx.session.user.id,
+        },
+      });
+    }),
+  updateProfilePicture: protectedProcedure
+    .input(
+      z.object({
+        picturePublicId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input: { picturePublicId } }) => {
+      return ctx.prisma.user.update({
+        data: {
+          avatar: `https://res.cloudinary.com/${env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/${picturePublicId}.webp`,
         },
         where: {
           id: ctx.session.user.id,

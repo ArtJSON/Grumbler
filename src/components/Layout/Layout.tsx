@@ -17,7 +17,6 @@ import { Brightness, Login } from "tabler-icons-react";
 import { useThemeContext } from "../ThemeManager/ThemeManager";
 import { MainLinks } from "./MainLinks/MainLinks";
 import { Notifications } from "@mantine/notifications";
-import Head from "next/head";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();

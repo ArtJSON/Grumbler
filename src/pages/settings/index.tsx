@@ -49,6 +49,8 @@ const schema = z.object({
   bio: z.string().max(320),
 });
 
+const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`;
+
 export default function SettingsPage() {
   const form = useForm({
     validate: zodResolver(schema),
@@ -60,6 +62,8 @@ export default function SettingsPage() {
   });
   const router = useRouter();
   const updateSettingsMutation = api.user.updateSettings.useMutation();
+  const updateProfilePictureMutation =
+    api.user.updateProfilePicture.useMutation();
   const { data: settingsData, isFetching } = api.user.getSettings.useQuery(
     {},
     {
@@ -120,8 +124,24 @@ export default function SettingsPage() {
             Profile image
           </Text>
           <Dropzone
-            onDrop={(files) => console.log("accepted files", files)}
-            onReject={(files) => console.log("rejected files", files)}
+            onDrop={(files) => {
+              if (files[0]) {
+                const formData = new FormData();
+                formData.append("file", files[0]);
+                formData.append("upload_preset", "profile-pic");
+
+                fetch(CLOUDINARY_URL, {
+                  method: "POST",
+                  body: formData,
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                }).then(async (res: any) => {
+                  const { public_id } = await res.json();
+                  updateProfilePictureMutation.mutate({
+                    picturePublicId: public_id,
+                  });
+                });
+              }
+            }}
             maxSize={1024 ** 2}
             accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}
           >
