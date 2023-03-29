@@ -16,6 +16,8 @@ import { useRouter } from "next/router";
 import { Photo, Upload, X } from "tabler-icons-react";
 import { Loader } from "../../components/Loader/Loader";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
+import { useState } from "react";
+import { notifications } from "@mantine/notifications";
 
 const schema = z.object({
   displayName: z
@@ -62,8 +64,6 @@ export default function SettingsPage() {
   });
   const router = useRouter();
   const updateSettingsMutation = api.user.updateSettings.useMutation();
-  const updateProfilePictureMutation =
-    api.user.updateProfilePicture.useMutation();
   const { data: settingsData, isFetching } = api.user.getSettings.useQuery(
     {},
     {
@@ -76,7 +76,6 @@ export default function SettingsPage() {
       },
     }
   );
-  const theme = useMantineTheme();
 
   if (!settingsData || isFetching) {
     return <Loader />;
@@ -123,56 +122,88 @@ export default function SettingsPage() {
           <Text size={14} weight="500" style={{ lineHeight: "26px" }}>
             Profile image
           </Text>
-          <Dropzone
-            onDrop={(files) => {
-              if (files[0]) {
-                const formData = new FormData();
-                formData.append("file", files[0]);
-                formData.append("upload_preset", "profile-pic");
-
-                fetch(CLOUDINARY_URL, {
-                  method: "POST",
-                  body: formData,
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                }).then(async (res: any) => {
-                  const { public_id } = await res.json();
-                  updateProfilePictureMutation.mutate({
-                    picturePublicId: public_id,
-                  });
-                });
-              }
-            }}
-            maxSize={1024 ** 2}
-            accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}
-          >
-            <Group
-              position="center"
-              spacing="xl"
-              style={{ minHeight: 220, pointerEvents: "none" }}
-            >
-              <Dropzone.Accept>
-                <Upload color={theme.colors.teal[6]} size="3.2rem" />
-              </Dropzone.Accept>
-              <Dropzone.Reject>
-                <X color={theme.colors.red[6]} size="3.2rem" />
-              </Dropzone.Reject>
-              <Dropzone.Idle>
-                <Text size={0}>
-                  <Photo size="3.2rem" />
-                </Text>
-              </Dropzone.Idle>
-              <div>
-                <Text size="xl" inline>
-                  Drag image here or click to select the file
-                </Text>
-                <Text size="sm" color="dimmed" inline mt={7}>
-                  Attach a picture in jpeg, jpg or png format up to 1MB
-                </Text>
-              </div>
-            </Group>
-          </Dropzone>
+          <ProfilePictureUpload />
         </Tabs.Panel>
       </Tabs>
     </>
+  );
+}
+
+function ProfilePictureUpload() {
+  const updateProfilePictureMutation =
+    api.user.updateProfilePicture.useMutation();
+  const theme = useMantineTheme();
+  const [isUploading, setIsUploading] = useState(false);
+
+  return (
+    <Dropzone
+      onDrop={(files) => {
+        if (files[0]) {
+          setIsUploading(true);
+          const formData = new FormData();
+          formData.append("file", files[0]);
+          formData.append("upload_preset", "profile-pic");
+
+          fetch(CLOUDINARY_URL, {
+            method: "POST",
+            body: formData,
+          })
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .then(async (res: any) => {
+              const { public_id } = await res.json();
+              updateProfilePictureMutation.mutate(
+                {
+                  picturePublicId: public_id,
+                },
+                {
+                  onSuccess: () => {
+                    notifications.show({
+                      message: "Successfully updated the image",
+                    });
+                  },
+                }
+              );
+            })
+            .catch(() => {
+              notifications.show({
+                message: "There was and issue with your image",
+                color: "red",
+              });
+            })
+            .finally(() => {
+              setIsUploading(false);
+            });
+        }
+      }}
+      maxSize={1024 ** 2}
+      accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}
+      loading={isUploading}
+    >
+      <Group
+        position="center"
+        spacing="xl"
+        style={{ minHeight: 220, pointerEvents: "none" }}
+      >
+        <Dropzone.Accept>
+          <Upload color={theme.colors.teal[6]} size="3.2rem" />
+        </Dropzone.Accept>
+        <Dropzone.Reject>
+          <X color={theme.colors.red[6]} size="3.2rem" />
+        </Dropzone.Reject>
+        <Dropzone.Idle>
+          <Text size={0}>
+            <Photo size="3.2rem" />
+          </Text>
+        </Dropzone.Idle>
+        <div>
+          <Text size="xl" inline>
+            Drag image here or click to select the file
+          </Text>
+          <Text size="sm" color="dimmed" inline mt={7}>
+            Attach a picture in jpeg, jpg or png format up to 1MB
+          </Text>
+        </div>
+      </Group>
+    </Dropzone>
   );
 }

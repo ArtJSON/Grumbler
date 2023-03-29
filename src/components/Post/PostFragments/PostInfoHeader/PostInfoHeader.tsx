@@ -19,7 +19,15 @@ export function PostInfoHeader({
     <Flex justify="space-between" align="flex-start" gap="xs">
       <Link href={`/user/${username}`} style={{ zIndex: 1 }}>
         <Flex gap="xs" align="flex-start">
-          <Image src={imageUrl} alt="User image" width={36} height={36} />
+          <Image
+            src={imageUrl}
+            alt="User image"
+            width={36}
+            height={36}
+            style={{
+              borderRadius: 4,
+            }}
+          />
           <Stack spacing={0}>
             <Text size="xs" sx={{ overflowWrap: "anywhere" }}>
               {displayName}

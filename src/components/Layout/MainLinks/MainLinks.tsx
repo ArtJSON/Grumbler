@@ -11,6 +11,7 @@ import {
   Users,
 } from "tabler-icons-react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 interface MainLinkProps {
   icon: React.ReactNode;
@@ -54,136 +55,118 @@ export function MainLinks() {
   const session = useSession();
   const router = useRouter();
 
-  const adminPanelLinks = [
-    {
-      icon: <ArrowBackUp size="2rem" strokeWidth={1} />,
-      label: "Main application",
-      href: "/",
-    },
-    {
-      icon: <Flag size="2rem" strokeWidth={1} />,
-      label: "Resolve reports",
-      href: "/admin/reports",
-    },
-    {
-      icon: <Users size="2rem" strokeWidth={1} />,
-      label: "Manage users",
-      href: "/admin/users",
-    },
-  ];
-
-  const adminLinks = [
-    {
-      icon: <Home size="2rem" strokeWidth={1} />,
-      label: "Home",
-      href: "/",
-    },
-    {
-      icon: <TrendingUp size="2rem" strokeWidth={1} />,
-      label: "Trending",
-      href: "/trending",
-    },
-    {
-      icon: <Settings size="2rem" strokeWidth={1} />,
-      label: "Settings",
-      href: "/settings",
-    },
-    {
-      icon: <Home size="2rem" strokeWidth={1} />,
-      label: "Profile",
-      href: `/user/${session.data?.user.username}`,
-    },
-    {
-      icon: <ServerCog size="2rem" strokeWidth={1} />,
-      label: "Admin panel",
-      href: "/admin/reports",
-    },
-  ];
-
-  const loggedLinks = [
-    {
-      icon: <Home size="2rem" strokeWidth={1} />,
-      label: "Home",
-      href: "/",
-    },
-    {
-      icon: <TrendingUp size="2rem" strokeWidth={1} />,
-      label: "Trending",
-      href: "/trending",
-    },
-    {
-      icon: <Settings size="2rem" strokeWidth={1} />,
-      label: "Settings",
-      href: "/settings",
-    },
-    {
-      icon: <Home size="2rem" strokeWidth={1} />,
-      label: "Profile",
-      href: `/user/${session.data?.user.username}`,
-    },
-  ];
-
-  const notLoggedLinks = [
-    {
-      icon: <Home size="2rem" strokeWidth={1} />,
-      label: "Home",
-      href: "/",
-    },
-    {
-      icon: <TrendingUp size="2rem" strokeWidth={1} />,
-      label: "Trending",
-      href: "/trending",
-    },
-  ];
+  let links: MainLinkProps[] = [];
 
   if (
     session.data?.user.role === "ADMIN" &&
     router.pathname.split("/")[1] === "admin"
   ) {
-    return (
-      <>
-        {adminPanelLinks.map((link) => (
-          <MainLink
-            {...link}
-            key={link.label}
-            active={router.asPath === link.href}
+    links = [
+      {
+        icon: <ArrowBackUp size="2rem" strokeWidth={1} />,
+        label: "Main application",
+        href: "/",
+      },
+      {
+        icon: <Flag size="2rem" strokeWidth={1} />,
+        label: "Resolve reports",
+        href: "/admin/reports",
+      },
+      {
+        icon: <Users size="2rem" strokeWidth={1} />,
+        label: "Manage users",
+        href: "/admin/users",
+      },
+    ];
+  } else if (session.data?.user.role === "ADMIN") {
+    links = [
+      {
+        icon: <Home size="2rem" strokeWidth={1} />,
+        label: "Home",
+        href: "/",
+      },
+      {
+        icon: <TrendingUp size="2rem" strokeWidth={1} />,
+        label: "Trending",
+        href: "/trending",
+      },
+      {
+        icon: <Settings size="2rem" strokeWidth={1} />,
+        label: "Settings",
+        href: "/settings",
+      },
+      {
+        icon: (
+          <Image
+            alt="User image"
+            src={session.data.user.image ?? "/defaultUserImage.webp"}
+            width={32}
+            height={32}
+            style={{
+              borderRadius: 4,
+            }}
           />
-        ))}
-      </>
-    );
-  }
-
-  if (session.data?.user.role === "ADMIN") {
-    return (
-      <>
-        {adminLinks.map((link) => (
-          <MainLink
-            {...link}
-            key={link.label}
-            active={router.asPath === link.href}
+        ),
+        label: "Profile",
+        href: `/user/${session.data?.user.username}`,
+      },
+      {
+        icon: <ServerCog size="2rem" strokeWidth={1} />,
+        label: "Admin panel",
+        href: "/admin/reports",
+      },
+    ];
+  } else if (session.data?.user.role === "USER") {
+    links = [
+      {
+        icon: <Home size="2rem" strokeWidth={1} />,
+        label: "Home",
+        href: "/",
+      },
+      {
+        icon: <TrendingUp size="2rem" strokeWidth={1} />,
+        label: "Trending",
+        href: "/trending",
+      },
+      {
+        icon: <Settings size="2rem" strokeWidth={1} />,
+        label: "Settings",
+        href: "/settings",
+      },
+      {
+        icon: (
+          <Image
+            alt="User image"
+            src={session.data.user.image ?? "/defaultUserImage.webp"}
+            width={32}
+            height={32}
+            style={{
+              borderRadius: 4,
+            }}
           />
-        ))}
-      </>
-    );
-  }
-
-  if (session.data?.user.role === "USER") {
-    return (
-      <>
-        {loggedLinks.map((link) => (
-          <MainLink
-            {...link}
-            key={link.label}
-            active={router.asPath === link.href}
-          />
-        ))}
-      </>
-    );
+        ),
+        label: "Profile",
+        href: `/user/${session.data?.user.username}`,
+      },
+    ];
+  } else {
+    links = [
+      {
+        icon: <Home size="2rem" strokeWidth={1} />,
+        label: "Home",
+        href: "/",
+      },
+      {
+        icon: <TrendingUp size="2rem" strokeWidth={1} />,
+        label: "Trending",
+        href: "/trending",
+      },
+    ];
   }
 
   return (
     <>
-      {notLoggedLinks.map((link) => (
+      {links.map((link) => (
         <MainLink
           {...link}
           key={link.label}

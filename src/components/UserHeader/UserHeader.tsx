@@ -75,7 +75,15 @@ export function UserHeader({
               </Button>
             )}
           </Stack>
-          <Image width={96} height={96} src={imageUrl} alt="User image" />
+          <Image
+            width={96}
+            height={96}
+            src={imageUrl}
+            alt="User image"
+            style={{
+              borderRadius: 4,
+            }}
+          />
         </Flex>
       </MediaQuery>
       {bio && <Text size="lg">{bio}</Text>}

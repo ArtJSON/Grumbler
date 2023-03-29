@@ -45,14 +45,14 @@ export const authOptions: NextAuthOptions = {
     async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
-        const userInDb = await prisma.user.findUnique({
+        const userInDb = await prisma.user.findUniqueOrThrow({
           where: { id: user.id },
         });
 
-        session.user.role = userInDb?.role as UserRole;
-        session.user.username = userInDb?.username ?? null;
-        session.user.image = userInDb?.avatar;
-        session.user.displayName = userInDb?.displayName ?? null;
+        session.user.role = userInDb.role as UserRole;
+        session.user.username = userInDb.username ?? null;
+        session.user.image = userInDb.avatar ?? "/defaultUserImage.webp";
+        session.user.displayName = userInDb.displayName ?? null;
         // session.user.role = user.role; <-- put other properties on the session here
       }
       return session;
