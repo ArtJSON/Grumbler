@@ -1,4 +1,4 @@
-import { Table, Pagination, Modal, Text } from "@mantine/core";
+import { Table, Pagination, Modal, Text, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -130,7 +130,7 @@ function ReportsTable({
 }) {
   const ths = (
     <tr>
-      <th onClick={onSortClick}>
+      <th className={styles.sortHeader} onClick={onSortClick}>
         <ArrowsSort size={12} style={{ marginRight: 6 }} />
         Reported at
       </th>
@@ -144,12 +144,9 @@ function ReportsTable({
       <td className={styles.narrowField}>{r.createdAt}</td>
       <td className={styles.elipsisField}>{r.reason}</td>
       <td className={styles.narrowField}>
-        <button
-          className={styles.actionButton}
-          onClick={() => onReviewClick(r.id)}
-        >
+        <Button variant="outline" onClick={() => onReviewClick(r.id)}>
           Review
-        </button>
+        </Button>
       </td>
     </tr>
   ));

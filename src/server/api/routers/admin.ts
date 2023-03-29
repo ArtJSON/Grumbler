@@ -212,6 +212,7 @@ export const adminRouter = createTRPCRouter({
         resetDisplayName: z.boolean(),
         resetBio: z.boolean(),
         removeAllPosts: z.boolean(),
+        resetPicture: z.boolean(),
       })
     )
     .mutation(
@@ -223,6 +224,7 @@ export const adminRouter = createTRPCRouter({
           resetDisplayName,
           resetUsername,
           removeAllPosts,
+          resetPicture,
         },
       }) => {
         if (resetBio) {
@@ -243,6 +245,13 @@ export const adminRouter = createTRPCRouter({
           await ctx.prisma.user.update({
             where: { id: userId },
             data: { username: null },
+          });
+        }
+
+        if (resetPicture) {
+          await ctx.prisma.user.update({
+            where: { id: userId },
+            data: { avatar: "/defaultUserImage.webp" },
           });
         }
 

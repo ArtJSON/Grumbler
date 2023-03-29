@@ -38,6 +38,17 @@ export default function ThemeManager({
           fontFamily: "Roboto Flex, sans-serif",
           primaryColor: "teal",
           components: {
+            Table: {
+              defaultProps: {
+                withColumnBorders: true,
+                withBorder: true,
+                style: {
+                  borderTop: "0",
+                  borderLeft: "0",
+                  borderRight: "0",
+                },
+              },
+            },
             Modal: {
               defaultProps: {
                 styles: {

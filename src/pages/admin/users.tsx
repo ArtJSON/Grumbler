@@ -56,6 +56,7 @@ export default function UsersPage() {
       resetDisplayName: false,
       resetBio: false,
       removeAllPosts: false,
+      resetPicture: false,
     },
   });
   const roleForm = useForm();
@@ -96,7 +97,7 @@ export default function UsersPage() {
         className={styles.modal}
         size="lg"
       >
-        <Tabs color="indigo" defaultValue="reset">
+        <Tabs defaultValue="reset">
           <Tabs.List>
             <Tabs.Tab value="reset">Reset user data</Tabs.Tab>
             <Tabs.Tab value="role">Change role</Tabs.Tab>
@@ -139,6 +140,12 @@ export default function UsersPage() {
                 })}
               />
               <Checkbox
+                label="Profile picture"
+                {...resetUserForm.getInputProps("resetPicture", {
+                  type: "checkbox",
+                })}
+              />
+              <Checkbox
                 color="red"
                 label="Remove all posts"
                 {...resetUserForm.getInputProps("removeAllPosts", {
@@ -148,7 +155,7 @@ export default function UsersPage() {
               <Button
                 type="submit"
                 mt={8}
-                color={resetUserForm.values.removeAllPosts ? "red" : "blue"}
+                color={resetUserForm.values.removeAllPosts ? "red" : undefined}
                 style={{
                   transition: "0.2s background-color",
                 }}
@@ -349,14 +356,14 @@ function UserTable({
       <td>{r.bannedUntil}</td>
       <td>{r.email}</td>
       <td className={styles.narrowField}>
-        <button
-          className={styles.actionButton}
+        <Button
           onClick={() => {
             onActionClick(r.id);
           }}
+          variant="outline"
         >
           Manage
-        </button>
+        </Button>
       </td>
     </tr>
   ));
