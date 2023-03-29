@@ -19,6 +19,7 @@ export default function RouteGuard({
     ) {
       router.push("/settings");
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.status, router.pathname]);
 

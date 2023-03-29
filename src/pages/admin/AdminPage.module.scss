@@ -2,12 +2,14 @@
 
 .adminPage {
   box-sizing: content-box;
-  padding-bottom: 4rem;
+  height: 100%;
+  overflow: scroll;
 
   .table {
     th {
       user-select: none;
       font-size: 1rem;
+      white-space: nowrap;
     }
 
     tr {

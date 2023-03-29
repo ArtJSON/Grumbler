@@ -8,6 +8,7 @@ import {
   MediaQuery,
   Navbar,
   Text,
+  useMantineTheme,
 } from "@mantine/core";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -16,11 +17,13 @@ import { Brightness, Login } from "tabler-icons-react";
 import { useThemeContext } from "../ThemeManager/ThemeManager";
 import { MainLinks } from "./MainLinks/MainLinks";
 import { Notifications } from "@mantine/notifications";
+import Head from "next/head";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { data } = useSession();
   const theme = useThemeContext();
+  const mantineTheme = useMantineTheme();
   const [opened, setOpened] = useState(false);
 
   useEffect(() => {
@@ -29,8 +32,29 @@ export function Layout({ children }: { children: React.ReactNode }) {
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.pathname]);
 
+  useEffect(() => {
+    document.body.style.backgroundColor =
+      mantineTheme.colorScheme === "dark"
+        ? mantineTheme.colors.dark[8]
+        : mantineTheme.colors.gray[0];
+  }, [
+    mantineTheme.colorScheme,
+    mantineTheme.colors.dark,
+    mantineTheme.colors.gray,
+  ]);
+
   return (
     <>
+      <Head>
+        <meta
+          name="theme-color"
+          content={
+            mantineTheme.colorScheme === "dark"
+              ? mantineTheme.colors.dark[8]
+              : mantineTheme.colors.gray[0]
+          }
+        />
+      </Head>
       <Notifications autoClose={5000} />
       <AppShell
         padding={0}
