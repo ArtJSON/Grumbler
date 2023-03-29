@@ -1,53 +1,37 @@
 @import "../../styles/variables";
 
-.adminPage {
-  box-sizing: content-box;
-  height: 100%;
-  overflow: scroll;
-
-  .table {
-    th {
-      user-select: none;
-      font-size: 1rem;
-      white-space: nowrap;
-    }
-
-    tr {
-      font-size: 1rem;
-    }
-
-    .sortHeader {
-      cursor: pointer;
-    }
-
-    .elipsisField {
-      max-width: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .narrowField {
-      width: 150px;
-    }
-
-    .actionButton {
-      cursor: pointer;
-      color: inherit;
-      border: transparent;
-      background-color: transparent;
-      padding: 0;
-    }
+.table {
+  th {
+    user-select: none;
+    font-size: 1rem;
+    white-space: nowrap;
   }
 
-  .paginationContainer {
-    position: fixed;
-    bottom: 4rem;
-    right: 1rem;
+  tr {
+    font-size: 1rem;
+  }
 
-    @media screen and (min-width: $breakpoint-desktop) {
-      bottom: 1rem;
-    }
+  .sortHeader {
+    cursor: pointer;
+  }
+
+  .elipsisField {
+    max-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .narrowField {
+    width: 150px;
+  }
+
+  .actionButton {
+    cursor: pointer;
+    color: inherit;
+    border: transparent;
+    background-color: transparent;
+    padding: 0;
   }
 }
 

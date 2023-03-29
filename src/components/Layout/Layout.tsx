@@ -45,16 +45,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Head>
-        <meta
-          name="theme-color"
-          content={
-            mantineTheme.colorScheme === "dark"
-              ? mantineTheme.colors.dark[8]
-              : mantineTheme.colors.gray[0]
-          }
-        />
-      </Head>
       <Notifications autoClose={5000} />
       <AppShell
         padding={0}
