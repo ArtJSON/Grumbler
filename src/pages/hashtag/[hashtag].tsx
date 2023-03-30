@@ -1,6 +1,7 @@
-import { Anchor, Stack, Text } from "@mantine/core";
+import { Anchor, List, Select, Stack, Text } from "@mantine/core";
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
+import { useState } from "react";
 import InfiniteScrollTrigger from "../../components/InfiniteScrollTrigger/InfiniteScrollTrigger";
 import { Loader } from "../../components/Loader/Loader";
 import { PostList } from "../../components/PostList/PostList";
@@ -11,12 +12,13 @@ interface HashtagPagePropsType {
 }
 
 export default function HashtagPage({ hashtag }: HashtagPagePropsType) {
+  const [allPosts, setAllPosts] = useState(false);
   const {
     data: trendingData,
     fetchNextPage,
     isFetching,
   } = api.post.getByHashtag.useInfiniteQuery(
-    { hashtagName: hashtag },
+    { hashtagName: hashtag, allPosts },
     {
       getNextPageParam: (lastPage) => lastPage.nextPage,
     }
@@ -32,11 +34,7 @@ export default function HashtagPage({ hashtag }: HashtagPagePropsType) {
         <title>Grumbler | #{hashtag}</title>
       </Head>
       <Stack spacing={48}>
-        <HashtagInfo
-          hashtagName={hashtag}
-          postsAllTime={100}
-          postsRecently={13}
-        />
+        <HashtagInfo hashtagName={hashtag} onShowAllChange={setAllPosts} />
         <PostList posts={trendingData.pages.map((p) => p.posts).flat(1)} />
       </Stack>
       <InfiniteScrollTrigger
@@ -55,15 +53,10 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => ({
 
 interface HashtagInfoProps {
   hashtagName: string;
-  postsRecently: number;
-  postsAllTime: number;
+  onShowAllChange: (showAll: boolean) => void;
 }
 
-function HashtagInfo({
-  hashtagName,
-  postsAllTime,
-  postsRecently,
-}: HashtagInfoProps) {
+function HashtagInfo({ hashtagName, onShowAllChange }: HashtagInfoProps) {
   return (
     <Stack
       sx={(t) => ({
@@ -74,8 +67,9 @@ function HashtagInfo({
         }`,
       })}
       spacing="sm"
+      p={16}
     >
-      <Text size="xl" p={16}>
+      <Text size="xl">
         Top posts in{" "}
         <Anchor
           component="span"
@@ -84,6 +78,21 @@ function HashtagInfo({
           #{hashtagName}
         </Anchor>
       </Text>
+      <Select
+        defaultValue="recent"
+        data={[
+          { value: "recent", label: "Show recent posts" },
+          { value: "all", label: "Show all posts" },
+        ]}
+        onChange={(value) => {
+          onShowAllChange(value === "all");
+        }}
+        styles={() => ({
+          input: {
+            borderWidth: 2,
+          },
+        })}
+      />
     </Stack>
   );
 }
