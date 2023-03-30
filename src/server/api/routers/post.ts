@@ -234,8 +234,6 @@ export const postRouter = createTRPCRouter({
       GROUP BY h.hashtagName
       `) as { hashtagName: string; posts: string }[];
 
-      console.log(hashtagsInDb);
-
       let nextPage: number | undefined = undefined;
       if (postsInDb.length === limit) {
         nextPage = page + 1;
@@ -246,6 +244,76 @@ export const postRouter = createTRPCRouter({
           hashtagName: row["hashtagName"],
           posts: Number(row["posts"]),
         })),
+        posts: postsInDb.map((p) => ({
+          id: p.id,
+          createdAt: dateFormat(p.createdAt, "dd/mm/yyyy, HH:MM:ss"),
+          userId: p.user.id,
+          userImage: p.user.avatar,
+          displayName: p.user.displayName ?? "",
+          username: p.user.username ?? "",
+          content: p.content,
+          commentsCount: p._count.comments,
+          likesCount: p._count.postLikes,
+          liked: ctx.session !== null && p.postLikes.length !== 0,
+          hasExtendedContent: p.extendedContent !== null,
+          likeButtonActive: ctx.session !== null,
+        })),
+      };
+    }),
+  getByHashtag: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.number().nullish(),
+        hashtagName: z.string(),
+        allPosts: z.boolean().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 25;
+      const page = input.cursor ?? 0;
+      const { hashtagName } = input;
+      const { allPosts } = input;
+
+      const trendingMinDate = new Date();
+      trendingMinDate.setDate(trendingMinDate.getDate() - 7);
+
+      const postsInDb = await ctx.prisma.post.findMany({
+        orderBy: [
+          {
+            postLikes: {
+              _count: "desc",
+            },
+          },
+          {
+            createdAt: "desc",
+          },
+        ],
+        take: limit,
+        skip: page * limit,
+        where: {
+          ...(allPosts ? { createdAt: { gt: trendingMinDate } } : undefined),
+          postHashtag: { some: { hashtagName } },
+        },
+        include: {
+          user: true,
+          postLikes: {
+            where: {
+              userId: ctx.session?.user.id,
+            },
+          },
+          _count: {
+            select: { comments: true, postLikes: true },
+          },
+        },
+      });
+
+      let nextPage: number | undefined = undefined;
+      if (postsInDb.length === limit) {
+        nextPage = page + 1;
+      }
+      return {
+        nextPage: nextPage,
         posts: postsInDb.map((p) => ({
           id: p.id,
           createdAt: dateFormat(p.createdAt, "dd/mm/yyyy, HH:MM:ss"),
