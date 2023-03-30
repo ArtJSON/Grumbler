@@ -44,7 +44,7 @@ export default function TrendingPage() {
 interface TrendingHashtagsProps {
   trendingHashtags: {
     hashtagName: string;
-    posts: string;
+    posts: number;
   }[];
 }
 
