@@ -179,23 +179,29 @@ export const postRouter = createTRPCRouter({
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
-        cursor: z.string().nullish(),
+        cursor: z.number().nullish(),
       })
     )
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 25;
-      const { cursor } = input;
+      const page = input.cursor ?? 0;
+
       const trendingMinDate = new Date();
       trendingMinDate.setDate(trendingMinDate.getDate() - 7);
 
       const postsInDb = await ctx.prisma.post.findMany({
-        cursor: cursor ? { id: cursor } : undefined,
-        orderBy: {
-          postLikes: {
-            _count: "desc",
+        orderBy: [
+          {
+            postLikes: {
+              _count: "desc",
+            },
           },
-        },
-        take: limit + 1,
+          {
+            createdAt: "desc",
+          },
+        ],
+        take: limit,
+        skip: page * limit,
         where: {
           createdAt: {
             gt: trendingMinDate,
@@ -203,19 +209,46 @@ export const postRouter = createTRPCRouter({
         },
         include: {
           user: true,
-          _count: true,
-          postLikes: true,
+          postLikes: {
+            where: {
+              userId: ctx.session?.user.id,
+            },
+          },
+          _count: {
+            select: { comments: true, postLikes: true },
+          },
         },
       });
 
-      let nextCursor: typeof cursor | undefined = undefined;
-      if (postsInDb.length > limit) {
-        const nextItem = postsInDb.pop();
-        nextCursor = nextItem?.id;
-      }
+      const hashtagsRawQuery = await ctx.prisma.$queryRaw`
+      SELECT h.hashtagName, COUNT(h.hashtagName) 
+      FROM Hashtag as h
+      RIGHT JOIN PostHashtag as ph
+      ON h.hashtagName = ph.hashtagName
+      LEFT JOIN Post as p
+      ON p.id = ph.postId
+      WHERE p.createdAt > ${dateFormat(
+        trendingMinDate,
+        "yyyy-mm-dd, HH:MM:ss.l"
+      )}
+      GROUP BY h.hashtagName
+      `;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const hashtagsInDb = hashtagsRawQuery as any;
+
+      let nextPage: number | undefined = undefined;
+      if (postsInDb.length === limit) {
+        nextPage = page + 1;
+      }
       return {
-        nextCursor: nextCursor,
+        nextPage: nextPage,
+        trendingHashtags: hashtagsInDb.map(
+          (row: { hashtagName: string; "COUNT(h.hashtagName)": string }) => ({
+            hashtagName: row["hashtagName"],
+            posts: Number(row["COUNT(h.hashtagName)"]),
+          })
+        ),
         posts: postsInDb.map((p) => ({
           id: p.id,
           createdAt: dateFormat(p.createdAt, "dd/mm/yyyy, HH:MM:ss"),
@@ -250,19 +283,19 @@ export const postRouter = createTRPCRouter({
       hashtags.map(async (h) => {
         const hashtagInDb = await ctx.prisma.hashtag.findUnique({
           where: {
-            name: h,
+            hashtagName: h,
           },
         });
 
         if (hashtagInDb === null) {
           await ctx.prisma.hashtag.create({
             data: {
-              name: h,
+              hashtagName: h,
             },
           });
         }
 
-        ctx.prisma.postHashtag.create({
+        await ctx.prisma.postHashtag.create({
           data: {
             hashtagName: h,
             postId: postInDb.id,

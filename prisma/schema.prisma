@@ -137,7 +137,7 @@ model Post {
 model PostHashtag {
     post        Post    @relation(fields: [postId], references: [id])
     postId      String
-    hashtag     Hashtag @relation(fields: [hashtagName], references: [name])
+    hashtag     Hashtag @relation(fields: [hashtagName], references: [hashtagName])
     hashtagName String
 
     @@id([postId, hashtagName])
@@ -146,7 +146,7 @@ model PostHashtag {
 }
 
 model Hashtag {
-    name        String        @id
+    hashtagName String        @id
     postHashtag PostHashtag[]
 }
 
