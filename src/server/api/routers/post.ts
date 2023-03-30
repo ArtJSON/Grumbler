@@ -221,7 +221,7 @@ export const postRouter = createTRPCRouter({
       });
 
       const hashtagsInDb = (await ctx.prisma.$queryRaw`
-      SELECT h.hashtagName, COUNT(h.hashtagName) 
+      SELECT h.hashtagName, CAST(COUNT(h.hashtagName) as CHAR(50)) AS posts
       FROM Hashtag as h
       RIGHT JOIN PostHashtag as ph
       ON h.hashtagName = ph.hashtagName
@@ -232,7 +232,9 @@ export const postRouter = createTRPCRouter({
         "yyyy-mm-dd, HH:MM:ss.l"
       )}
       GROUP BY h.hashtagName
-      `) as { hashtagName: string; "COUNT(h.hashtagName)": string }[];
+      `) as { hashtagName: string; posts: string }[];
+
+      console.log(hashtagsInDb);
 
       let nextPage: number | undefined = undefined;
       if (postsInDb.length === limit) {
@@ -242,7 +244,7 @@ export const postRouter = createTRPCRouter({
         nextPage: nextPage,
         trendingHashtags: hashtagsInDb.map((row) => ({
           hashtagName: row["hashtagName"],
-          posts: row["COUNT(h.hashtagName)"],
+          posts: Number(row["posts"]),
         })),
         posts: postsInDb.map((p) => ({
           id: p.id,
