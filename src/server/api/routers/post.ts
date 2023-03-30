@@ -292,7 +292,7 @@ export const postRouter = createTRPCRouter({
         take: limit,
         skip: page * limit,
         where: {
-          ...(allPosts ? { createdAt: { gt: trendingMinDate } } : undefined),
+          ...(allPosts ? undefined : { createdAt: { gt: trendingMinDate } }),
           postHashtag: { some: { hashtagName } },
         },
         include: {
