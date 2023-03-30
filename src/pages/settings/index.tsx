@@ -158,7 +158,8 @@ function ProfilePictureUpload() {
                 {
                   onSuccess: () => {
                     notifications.show({
-                      message: "Successfully updated the image",
+                      message:
+                        "Successfully updated the image, refresh the page to view changes",
                     });
                   },
                 }
