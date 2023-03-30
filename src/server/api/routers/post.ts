@@ -242,7 +242,7 @@ export const postRouter = createTRPCRouter({
         nextPage: nextPage,
         trendingHashtags: hashtagsInDb.map((row) => ({
           hashtagName: row["hashtagName"],
-          posts: Number(row["COUNT(h.hashtagName)"]),
+          posts: row["COUNT(h.hashtagName)"],
         })),
         posts: postsInDb.map((p) => ({
           id: p.id,
