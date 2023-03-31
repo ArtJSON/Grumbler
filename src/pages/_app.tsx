@@ -6,9 +6,9 @@ import { api } from "../utils/api";
 
 import "../styles/globals.scss";
 import React from "react";
-import { Layout } from "../components/Layout/Layout";
-import RouteGuard from "../components/RouteGuard/RouteGuard";
-import ThemeManager from "../components/ThemeManager/ThemeManager";
+import { Layout } from "../components/Layout";
+import RouteGuard from "../components/RouteGuard";
+import ThemeManager from "../components/ThemeManager";
 
 const MyApp: AppType<{
   session: Session | null;

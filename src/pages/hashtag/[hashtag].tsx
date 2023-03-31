@@ -2,9 +2,9 @@ import { Anchor, Select, Stack, Text } from "@mantine/core";
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useState } from "react";
-import InfiniteScrollTrigger from "../../components/InfiniteScrollTrigger/InfiniteScrollTrigger";
-import { Loader } from "../../components/Loader/Loader";
-import { PostList } from "../../components/PostList/PostList";
+import InfiniteScrollTrigger from "../../components/InfiniteScrollTrigger";
+import { Loader } from "../../components/Loader";
+import { PostList } from "../../components/Post";
 import { api } from "../../utils/api";
 
 interface HashtagPagePropsType {

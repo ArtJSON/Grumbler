@@ -1,11 +1,11 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { api } from "../utils/api";
-import { PostInput } from "../components/PostInput/PostInput";
-import { PostList } from "../components/PostList/PostList";
-import InfiniteScrollTrigger from "../components/InfiniteScrollTrigger/InfiniteScrollTrigger";
-import { Loader } from "../components/Loader/Loader";
+import { PostInput } from "../components/PostInput";
+import InfiniteScrollTrigger from "../components/InfiniteScrollTrigger";
+import { Loader } from "../components/Loader";
 import { Stack } from "@mantine/core";
+import { PostList } from "../components/Post";
 
 const Home: NextPage = () => {
   const {

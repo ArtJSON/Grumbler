@@ -3,8 +3,8 @@ import { useDisclosure } from "@mantine/hooks";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { ArrowsSort, Ban, ThumbUp } from "tabler-icons-react";
-import { Loader } from "../../components/Loader/Loader";
-import { AdminPost } from "../../components/Post/AdminPost/AdminPost";
+import { Loader } from "../../components/Loader";
+import { AdminPost } from "../../components/AdminPost/AdminPost";
 import { api } from "../../utils/api";
 
 import styles from "./AdminPage.module.scss";

@@ -1,16 +1,17 @@
 import Head from "next/head";
 import { api } from "../../utils/api";
-import { PostList } from "../../components/PostList/PostList";
-import { Loader } from "../../components/Loader/Loader";
-import InfiniteScrollTrigger from "../../components/InfiniteScrollTrigger/InfiniteScrollTrigger";
+import { Loader } from "../../components/Loader";
+import InfiniteScrollTrigger from "../../components/InfiniteScrollTrigger";
 import { NavLink, Stack, Text } from "@mantine/core";
 import Link from "next/link";
+import { PostList } from "../../components/Post";
 
 export default function TrendingPage() {
   const {
     data: trendingData,
     fetchNextPage,
     isFetching,
+    refetch,
   } = api.post.getTrending.useInfiniteQuery(
     {},
     {
@@ -31,7 +32,10 @@ export default function TrendingPage() {
         <TrendingHashtags
           trendingHashtags={trendingData.pages[0]?.trendingHashtags ?? []}
         />
-        <PostList posts={trendingData.pages.map((p) => p.posts).flat(1)} />
+        <PostList
+          refetch={refetch}
+          posts={trendingData.pages.map((p) => p.posts).flat(1)}
+        />
       </Stack>
       <InfiniteScrollTrigger
         isFetching={isFetching}

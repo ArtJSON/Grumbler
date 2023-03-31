@@ -2,10 +2,10 @@ import { Stack } from "@mantine/core";
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useState } from "react";
-import { CommentInput } from "../../components/CommentInput/CommentInput";
-import { CommentList } from "../../components/CommentList/CommentList";
-import { Loader } from "../../components/Loader/Loader";
-import { PostDetailed } from "../../components/Post/PostDetailed/PostDetailed";
+import { CommentInput } from "../../components/CommentInput";
+import { CommentList } from "../../components/CommentList";
+import { Loader } from "../../components/Loader";
+import { PostDetailed } from "../../components/Post";
 import { api } from "../../utils/api";
 
 interface PostPagePropsType {

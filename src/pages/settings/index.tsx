@@ -14,7 +14,7 @@ import { z } from "zod";
 import { api } from "../../utils/api";
 import { useRouter } from "next/router";
 import { Photo, Upload, X } from "tabler-icons-react";
-import { Loader } from "../../components/Loader/Loader";
+import { Loader } from "../../components/Loader";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { useState } from "react";
 import { notifications } from "@mantine/notifications";

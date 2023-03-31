@@ -13,7 +13,7 @@ import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { ArrowsSort } from "tabler-icons-react";
-import { Loader } from "../../components/Loader/Loader";
+import { Loader } from "../../components/Loader";
 import { api } from "../../utils/api";
 import styles from "./AdminPage.module.scss";
 import { DatePicker } from "@mantine/dates";

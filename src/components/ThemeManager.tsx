@@ -1,7 +1,7 @@
 import { MantineProvider } from "@mantine/core";
 import { getCookie, setCookie } from "cookies-next";
 import React, { useContext, useEffect, useState } from "react";
-import type { ColorTheme } from "../../types/types";
+import type { ColorTheme } from "../types/types";
 
 const ThemeContext = React.createContext({
   theme: "dark",

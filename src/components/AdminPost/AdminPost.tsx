@@ -6,7 +6,7 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { lowlight } from "lowlight";
 import { useEffect } from "react";
-import { useThemeContext } from "../../ThemeManager/ThemeManager";
+import { useThemeContext } from "../ThemeManager";
 import styles from "./AdminPost.module.scss";
 
 interface AdminPostProps {

@@ -1,6 +1,6 @@
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
-import { api } from "../../utils/api";
+import { api } from "../utils/api";
 import { Button, Flex, Stack, Text, Textarea } from "@mantine/core";
 
 interface CommentInputProps {
