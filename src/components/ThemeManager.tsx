@@ -49,6 +49,16 @@ export default function ThemeManager({
                 },
               },
             },
+            Textarea: {
+              defaultProps: {
+                size: "md",
+              },
+            },
+            TextInput: {
+              defaultProps: {
+                size: "md",
+              },
+            },
             Modal: {
               defaultProps: {
                 styles: {
