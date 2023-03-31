@@ -1,4 +1,4 @@
-import { Anchor, List, Select, Stack, Text } from "@mantine/core";
+import { Anchor, Select, Stack, Text } from "@mantine/core";
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useState } from "react";
@@ -37,10 +37,12 @@ export default function HashtagPage({ hashtag }: HashtagPagePropsType) {
           <Loader />
         )}
       </Stack>
-      <InfiniteScrollTrigger
-        isFetching={isFetching}
-        onScreenEnter={fetchNextPage}
-      />
+      {trendingData && (
+        <InfiniteScrollTrigger
+          isFetching={isFetching}
+          onScreenEnter={fetchNextPage}
+        />
+      )}
     </>
   );
 }
