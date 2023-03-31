@@ -24,10 +24,6 @@ export default function HashtagPage({ hashtag }: HashtagPagePropsType) {
     }
   );
 
-  if (!trendingData) {
-    return <Loader />;
-  }
-
   return (
     <>
       <Head>
@@ -35,7 +31,11 @@ export default function HashtagPage({ hashtag }: HashtagPagePropsType) {
       </Head>
       <Stack spacing={48}>
         <HashtagInfo hashtagName={hashtag} onShowAllChange={setAllPosts} />
-        <PostList posts={trendingData.pages.map((p) => p.posts).flat(1)} />
+        {trendingData ? (
+          <PostList posts={trendingData.pages.map((p) => p.posts).flat(1)} />
+        ) : (
+          <Loader />
+        )}
       </Stack>
       <InfiniteScrollTrigger
         isFetching={isFetching}
