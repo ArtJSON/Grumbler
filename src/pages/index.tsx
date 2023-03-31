@@ -19,6 +19,7 @@ const Home: NextPage = () => {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
+  const postCreateMutation = api.post.create.useMutation();
 
   if (!postsData) {
     return <Loader />;
@@ -31,11 +32,18 @@ const Home: NextPage = () => {
       </Head>
       <Stack spacing={48}>
         <PostInput
-          onSubmit={() => {
+          onSubmit={async (content, extendedContent) => {
+            await postCreateMutation.mutateAsync({
+              content: content,
+              extendedConent: extendedContent,
+            });
             refetch();
           }}
         />
-        <PostList posts={postsData.pages.map((p) => p.posts).flat(1)} />
+        <PostList
+          refetch={refetch}
+          posts={postsData.pages.map((p) => p.posts).flat(1)}
+        />
       </Stack>
       <InfiniteScrollTrigger
         isFetching={isFetching}

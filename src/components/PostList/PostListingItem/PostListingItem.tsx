@@ -20,6 +20,8 @@ export interface PostListingItemProps {
   hasExtendedContent: boolean;
   likeButtonActive: boolean;
   onReportClick: () => void;
+  onEditClick?: () => void;
+  onRemoveClick?: () => void;
 }
 
 export function PostListingItem({
@@ -35,6 +37,8 @@ export function PostListingItem({
   liked,
   likeButtonActive,
   onReportClick,
+  onEditClick,
+  onRemoveClick,
 }: PostListingItemProps) {
   const likePostMutation = api.post.like.useMutation();
   const unlikePostMutation = api.post.unlike.useMutation();
@@ -82,6 +86,8 @@ export function PostListingItem({
             setIsLiked((prev) => !prev);
           }}
           onReportClick={onReportClick}
+          onEditClick={onEditClick}
+          onRemoveClick={onRemoveClick}
         />
       </Stack>
       <Link

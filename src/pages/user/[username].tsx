@@ -53,7 +53,10 @@ export default function UserPage({ username }: UserPagePropsType) {
             refetch();
           }}
         />
-        <PostList posts={userData.pages.map((p) => p.posts).flat(1)} />
+        <PostList
+          refetch={refetch}
+          posts={userData.pages.map((p) => p.posts).flat(1)}
+        />
       </Stack>
       <InfiniteScrollTrigger
         isFetching={isFetching}

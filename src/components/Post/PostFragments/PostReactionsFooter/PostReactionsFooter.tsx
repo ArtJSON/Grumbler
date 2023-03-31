@@ -1,5 +1,5 @@
 import { Flex, Group, Text, useMantineTheme } from "@mantine/core";
-import { Flag, Heart, MessageCircle } from "tabler-icons-react";
+import { Edit, Flag, Heart, MessageCircle, X } from "tabler-icons-react";
 
 interface PostReactionsFooterProps {
   likesCount: number;
@@ -7,6 +7,8 @@ interface PostReactionsFooterProps {
   liked: boolean;
   onLikeClick: () => void;
   onReportClick: () => void;
+  onEditClick?: () => void;
+  onRemoveClick?: () => void;
 }
 
 export function PostReactionsFooter({
@@ -15,6 +17,8 @@ export function PostReactionsFooter({
   liked,
   onLikeClick,
   onReportClick,
+  onRemoveClick,
+  onEditClick,
 }: PostReactionsFooterProps) {
   const theme = useMantineTheme();
 
@@ -56,19 +60,52 @@ export function PostReactionsFooter({
           </Flex>
         </Text>
       </Group>
-      <Text
-        onClick={(e) => {
-          e.preventDefault();
-          onReportClick();
-        }}
-        sx={{
-          cursor: "pointer",
-          userSelect: "none",
-          zIndex: 1,
-        }}
-      >
-        <Flag />
-      </Text>
+      <Group>
+        {onEditClick && onRemoveClick ? (
+          <>
+            <Text
+              onClick={(e) => {
+                e.preventDefault();
+                onRemoveClick();
+              }}
+              sx={{
+                cursor: "pointer",
+                userSelect: "none",
+                zIndex: 1,
+              }}
+            >
+              <X />
+            </Text>
+            <Text
+              onClick={(e) => {
+                e.preventDefault();
+                onEditClick();
+              }}
+              sx={{
+                cursor: "pointer",
+                userSelect: "none",
+                zIndex: 1,
+              }}
+            >
+              <Edit />
+            </Text>
+          </>
+        ) : (
+          <Text
+            onClick={(e) => {
+              e.preventDefault();
+              onReportClick();
+            }}
+            sx={{
+              cursor: "pointer",
+              userSelect: "none",
+              zIndex: 1,
+            }}
+          >
+            <Flag />
+          </Text>
+        )}
+      </Group>
     </Flex>
   );
 }

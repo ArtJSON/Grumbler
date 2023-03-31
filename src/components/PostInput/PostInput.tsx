@@ -2,7 +2,7 @@ import { Button, Checkbox, Flex, Stack, Text, Textarea } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import { TiptapEditor } from "../TiptapEditor/TiptapEditor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
@@ -11,21 +11,19 @@ import Placeholder from "@tiptap/extension-placeholder";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { lowlight } from "lowlight";
 import { useEditor } from "@tiptap/react";
-import { api } from "../../utils/api";
 
 interface PostInputProps {
-  onSubmit?: () => void;
+  onSubmit: (content: string, extendedContent?: string) => void;
+  defaultContent?: string;
+  defaultExtendedContent?: string;
 }
 
-export function PostInput({ onSubmit }: PostInputProps) {
-  const [extended, setExtended] = useState(false);
-  const postCreateMutation = api.post.create.useMutation({
-    onSuccess: () => {
-      if (onSubmit) {
-        onSubmit();
-      }
-    },
-  });
+export function PostInput({
+  onSubmit,
+  defaultContent,
+  defaultExtendedContent,
+}: PostInputProps) {
+  const [extended, setExtended] = useState(Boolean(defaultExtendedContent));
 
   const form = useForm({
     validate: zodResolver(
@@ -37,11 +35,12 @@ export function PostInput({ onSubmit }: PostInputProps) {
       })
     ),
     initialValues: {
-      content: "",
+      content: defaultContent ? defaultContent : "",
     },
   });
 
   const editor = useEditor({
+    content: defaultExtendedContent,
     extensions: [
       StarterKit.configure({
         codeBlock: false,
@@ -60,13 +59,26 @@ export function PostInput({ onSubmit }: PostInputProps) {
     ],
   });
 
+  useEffect(() => {
+    if (defaultContent) {
+      form.setFieldValue("content", defaultContent);
+    } else {
+      form.setFieldValue("content", "");
+    }
+  }, [defaultContent]);
+
+  useEffect(() => {
+    if (defaultExtendedContent) {
+      editor?.commands.setContent(defaultExtendedContent);
+    } else {
+      editor?.commands.setContent("");
+    }
+  }, [defaultExtendedContent]);
+
   return (
     <form
       onSubmit={form.onSubmit((values) => {
-        postCreateMutation.mutate({
-          content: values.content,
-          extendedConent: extended ? editor?.getHTML() : undefined,
-        });
+        onSubmit(values.content, extended ? editor?.getHTML() : undefined);
         editor?.commands.clearContent();
         form.reset();
         setExtended(false);

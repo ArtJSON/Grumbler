@@ -136,6 +136,31 @@ export const postRouter = createTRPCRouter({
         })),
       };
     }),
+  getByIdToUpdate: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input: { id } }) => {
+      const postInDb = await ctx.prisma.post.findUniqueOrThrow({
+        where: {
+          id: id,
+        },
+        select: {
+          content: true,
+          extendedContent: true,
+        },
+      });
+
+      return {
+        post: {
+          id,
+          content: postInDb.content,
+          extendedContent: postInDb.extendedContent ?? undefined,
+        },
+      };
+    }),
   getRecentByFollowed: protectedProcedure
     .input(
       z.object({
@@ -395,11 +420,10 @@ export const postRouter = createTRPCRouter({
       z.object({
         postId: z.string(),
         content: z.string(),
-        extendedConent: z.string().optional(),
+        extendedContent: z.string().optional(),
       })
     )
-    .mutation(async ({ ctx, input: { content, extendedConent, postId } }) => {
-      // TODO: Add hashtag extraction
+    .mutation(async ({ ctx, input: { content, extendedContent, postId } }) => {
       const postInDb = await ctx.prisma.post.findUnique({
         where: {
           id: postId,
@@ -413,14 +437,45 @@ export const postRouter = createTRPCRouter({
         });
       }
 
-      return await ctx.prisma.post.update({
+      await ctx.prisma.post.update({
         where: {
           id: postId,
         },
         data: {
           content: content,
-          extendedContent: extendedConent,
+          extendedContent: extendedContent ? extendedContent : null,
         },
+      });
+
+      const hashtags = extractUniqueHashtags(content);
+
+      await ctx.prisma.postHashtag.deleteMany({
+        where: {
+          postId: postId,
+        },
+      });
+
+      hashtags.map(async (h) => {
+        const hashtagInDb = await ctx.prisma.hashtag.findUnique({
+          where: {
+            hashtagName: h,
+          },
+        });
+
+        if (hashtagInDb === null) {
+          await ctx.prisma.hashtag.create({
+            data: {
+              hashtagName: h,
+            },
+          });
+        }
+
+        await ctx.prisma.postHashtag.create({
+          data: {
+            hashtagName: h,
+            postId: postInDb.id,
+          },
+        });
       });
     }),
   like: protectedProcedure

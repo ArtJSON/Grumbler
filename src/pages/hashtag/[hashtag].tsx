@@ -17,6 +17,7 @@ export default function HashtagPage({ hashtag }: HashtagPagePropsType) {
     data: trendingData,
     fetchNextPage,
     isFetching,
+    refetch,
   } = api.post.getByHashtag.useInfiniteQuery(
     { hashtagName: hashtag, allPosts },
     {
@@ -32,7 +33,10 @@ export default function HashtagPage({ hashtag }: HashtagPagePropsType) {
       <Stack spacing={48}>
         <HashtagInfo hashtagName={hashtag} onShowAllChange={setAllPosts} />
         {trendingData ? (
-          <PostList posts={trendingData.pages.map((p) => p.posts).flat(1)} />
+          <PostList
+            refetch={refetch}
+            posts={trendingData.pages.map((p) => p.posts).flat(1)}
+          />
         ) : (
           <Loader />
         )}
